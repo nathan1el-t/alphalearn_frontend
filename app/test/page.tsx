@@ -1,5 +1,5 @@
 export default function test(){
-    return (
-        <div>hello world</div>
+    return(
+        <h1>wow such empty</h1>
     )
 }
