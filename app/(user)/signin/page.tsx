@@ -1,43 +1,28 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import { showError,showSuccess } from "@/lib/notifications";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [successMsg, setSuccessMsg] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
 
   const { signIn, signUp, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMsg("");
-    setSuccessMsg("");
 
-    try {
       if (isSignUp) {
-        const { error } = await signUp(email, password);
-        if (error) throw error;
-        setSuccessMsg("Account created successfully! Check your email");
+        await signUp(email, password);
       } else {
-        const { data,error } = await signIn(email, password);
-        console.log(data);
-        if (error) throw error;
-        setSuccessMsg("Login successful!");
+        await signIn(email, password);
       }
-    } catch (error: any) {
-      setErrorMsg(error.message ?? "Something went wrong");
-    }
   };
 
   return (
     <main style={{ padding: "2rem", maxWidth: 480 }}>
       <h1>{isSignUp ? "Sign up" : "Login"}</h1>
-
-      {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
-      {successMsg && <p style={{ color: "green" }}>{successMsg}</p>}
 
       <form onSubmit={handleSubmit}>
         <div style={{ marginTop: "1rem" }}>
@@ -100,8 +85,6 @@ export default function LoginPage() {
         <button
           type="button"
           onClick={() => {
-            setErrorMsg("");
-            setSuccessMsg("");
             setIsSignUp(!isSignUp);
           }}
           style={{
