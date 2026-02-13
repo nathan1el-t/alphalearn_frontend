@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { showError,showSuccess } from "@/lib/notifications";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
