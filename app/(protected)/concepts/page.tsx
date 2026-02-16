@@ -1,5 +1,7 @@
-import ConceptsPage from "@/components/concepts/ConceptsPage";
+import ConceptsPage from "@/components/concepts/conceptsPage";
 import type { Concept } from "@/interfaces/interfaces";
+import { Suspense } from "react";
+import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
 
 /**
  * SERVER COMPONENT (No "use client")
@@ -21,9 +23,14 @@ import type { Concept } from "@/interfaces/interfaces";
  * Best of both worlds!
  * 
  * This is Next.js 13+ App Router best practice
+ * 
+ * NEW: Suspense boundary with Skeleton loading
+ * - Shows skeleton while concepts fetch
+ * - Better perceived performance
+ * - Smooth loading experience
  */
 
-export default async function ConceptsPageRoute() {
+async function ConceptsData() {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
   const res = await fetch(`${url}/concepts`, { cache: "no-store" });
 
@@ -33,8 +40,15 @@ export default async function ConceptsPageRoute() {
 
   const concepts: Concept[] = await res.json();
 
-  // Clean and simple! Just fetch and pass to client component
   return <ConceptsPage concepts={concepts} />;
+}
+
+export default function ConceptsPageRoute() {
+  return (
+    <Suspense fallback={<ConceptsSkeleton />}>
+      <ConceptsData />
+    </Suspense>
+  );
 }
 
 /**

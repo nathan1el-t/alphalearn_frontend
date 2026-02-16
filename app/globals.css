@@ -1,34 +1,183 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
+/* ============================================
+   THEME SYSTEM - Light & Dark Mode
+   ============================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Font Variables */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* Custom theme colors for auth pages */
+  /* Light Theme */
   --color-primary: #7c5cff;
+  --color-primary-hover: #6b4ce6;
+  --color-primary-active: #5a3dc0;
+  --color-accent:#3aa37c;
+  --color-accent-hover: #19a071;
+  
+  --color-background: #f6f4ff;
+  --color-surface: #f0e9fe;
+  --color-surface-elevated: #ffffff;
+  --color-input: #f0f0f5;
+  
+  --color-text: #171717;
+  --color-text-secondary: #6b6b80;
+  --color-text-muted: #9a9aaa;
+  
+  --color-border: #e0e0e8;
+  --color-border-focus: #7c5cff;
+  
+  --color-overlay: rgba(0, 0, 0, 0.05);
+  --color-shadow: rgba(124, 92, 255, 0.1);
+  --color-shadow-hover: rgba(124, 92, 255, 0.2);
+  
+  /* Status Colors */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  
+  /* Special */
+  --color-discord: #5865F2;
+  --color-streak: #f97316;
+}
+
+/* Dark Theme */
+[data-mantine-color-scheme="dark"] {
+  --color-primary: #7c5cff;
+  --color-primary-hover: #6b4ce6;
+  --color-primary-active: #5a3dc0;
+  --color-accent: #2EFFB4;
+  --color-accent-hover: #26e5a3;
+  
+  --color-background: #0F0F14;
+  --color-surface: #181826;
+  --color-surface-elevated: #1d1736;
+  --color-input: #29204b;
+  
+  --color-text: #ffffff;
+  --color-text-secondary: #b3b3c6;
+  --color-text-muted: #9a8dce;
+  
+  --color-border: #3a2e6b;
+  --color-border-focus: #2EFFB4;
+  
+  --color-overlay: rgba(255, 255, 255, 0.05);
+  --color-shadow: rgba(46, 255, 180, 0.15);
+  --color-shadow-hover: rgba(46, 255, 180, 0.25);
+  
+  /* Status Colors (slightly adjusted for dark) */
+  --color-success: #10b981;
+  --color-warning: #fbbf24;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+  
+  /* Special */
+  --color-streak: #fb923c;
+}
+
+/* Legacy variables for backward compatibility */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-text);
   --color-background-light: #f6f5f8;
   --color-background-dark: #0F0F14;
   --color-surface-dark: #181826;
   --color-input-dark: #29204b;
-  --color-text-muted: #9a8dce;
   --color-border-dark: #3a2e6b;
-  --color-discord: #5865F2;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================
+   TAILWIND THEME INTEGRATION
+   ============================================ */
+
+@theme {
+  /* Map CSS variables to Tailwind utilities */
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-accent: var(--color-accent);
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-border: var(--color-border);
+  --color-input: var(--color-input);
+  --color-overlay: var(--color-overlay);
+}
+
+/* ============================================
+   GLOBAL STYLES
+   ============================================ */
+
+html {
+  background: var(--color-background);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-background);
+  color: var(--color-text);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Global Scrollbar - Applied to all scrollable elements */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) var(--color-background);
+}
+
+/* Legacy class for backward compatibility */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-background);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* Smooth theme transitions
+html, body {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class*="bg-"], [style*="background"] {
+  transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class*="text-"], [style*="color"] {
+  transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[class*="border-"], [style*="border"] {
+  transition: border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+} */

@@ -1,0 +1,33 @@
+/* Pagination Component Styles */
+.control {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-muted) !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  min-width: 2rem !important;
+  font-size: 0.875rem !important;
+  font-weight: bold !important;
+  transition: all 0.2s ease !important;
+}
+
+.control:hover:not([data-disabled="true"]) {
+  background-color: var(--color-surface-elevated) !important;
+  color: var(--color-text) !important;
+  transform: scale(1.05);
+}
+
+.control[data-active="true"] {
+  background-color: var(--color-accent) !important;
+  color: var(--color-background) !important;
+  border: 1px solid var(--color-accent) !important;
+}
+
+.control[data-disabled="true"] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.dots {
+  color: var(--color-text-muted) !important;
+}
