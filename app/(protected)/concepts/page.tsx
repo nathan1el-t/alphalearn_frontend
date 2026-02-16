@@ -1,56 +1,20 @@
-"use client";
-
-import { useConcepts } from "@/hooks/useConcepts";
-import { Button } from "@mantine/core";
-import { Spotlight, spotlight, SpotlightActionData } from "@mantine/spotlight";
-import { useRouter } from "next/navigation";
+import ConceptSearch from "@/components/conceptSearch";
 import Link from "next/link";
-import { useEffect } from "react";
+import type { Concept } from "@/interfaces/interfaces";
 
-export default function ConceptsPage() {
-  const { concepts, isLoading, error, getAllConcepts } = useConcepts();
-  const router = useRouter();
+export default async function ConceptsPage() {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const res = await fetch(`${url}/concepts`, { cache: "no-store" });
 
-  useEffect(() => {
-    getAllConcepts();
-  }, []);
+  if (!res.ok) {
+    throw new Error("Failed to fetch concepts");
+  }
 
-  const goToConcept = (id: string | number) => {
-    router.push(`/concepts/${id}`);
-  };
-
-  const actions: SpotlightActionData[] = concepts.map((concept) => ({
-    id: String(concept.conceptId),
-    label: concept.title,
-    description: concept.description,
-    onClick: () => goToConcept(concept.conceptId),
-  }));
-
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500 text-lg">Loading...</p>
-      </div>
-    );
-
-  if (error)
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-500 text-lg">Error: {error}</p>
-      </div>
-    );
+  const concepts: Concept[] = await res.json();
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <Button onClick={spotlight.open}>Search</Button>
-
-      <Spotlight
-        actions={actions}
-        limit={7}
-        searchProps={{
-          placeholder: "Search...",
-        }}
-      />
+      <ConceptSearch concepts={concepts} />
 
       <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
         Concepts

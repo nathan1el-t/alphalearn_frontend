@@ -17,7 +17,7 @@ export default function Navbar() {
   return (
     <nav className="p-4 border-b flex justify-between">
       <Link href="/">Home</Link>
-
+      <Link href="/concepts">concepts</Link>
       <div className="flex gap-4">
         {user ? (
           <>
