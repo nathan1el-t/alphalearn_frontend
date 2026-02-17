@@ -2,6 +2,7 @@ import ConceptsPage from "@/components/concepts/conceptsPage";
 import type { Concept } from "@/interfaces/interfaces";
 import { Suspense } from "react";
 import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
+import { createClient } from "@/lib/supabase/server";
 
 /**
  * SERVER COMPONENT (No "use client")
@@ -31,8 +32,19 @@ import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
  */
 
 async function ConceptsData() {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (!session) {
+    throw new Error("User not authenticated");
+  }
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${url}/concepts`, { cache: "no-store" });
+  const res = await fetch(`${url}/concepts`, {
+    cache: "no-store",
+    headers: {
+      "Authorization": `Bearer ${session.access_token}`,
+    },
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch concepts");
