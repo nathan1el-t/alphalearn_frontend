@@ -18,8 +18,9 @@ export default function Navbar() {
     )
   }
 
-  // Get first letter of email for avatar
+  // Get first letter of email for avatar, and profile picture for Google auth
   const avatarLetter = user?.email ? user.email[0].toUpperCase() : "?"
+  const profilePicture = user?.user_metadata?.picture || user?.user_metadata?.avatar_url
 
   return (
     <>
@@ -93,6 +94,7 @@ export default function Navbar() {
                   </p>
                 </div>
                 <Avatar
+                  src={profilePicture}
                   color="white"
                   radius="xl"
                   size="md"
@@ -188,6 +190,7 @@ export default function Navbar() {
               {/* User Profile */}
               <div className="flex items-center gap-3 pb-4 border-b border-[var(--color-border)]">
                 <Avatar
+                  src={profilePicture}
                   color="violet"
                   radius="xl"
                   size="lg"
