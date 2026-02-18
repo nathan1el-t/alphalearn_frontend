@@ -2,55 +2,11 @@ import ConceptsPage from "@/components/concepts/conceptsPage";
 import type { Concept } from "@/interfaces/interfaces";
 import { Suspense } from "react";
 import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
-import { createClient } from "@/lib/supabase/server";
-
-/**
- * SERVER COMPONENT (No "use client")
- * 
- * Purpose: Fetch data server-side
- * Responsibility: Data fetching only
- * 
- * React Server Components Pattern:
- * 
- *   page.tsx (Server)         ConceptsPage (Client)
- *   ├─ Fetches data      →    ├─ Manages state
- *   ├─ No "use client"        ├─ Handles events
- *   ├─ Runs on server         └─ Runs in browser
- *   └─ SEO friendly
- * 
- * Why this separation?
- * Server Component = Fast initial load, SEO, backend access
- * Client Component = Interactive UI, state management
- * Best of both worlds!
- * 
- * This is Next.js 13+ App Router best practice
- * 
- * NEW: Suspense boundary with Skeleton loading
- * - Shows skeleton while concepts fetch
- * - Better perceived performance
- * - Smooth loading experience
- */
+import { apiFetch } from "@/lib/api";
 
 async function ConceptsData() {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    throw new Error("User not authenticated");
-  }
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${url}/concepts`, {
-    cache: "no-store",
-    headers: {
-      "Authorization": `Bearer ${session.access_token}`,
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to fetch concepts");
-  }
-
-  const concepts: Concept[] = await res.json();
+  
+  const concepts:Concept[] = await apiFetch<Concept[]>("/concepts");
 
   return <ConceptsPage concepts={concepts} />;
 }
