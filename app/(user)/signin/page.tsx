@@ -22,7 +22,7 @@ export default function SignInPage() {
   };
 
   return (
-      <div className="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-['Plus_Jakarta_Sans'] min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[#7c5cff] selection:text-white">
+      <div className="bg-[var(--color-surface)] text-[var(--color-text)] font-['Plus_Jakarta_Sans'] min-h-screen flex flex-col relative overflow-x-hidden selection:bg-[var(--color-primary)] selection:text-white">
         {/* Background decorative elements */}
         <div className="fixed inset-0 z-0 pointer-events-none">
           {/* Grid pattern overlay */}
@@ -30,7 +30,7 @@ export default function SignInPage() {
             className="absolute inset-0 opacity-[0.15]"
             style={{
               backgroundImage:
-                "linear-gradient(to right, #29204b 1px, transparent 1px), linear-gradient(to bottom, #29204b 1px, transparent 1px)",
+                "linear-gradient(to right, var(--color-input) 1px, transparent 1px), linear-gradient(to bottom, var(--color-input) 1px, transparent 1px)",
               backgroundSize: "40px 40px",
               maskImage:
                 "radial-gradient(circle at center, black 40%, transparent 100%)",
@@ -40,8 +40,8 @@ export default function SignInPage() {
           ></div>
           {/* Glowing purple blob - top left */}
           <div
-            className="absolute w-[500px] h-[500px] top-[-100px] left-[-100px] bg-[#7c5cff] rounded-full opacity-15 pointer-events-none"
-            style={{ filter: "blur(120px)" }}
+            className="absolute w-[500px] h-[500px] top-[-100px] left-[-100px] rounded-full opacity-15 pointer-events-none"
+            style={{ filter: "blur(120px)", backgroundColor: "var(--color-primary)" }}
           ></div>
           {/* Glowing blue blob - bottom right */}
           <div
@@ -56,17 +56,17 @@ export default function SignInPage() {
         <main className="flex-grow flex items-center justify-center p-4 relative z-10">
           <div className={`w-full ${isSignUp ? 'lg:max-w-[1100px]' : 'lg:max-w-[500px]'} flex flex-col gap-6`}>
             {/* Main card container */}
-            <div className="relative w-full bg-white dark:bg-[#181826] rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border dark:border-[#29204b] border-gray-200">
+            <div className="relative w-full bg-[var(--color-surface-elevated)] rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-[var(--color-border)]">
               {/* Left Panel: Form Section */}
               <div className="flex-1 p-8 sm:p-12 lg:p-14 flex flex-col justify-center">
                 {/* Header text - changes based on login/signup mode */}
                 <div className="mb-8">
-                  <h1 className="text-4xl text-center font-black tracking-tight leading-tight mb-2 dark:text-white text-slate-900">
+                  <h1 className="text-4xl text-center font-black tracking-tight leading-tight mb-2 text-[var(--color-text)]">
                     {isSignUp
                       ? "Level Up Your Lore"
                       : "Welcome Back, Legend"}
                   </h1>
-                  <p className="text-slate-500 text-center dark:text-[#9a8dce] text-lg font-normal">
+                  <p className="text-[var(--color-text-secondary)] text-center text-lg font-normal">
                     {isSignUp
                       ? "Master the memes. Decode the slang."
                       : "Ready to break the internet again?"}
@@ -79,7 +79,7 @@ export default function SignInPage() {
                   <button
                     type="button"
                     disabled
-                    className="flex items-center justify-center gap-2 h-12 rounded-lg bg-white dark:bg-[#29204b] border border-gray-200 dark:border-[#3a2e6b] text-slate-900 dark:text-white font-bold opacity-50 cursor-not-allowed"
+                    className="flex items-center justify-center gap-2 h-12 rounded-lg bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-text)] font-bold opacity-50 cursor-not-allowed"
                     title="Coming soon"
                   >
                     <svg
@@ -110,18 +110,18 @@ export default function SignInPage() {
 
                 {/* Divider */}
                 <div className="relative flex items-center gap-2 mb-6">
-                  <div className="h-px bg-gray-200 dark:bg-[#3a2e6b] flex-1"></div>
-                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                  <div className="h-px bg-[var(--color-border)] flex-1"></div>
+                  <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest">
                     {isSignUp ? "Or create account" : "Or continue with"}
                   </p>
-                  <div className="h-px bg-gray-200 dark:bg-[#3a2e6b] flex-1"></div>
+                  <div className="h-px bg-[var(--color-border)] flex-1"></div>
                 </div>
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                   {/* Email field */}
                   <label className="flex flex-col gap-2">
-                    <span className="text-white text-sm font-medium">
+                    <span className="text-[var(--color-text)] text-sm font-medium">
                       {isSignUp ? "Email" : "Username or Email"}
                     </span>
                     <div className="relative flex items-center">
@@ -133,9 +133,9 @@ export default function SignInPage() {
                         placeholder={
                           isSignUp ? "name@example.com" : "Enter your username"
                         }
-                        className="w-full rounded-lg bg-gray-50 dark:bg-[#0F0F14] border border-gray-200 dark:border-[#3a2e6b] text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#6a5e95] focus:outline-none focus:ring-2 focus:ring-[#7c5cff] focus:border-transparent transition-all h-12 pl-11 pr-4 text-base"
+                        className="w-full rounded-lg bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] focus:border-transparent transition-all h-12 pl-11 pr-4 text-base"
                       />
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#6a5e95] text-[20px]">
+                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] text-[20px]">
                         mail
                       </span>
                     </div>
@@ -143,7 +143,7 @@ export default function SignInPage() {
 
                   {/* Password field */}
                   <label className="flex flex-col gap-2">
-                    <span className="text-white text-sm font-medium">
+                    <span className="text-[var(--color-text)] text-sm font-medium">
                       Password
                     </span>
                     <div className="relative flex items-center">
@@ -156,16 +156,16 @@ export default function SignInPage() {
                         placeholder={
                           isSignUp ? "••••••••" : "Enter your password"
                         }
-                        className="w-full rounded-lg bg-gray-50 dark:bg-[#0F0F14] border border-gray-200 dark:border-[#3a2e6b] text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#6a5e95] focus:outline-none focus:ring-2 focus:ring-[#7c5cff] focus:border-transparent transition-all h-12 pl-11 pr-12 text-base"
+                        className="w-full rounded-lg bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-text)] placeholder:text-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] focus:border-transparent transition-all h-12 pl-11 pr-12 text-base"
                       />
-                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-[#6a5e95] text-[20px]">
+                      <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] text-[20px]">
                         lock
                       </span>
                       {/* Password visibility toggle */}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-0 top-0 h-full px-4 text-[#9a8dce] hover:text-white flex items-center justify-center transition-colors"
+                        className="absolute right-0 top-0 h-full px-4 text-[var(--color-text-muted)] hover:text-[var(--color-text)] flex items-center justify-center transition-colors"
                       >
                         <span className="material-symbols-outlined text-[20px]">
                           {showPassword ? "visibility_off" : "visibility"}
@@ -180,15 +180,15 @@ export default function SignInPage() {
                       <label className="flex items-center gap-2 cursor-pointer group">
                         <input
                           type="checkbox"
-                          className="rounded border-none bg-[#29204b] text-[#7c5cff] focus:ring-offset-[#130f23] focus:ring-[#7c5cff] size-4 group-hover:bg-[#342a5e] transition-colors"
+                          className="rounded border-none bg-[var(--color-input)] text-[var(--color-primary)] focus:ring-offset-[var(--color-background)] focus:ring-[var(--color-primary)] size-4 group-hover:bg-[var(--color-overlay)] transition-colors"
                         />
-                        <span className="text-white text-sm">
+                        <span className="text-[var(--color-text)] text-sm">
                           Stay logged in
                         </span>
                       </label>
                       <a
                         href="#"
-                        className="text-[#B3B3C6] hover:text-[#7c5cff] text-sm font-medium transition-colors"
+                        className="text-[var(--color-text-secondary)] hover:text-[var(--color-primary)] text-sm font-medium transition-colors"
                       >
                         Forgot password?
                       </a>
@@ -199,7 +199,7 @@ export default function SignInPage() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-[#7c5cff] hover:bg-[#6b4ce6] active:bg-[#5a3dc0] disabled:opacity-50 disabled:cursor-not-allowed text-white text-base font-bold tracking-[0.015em] transition-all duration-200 shadow-[0_0_20px_rgba(124,92,255,0.3)] hover:shadow-[0_0_30px_rgba(124,92,255,0.5)] transform hover:-translate-y-0.5 active:scale-[0.98]"
+                    className="mt-4 flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-4 bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] active:bg-[var(--color-primary-active)] disabled:opacity-50 disabled:cursor-not-allowed text-white text-base font-bold tracking-[0.015em] transition-all duration-200 shadow-[0_0_20px_var(--color-shadow)] hover:shadow-[0_0_30px_var(--color-shadow-hover)] transform hover:-translate-y-0.5 active:scale-[0.98]"
                   >
                     {isLoading
                       ? "Please wait..."
@@ -210,7 +210,7 @@ export default function SignInPage() {
 
                   {/* Terms text (signup only) */}
                   {isSignUp && (
-                    <p className="text-xs text-center text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-center text-[var(--color-text-muted)]">
                       By joining, you agree to our Terms of Service (no cap).
                     </p>
                   )}
@@ -218,14 +218,14 @@ export default function SignInPage() {
 
                 {/* Toggle between login/signup */}
                 <div className="mt-8 text-center">
-                  <p className="text-slate-600 dark:text-[#9a8dce]">
+                  <p className="text-[var(--color-text-secondary)]">
                     {isSignUp
                       ? "Already have an account?"
                       : "New here?"}
                     <button
                       type="button"
                       onClick={() => setIsSignUp(!isSignUp)}
-                      className="text-[#7c5cff] hover:text-white font-bold ml-1 transition-colors hover:underline"
+                      className="text-[var(--color-primary)] hover:text-[var(--color-text)] font-bold ml-1 transition-colors hover:underline"
                     >
                       {isSignUp ? "Log in" : "Start your origin story"}
                     </button>
@@ -235,32 +235,32 @@ export default function SignInPage() {
 
               {/* Right Panel: Value Proposition (visible on desktop when in signup mode) */}
               {isSignUp && (
-                <div className="hidden lg:flex w-[400px] bg-[#1d1736] dark:bg-[#130f24] border-l border-[#29204b] flex-col p-10 justify-center relative overflow-hidden">
+                <div className="hidden lg:flex w-[400px] bg-[var(--color-surface-elevated)] border-l border-[var(--color-border)] flex-col p-10 justify-center relative overflow-hidden">
                   {/* Background decorations */}
-                  <div className="absolute top-0 right-0 w-64 h-64 bg-[#7c5cff]/20 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none"></div>
+                  <div className="absolute top-0 right-0 w-64 h-64 rounded-full blur-[80px] -mr-32 -mt-32 pointer-events-none" style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}></div>
                   <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-[80px] -ml-32 -mb-32 pointer-events-none"></div>
 
                   <div className="relative z-10">
-                    <h2 className="text-3xl font-black text-white mb-2">
+                    <h2 className="text-3xl font-black text-[var(--color-text)] mb-2">
                       Why join?
                     </h2>
-                    <p className="text-[#9a8dce] text-base mb-8">
+                    <p className="text-[var(--color-text-muted)] text-base mb-8">
                       Unlock the ultimate internet culture database.
                     </p>
 
                     <div className="flex flex-col gap-5">
                       {/* Feature 1: Streak */}
-                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[#1d1736] border border-[#3a2e6b] hover:border-[#7c5cff]/50 transition-colors group">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#29204b] flex items-center justify-center group-hover:bg-[#7c5cff]/20 transition-colors">
+                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/50 transition-colors group">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[var(--color-input)] flex items-center justify-center group-hover:bg-[var(--color-primary)]/20 transition-colors">
                           <span className="material-symbols-outlined text-orange-400 text-2xl">
                             local_fire_department
                           </span>
                         </div>
                         <div>
-                          <h3 className="text-white font-bold text-lg leading-tight mb-1">
+                          <h3 className="text-[var(--color-text)] font-bold text-lg leading-tight mb-1">
                             Keep the Streak
                           </h3>
-                          <p className="text-[#9a8dce] text-sm leading-relaxed">
+                          <p className="text-[var(--color-text-muted)] text-sm leading-relaxed">
                             Daily drops of internet culture direct to your
                             brain.
                           </p>
@@ -268,34 +268,34 @@ export default function SignInPage() {
                       </div>
 
                       {/* Feature 2: XP */}
-                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[#1d1736] border border-[#3a2e6b] hover:border-[#7c5cff]/50 transition-colors group">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#29204b] flex items-center justify-center group-hover:bg-[#7c5cff]/20 transition-colors">
+                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/50 transition-colors group">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[var(--color-input)] flex items-center justify-center group-hover:bg-[var(--color-primary)]/20 transition-colors">
                           <span className="material-symbols-outlined text-yellow-400 text-2xl">
                             star
                           </span>
                         </div>
                         <div>
-                          <h3 className="text-white font-bold text-lg leading-tight mb-1">
+                          <h3 className="text-[var(--color-text)] font-bold text-lg leading-tight mb-1">
                             Earn XP
                           </h3>
-                          <p className="text-[#9a8dce] text-sm leading-relaxed">
+                          <p className="text-[var(--color-text-muted)] text-sm leading-relaxed">
                             Climb the leaderboards and flex on your friends.
                           </p>
                         </div>
                       </div>
 
                       {/* Feature 3: Badges */}
-                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[#1d1736] border border-[#3a2e6b] hover:border-[#7c5cff]/50 transition-colors group">
-                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[#29204b] flex items-center justify-center group-hover:bg-[#7c5cff]/20 transition-colors">
+                      <div className="flex items-start gap-4 p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] hover:border-[var(--color-primary)]/50 transition-colors group">
+                        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-[var(--color-input)] flex items-center justify-center group-hover:bg-[var(--color-primary)]/20 transition-colors">
                           <span className="material-symbols-outlined text-purple-400 text-2xl">
                             military_tech
                           </span>
                         </div>
                         <div>
-                          <h3 className="text-white font-bold text-lg leading-tight mb-1">
+                          <h3 className="text-[var(--color-text)] font-bold text-lg leading-tight mb-1">
                             Collect Badges
                           </h3>
-                          <p className="text-[#9a8dce] text-sm leading-relaxed">
+                          <p className="text-[var(--color-text-muted)] text-sm leading-relaxed">
                             Show off your meme mastery to the squad.
                           </p>
                         </div>
@@ -308,10 +308,10 @@ export default function SignInPage() {
 
             {/* Floating cultural tags at bottom */}
             <div className="flex flex-wrap justify-center gap-2 opacity-50">
-              <span className="px-3 py-1 rounded-full bg-[#29204b] border border-white/5 text-[10px] text-[#9a8dce] uppercase tracking-widest">
+              <span className="px-3 py-1 rounded-full bg-[var(--color-input)] border border-[var(--color-overlay)] text-[10px] text-[var(--color-text-muted)] uppercase tracking-widest">
                 #MemeEconomy
               </span>
-              <span className="px-3 py-1 rounded-full bg-[#29204b] border border-white/5 text-[10px] text-[#9a8dce] uppercase tracking-widest">
+              <span className="px-3 py-1 rounded-full bg-[var(--color-input)] border border-[var(--color-overlay)] text-[10px] text-[var(--color-text-muted)] uppercase tracking-widest">
                 #CreatorMode
               </span>
             </div>

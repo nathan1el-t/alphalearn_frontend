@@ -1,39 +1,56 @@
-import ConceptSearch from "@/components/conceptSearch";
-import Link from "next/link";
+import ConceptsPage from "@/components/concepts/conceptsPage";
 import type { Concept } from "@/interfaces/interfaces";
+import { Suspense } from "react";
+import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
+import { apiFetch } from "@/lib/api";
 
-export default async function ConceptsPage() {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${url}/concepts`, { cache: "no-store" });
+async function ConceptsData() {
+  
+  const concepts:Concept[] = await apiFetch<Concept[]>("/concepts");
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch concepts");
-  }
+  return <ConceptsPage concepts={concepts} />;
+}
 
-  const concepts: Concept[] = await res.json();
-
+export default function ConceptsPageRoute() {
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <ConceptSearch concepts={concepts} />
-
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Concepts
-      </h1>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        {concepts.map((concept) => (
-          <Link
-            key={concept.conceptId}
-            href={`/concepts/${concept.conceptId}`}
-            className="border rounded-lg p-4 shadow hover:shadow-lg hover:cursor-pointer transition-shadow duration-300 bg-white block"
-          >
-            <h2 className="text-xl font-semibold mb-2 text-gray-700">
-              {concept.title}
-            </h2>
-            <p className="text-gray-600">{concept.description}</p>
-          </Link>
-        ))}
-      </div>
-    </div>
+    <Suspense fallback={<ConceptsSkeleton />}>
+      <ConceptsData />
+    </Suspense>
   );
 }
+
+/**
+ * LEARNING NOTES:
+ * 
+ * 1. FILE ORGANIZATION:
+ *    components/
+ *    └─ concepts/              ← Feature-based folder
+ *       ├─ ConceptsPage.tsx    ← Main component
+ *       ├─ ConceptCard.tsx     ← Small pieces
+ *       ├─ ConceptGrid.tsx
+ *       ├─ Pagination.tsx
+ *       └─ ... etc
+ * 
+ * 2. NAMING:
+ *    Renamed this function to ConceptsPageRoute to avoid confusion
+ *    with ConceptsPage component
+ * 
+ * 3. SEPARATION OF CONCERNS:
+ *    page.tsx      → Routing & Data Fetching
+ *    ConceptsPage  → UI State & Logic
+ *    Child components → Specific UI pieces
+ * 
+ * 4. THE COMPLETE FLOW:
+ * 
+ *    1. User visits /concepts
+ *    2. Next.js calls this Server Component
+ *    3. Fetches data from backend
+ *    4. Passes data to ConceptsPage (Client Component)
+ *    5. ConceptsPage manages pagination, filtering, search
+ *    6. Child components render the UI
+ *    7. User interactions trigger events
+ *    8. Events bubble up to ConceptsPage
+ *    9. State updates in ConceptsPage
+ *    10. Props flow down to children
+ *    11. UI re-renders with new data
+ */

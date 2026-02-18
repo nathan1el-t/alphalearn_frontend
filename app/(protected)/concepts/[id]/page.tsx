@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import BackButton from "@/components/backButton";
 import type { Concept } from "@/interfaces/interfaces";
+import { apiFetch } from "@/lib/api";
 
 
 export default async function ConceptPage({
@@ -12,12 +13,7 @@ export default async function ConceptPage({
 
   if (!id) notFound();
 
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const res = await fetch(`${url}/concepts/${id}`, { cache: "no-store" });
-
-  if (!res.ok) notFound();
-
-  const concept: Concept = await res.json();
+  const concept:Concept = await apiFetch<Concept>(`/concepts/${id}`);
 
   return (
     
