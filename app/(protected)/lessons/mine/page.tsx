@@ -1,6 +1,6 @@
 import { apiFetch } from "@/lib/api";
 import type { Lesson } from "@/interfaces/interfaces";
-import { notFound } from "next/navigation";
+import NotFound from "@/components/notFound";
 import LessonCard from "@/components/lessons/lessonCard";
 import { Container, Skeleton, SimpleGrid, Text } from "@mantine/core";
 import BackButton from "@/components/backButton";
@@ -16,7 +16,7 @@ export default async function MyLessonsPage() {
     console.log(lessons);
   } catch (err: any) {
     console.log(err);
-    return notFound();
+    return <NotFound/>
   }
 
   return (

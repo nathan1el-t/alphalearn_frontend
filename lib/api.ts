@@ -12,7 +12,7 @@ export async function apiFetch<T>(
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-
+  // console.log(session.access_token);
   const res = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
     headers: {
@@ -23,8 +23,8 @@ export async function apiFetch<T>(
   });
 
   if (!res.ok) {
-    throw new Error(`Request failed: ${res.status}`);
+    const errbody = await res.json();
+    throw new Error(errbody.message);
   }
-//   showError('test');
   return res.json();
 }
