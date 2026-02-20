@@ -78,6 +78,14 @@
   --color-streak: #fb923c;
 }
 
+/* Lock-scroll utility for fullscreen overlays (used by NotFound) */
+html.not-found-lock-scroll,
+body.not-found-lock-scroll {
+  overflow: hidden !important;
+  height: 100% !important;
+  touch-action: none !important;
+}
+
 /* Legacy variables for backward compatibility */
 :root {
   --background: var(--color-background);

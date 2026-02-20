@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import NotFound from "@/components/notFound";
 import BackButton from "@/components/backButton";
 import type { Concept } from "@/interfaces/interfaces";
 import { apiFetch } from "@/lib/api";
@@ -11,9 +11,16 @@ export default async function ConceptPage({
 }) {
   const { id } = await params;
 
-  if (!id) notFound();
+  if (!id) {
+    return <NotFound />;
+  }
 
-  const concept:Concept = await apiFetch<Concept>(`/concepts/${id}`);
+  let concept: Concept;
+  try {
+    concept = await apiFetch<Concept>(`/concepts/${id}`);
+  } catch (error) {
+    return <NotFound title="Concept Not Found" subtitle="This concept decided to ghost us 💀" />;
+  }
 
   return (
     
