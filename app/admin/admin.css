@@ -1,0 +1,258 @@
+/* ============================================
+   ADMIN THEME - Orange/Yellow Color Scheme
+   ============================================ */
+
+:root {
+  /* Admin Light Theme - Override primary purple with orange */
+  --color-primary: #fb923c;
+  --color-primary-hover: #f97316;
+  --color-primary-active: #ea580c;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  
+  --color-background: #fffbeb;
+  --color-surface: #fef3c7;
+  --color-surface-elevated: #ffffff;
+  --color-input: #fef3c7;
+  
+  --color-text: #171717;
+  --color-text-secondary: #7c2d12;
+  --color-text-muted: #92400e;
+  
+  --color-border: #fcd34d;
+  --color-border-focus: #fb923c;
+  
+  --color-overlay: rgba(251, 146, 60, 0.05);
+  --color-shadow: rgba(251, 146, 60, 0.1);
+  --color-shadow-hover: rgba(251, 146, 60, 0.2);
+}
+
+/* Admin Dark Theme */
+[data-mantine-color-scheme="dark"] {
+  --color-primary: #fb923c;
+  --color-primary-hover: #f97316;
+  --color-primary-active: #ea580c;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  
+  --color-background: #0a0a0a;
+  --color-surface: #141414;
+  --color-surface-elevated: #1e1e1e;
+  --color-input: #1a1a1a;
+  --color-background-hover: rgba(251, 146, 60, 0.08);
+  
+  --color-text: #ffffff;
+  --color-text-secondary: #fbbf24;
+  --color-text-muted: #fb923c;
+  
+  --color-border: #2a2a2a;
+  --color-border-focus: #fbbf24;
+  
+  --color-overlay: rgba(251, 146, 60, 0.08);
+  --color-shadow: rgba(251, 146, 60, 0.2);
+  --color-shadow-hover: rgba(251, 146, 60, 0.35);
+}
+
+/* Admin Navbar Glass Effect with Orange Glow */
+nav.navbar-glass {
+  background: rgba(254, 243, 199, 0.7) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 
+    0 0 10px rgba(251, 146, 60, 0.3),
+    0 0 30px rgba(251, 146, 60, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-mantine-color-scheme="dark"] nav.navbar-glass {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(251, 146, 60, 0.2) !important;
+  box-shadow: 
+    0 0 20px rgba(251, 146, 60, 0.3),
+    0 0 40px rgba(251, 146, 60, 0.15),
+    0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Admin-specific component styles */
+.admin-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 
+    0 0 20px rgba(251, 146, 60, 0.15),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.admin-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 
+    0 0 30px rgba(251, 146, 60, 0.25),
+    0 0 60px rgba(251, 146, 60, 0.15),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.admin-badge {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent)) !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 
+    0 0 15px rgba(251, 146, 60, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Status badges for concepts */
+.admin-badge-success {
+  background: rgba(34, 197, 94, 0.15) !important;
+  color: #16a34a !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+}
+
+.admin-badge-warning {
+  background: rgba(251, 191, 36, 0.15) !important;
+  color: #d97706 !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+}
+
+.admin-badge-error {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #dc2626 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+/* Table styling */
+.admin-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background: var(--color-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 20px rgba(251, 146, 60, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-table thead th {
+  background: var(--color-surface);
+  border-bottom: 2px solid var(--color-border);
+  padding: 16px 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-table tbody tr {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table tbody tr:hover {
+  background: var(--color-overlay);
+  box-shadow: inset 0 0 0 1px rgba(251, 146, 60, 0.2);
+}
+
+.admin-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin-table tbody td {
+  padding: 16px 20px;
+  vertical-align: middle;
+  color: var(--color-text);
+}
+
+/* Action buttons with glowing effects */
+.admin-action-view {
+  background: rgba(59, 130, 246, 0.1) !important;
+  color: #3b82f6 !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  transition: all 0.3s ease !important;
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-action-view:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: #1d4ed8 !important;
+  box-shadow: 
+    0 0 0 2px rgba(59, 130, 246, 0.3),
+    0 0 20px rgba(59, 130, 246, 0.4),
+    0 4px 12px rgba(59, 130, 246, 0.2) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+.admin-action-delete {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  border-radius: 8px !important;
+  padding: 8px !important;
+  transition: all 0.3s ease !important;
+  min-width: 36px;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-action-delete:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #dc2626 !important;
+  box-shadow: 
+    0 0 0 2px rgba(239, 68, 68, 0.3),
+    0 0 20px rgba(239, 68, 68, 0.4),
+    0 4px 12px rgba(239, 68, 68, 0.2) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+}
+
+/* Responsive table container */
+@media (max-width: 768px) {
+  .admin-table tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .admin-table thead th {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+}
+
+/* Subtle glow animation for enhanced visual appeal */
+@keyframes admin-glow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 20px rgba(251, 146, 60, 0.15),
+      0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  50% { 
+    box-shadow: 
+      0 0 30px rgba(251, 146, 60, 0.25),
+      0 0 60px rgba(251, 146, 60, 0.1),
+      0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Apply subtle animation to cards in dark mode */
+[data-mantine-color-scheme="dark"] .admin-card {
+  animation: admin-glow 4s ease-in-out infinite;
+}
