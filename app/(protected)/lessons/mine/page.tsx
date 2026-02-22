@@ -1,19 +1,20 @@
 import { apiFetch } from "@/lib/api";
-import type { Lesson } from "@/interfaces/interfaces";
+import type { LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import LessonCard from "@/components/lessons/lessonCard";
-import { Container, Skeleton, SimpleGrid, Text } from "@mantine/core";
+import { Container, Skeleton, SimpleGrid, Text, Group,Button } from "@mantine/core";
 import BackButton from "@/components/backButton";
+import Link from "next/link";
 
 export default async function MyLessonsPage() {
-  let lessons: Lesson[] = [];
+  let lessons: LessonSummary[] = [];
   let loading = false;
 
   try {
     loading = true;
     lessons = await apiFetch("/lessons/mine");
     loading = false;
-    console.log(lessons);
+    // console.log(lessons);
   } catch (err: any) {
     console.log(err);
     return <NotFound/>
@@ -24,7 +25,13 @@ export default async function MyLessonsPage() {
       <Text size="2xl" mb="xl">
         All Lessons
       </Text>
+      <Group justify="space-between">
       <BackButton/>
+      <Link href={'/lessons/create'}>
+        <Button>Create new lesson</Button>
+      </Link>
+      </Group>
+      
 
       {loading ? (
         <SimpleGrid cols={3} spacing="lg">
