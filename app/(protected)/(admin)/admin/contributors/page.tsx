@@ -2,15 +2,48 @@ import { apiFetch } from "@/lib/api";
 import { Card } from "@mantine/core";
 import { Suspense } from "react";
 import CardSkeleton from "@/components/common/cardSkeleton";
-import ContributorsManagementTable from "./contributorsTable";
-import type { AdminContributor } from "@/interfaces/interfaces";
+import UsersManagementTable from "./usersTable";
+import type { AdminContributor, AdminLearner, AdminUser } from "@/interfaces/interfaces";
 
-async function ContributorsData() {
-    const contributors = await apiFetch<AdminContributor[]>("/contributors");
-    return <ContributorsManagementTable contributors={contributors} />;
+async function UsersData() {
+    // Fetch all users (learners) and contributor metadata
+    const [learners, contributors] = await Promise.all([
+        apiFetch<AdminLearner[]>("/learners"),
+        apiFetch<AdminContributor[]>("/contributors")
+    ]);
+
+    // Create a map of contributor IDs for quick lookup
+    const contributorMap = new Map(
+        contributors.map(c => [c.contributorId, c])
+    );
+
+    // Merge: Check if each learner is also a contributor
+    const users: AdminUser[] = learners.map(learner => {
+        const contributorData = contributorMap.get(learner.id);
+        
+        if (contributorData) {
+            // This learner is a contributor
+            return {
+                userId: learner.id,
+                username: learner.username,
+                role: "CONTRIBUTOR" as const,
+                promotedAt: contributorData.promotedAt,
+                demotedAt: contributorData.demotedAt
+            };
+        } else {
+            // Regular learner
+            return {
+                userId: learner.id,
+                username: learner.username,
+                role: "LEARNER" as const
+            };
+        }
+    });
+
+    return <UsersManagementTable users={users} />;
 }
 
-export default function ManageContributorsPage() {
+export default function ManageUsersPage() {
     return (
         <div className="min-h-screen bg-[var(--color-background)] pt-10 pb-8 px-4">
             <div className="max-w-7xl mx-auto">
@@ -19,35 +52,35 @@ export default function ManageContributorsPage() {
                     <div className="flex items-center justify-center">
                         <div>
                             <h1 className="text-4xl font-bold text-[var(--color-text)] mb-2">
-                                Manage Contributors
+                                Manage Users
                             </h1>
                             <p className="text-center text-[var(--color-text-secondary)] mb-10">
-                                Promote and demote contributors
+                                View and manage all contributors and learners
                             </p>
                         </div>
                     </div>
-
-                    <Suspense
-                        fallback={
-                            <div>
-                                {/* Stats Skeleton */}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                                    {[...Array(3)].map((_, i) => (
-                                        <Card key={i} className="admin-card">
-                                            <CardSkeleton count={1} cols={1} showBookmark={false} lines={1} />
-                                        </Card>
-                                    ))}
-                                </div>
-                                {/* Table Skeleton */}
-                                <Card className="admin-card">
-                                    <CardSkeleton count={6} cols={1} showBookmark={false} lines={2} />
-                                </Card>
-                            </div>
-                        }
-                    >
-                        <ContributorsData />
-                    </Suspense>
                 </div>
+
+                <Suspense
+                    fallback={
+                        <div>
+                            {/* Stats Skeleton */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                {[...Array(3)].map((_, i) => (
+                                    <Card key={i} className="admin-card">
+                                        <CardSkeleton count={1} cols={1} showBookmark={false} lines={1} />
+                                    </Card>
+                                ))}
+                            </div>
+                            {/* Table Skeleton */}
+                            <Card className="admin-card">
+                                <CardSkeleton count={6} cols={1} showBookmark={false} lines={2} />
+                            </Card>
+                        </div>
+                    }
+                >
+                    <UsersData />
+                </Suspense>
             </div>
         </div>
     );

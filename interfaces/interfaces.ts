@@ -53,8 +53,25 @@ export interface CreateLessonRequest {
 //     },  
 export interface AdminContributor {
   contributorId: string;
+  username: string;
   promotedAt: string | null;
   demotedAt: string | null;
+}
+
+export interface AdminLearner {
+  id: string;
+  username: string;
+  createdAt: string;
+  totalPoints: number;
+}
+
+// Unified user interface for admin pages
+export interface AdminUser {
+  userId: string;
+  username: string;
+  role: "CONTRIBUTOR" | "LEARNER";
+  promotedAt?: string | null;
+  demotedAt?: string | null;
 }
 
 export type AdminConcept = Concept;

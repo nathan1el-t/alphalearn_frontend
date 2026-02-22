@@ -32,37 +32,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch user role from backend via Server Action
   const fetchUserRole = async () => {
-    console.log("[AuthContext] 🔵 Fetching role via Server Action");
     
     try {
       const result = await getUserRoleAction();
       
       if (result.success && result.role) {
-        console.log("[AuthContext] ✅ Role fetched successfully:", result.role);
         setUserRole(result.role);
       } else {
-        console.warn("[AuthContext] ⚠️ Failed to fetch role");
         setUserRole(null);
       }
     } catch (error) {
-      console.error("[AuthContext] ❌ Error fetching user role:", error);
       setUserRole(null);
     }
   };
 
   useEffect(() => {
-    console.log("[AuthContext] 🔄 Initial useEffect triggered");
     
     const getSession = async () => {
       setIsLoading(true);
       const { data, error } = await supabase.auth.getSession();
-
-      console.log("[AuthContext] 🔄 Session fetched:", {
-        hasSession: !!data.session,
-        hasUser: !!data.session?.user,
-        hasToken: !!data.session?.access_token,
-        error: error?.message
-      });
 
       if (!error) {
         setSession(data.session);
@@ -70,10 +58,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         // Fetch role if user is authenticated
         if (data.session?.user) {
-          console.log("[AuthContext] 🔄 Calling fetchUserRole from initial load");
           await fetchUserRole();
         } else {
-          console.log("[AuthContext] ⚠️ No user session, skipping role fetch");
         }
       }
 
@@ -84,21 +70,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log("[AuthContext] 🔄 Auth state changed:", {
-          event,
-          hasSession: !!session,
-          hasToken: !!session?.access_token
-        });
-        
         setSession(session);
         setUser(session?.user || null);
         
         // Fetch role when auth state changes
         if (session?.user) {
-          console.log("[AuthContext] 🔄 Calling fetchUserRole from auth state change");
           await fetchUserRole();
         } else {
-          console.log("[AuthContext] ⚠️ No session/token, clearing role");
           setUserRole(null);
         }
         

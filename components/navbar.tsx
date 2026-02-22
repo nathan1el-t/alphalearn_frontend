@@ -41,31 +41,23 @@ export default function Navbar() {
           {/* Admin Navigation - Only shown for admins */}
           {userRole === "ADMIN" && (
             <div className="hidden lg:flex items-center gap-1 ml-4 pl-4 border-l border-[var(--color-border)]">
-              <Badge 
-                size="xs" 
-                variant="gradient"
-                gradient={{ from: '#fb923c', to: '#fbbf24', deg: 135 }}
-                className="mr-2"
-              >
-                ADMIN
-              </Badge>
-              <Link 
+              <Link
                 href="/admin"
                 className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
               >
                 Dashboard
               </Link>
-              <Link 
+              <Link
                 href="/admin/concepts"
                 className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
               >
                 Concepts
               </Link>
-              <Link 
+              <Link
                 href="/admin/contributors"
                 className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
               >
-                Contributors
+                Users
               </Link>
             </div>
           )}
@@ -246,35 +238,26 @@ export default function Navbar() {
               {/* Admin Navigation - Mobile */}
               {userRole === "ADMIN" && (
                 <div className="flex flex-col gap-2 pb-4 border-b border-[var(--color-border)]">
-                  <Badge 
-                    size="sm" 
-                    variant="gradient"
-                    gradient={{ from: '#fb923c', to: '#fbbf24', deg: 135 }}
-                    fullWidth
-                    className="justify-center"
-                  >
-                    ADMIN PANEL
-                  </Badge>
-                  <Link 
+                  <Link
                     href="/admin"
                     onClick={close}
                     className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
                   >
                     Dashboard
                   </Link>
-                  <Link 
+                  <Link
                     href="/admin/concepts"
                     onClick={close}
                     className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
                   >
                     Manage Concepts
                   </Link>
-                  <Link 
+                  <Link
                     href="/admin/contributors"
                     onClick={close}
                     className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
                   >
-                    Manage Contributors
+                    Manage Users
                   </Link>
                 </div>
               )}
