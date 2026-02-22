@@ -1,31 +1,54 @@
 "use client";
+
 import { useState } from "react";
 import { RichTextEditor } from "@/components/textEditor";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { showSuccess, showError } from "@/lib/notifications";
+import { createLesson, saveLesson } from "@/lib/lessons";
+import { CreateLessonRequest } from "@/interfaces/interfaces";
+
+export interface LessonEditorProps {
+  id?: string;
+  initialTitle: string;
+  initialLearningObjectives?: string;
+  initialContent: any;
+  conceptId: number;
+  contributorId: string;
+}
 
 export default function LessonEditor({
   id,
   initialTitle,
+  initialLearningObjectives = "",
   initialContent,
-  onEmit
-}: {
-  id: string;
-  initialTitle: string;
-  initialContent: any;
-  onEmit: (data: { title: string; content: any }) => Promise<{ success: boolean; message?: string }>;
-}) {
+  conceptId,
+  contributorId,
+}: LessonEditorProps) {
   const [title, setTitle] = useState(initialTitle);
+  const [learningObjectives, setLearningObjectives] = useState(initialLearningObjectives);
   const [content, setContent] = useState(initialContent);
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
+    setLoading(true);
+
     try {
-      setLoading(true);
-      const {success, message} = await onEmit({ title, content });
-      success == true ? showSuccess(message || "yay") : showError(message || "nooo");
-    } catch (e:any) {
-      console.error(e);
+      const response = id
+        ? await saveLesson({ id, title, learningObjectives, content })
+        : await createLesson({
+          title,
+          learningObjectives,
+          content,
+          conceptId,
+          contributorId,
+          submit: true,
+        } satisfies CreateLessonRequest); 
+
+      response.success
+        ? showSuccess(response.message || "Saved!")
+        : showError(response.message || "Failed");
+
+    } catch (e: any) {
       showError(e.message);
     } finally {
       setLoading(false);
@@ -33,14 +56,29 @@ export default function LessonEditor({
   };
 
   return (
-    <Stack>
-      <TextInput
+    <Stack gap="xl">
+      <TextInput size="lg"
         value={title}
-        onChange={(event) => setTitle(event.currentTarget.value)}
+        onChange={(e) => setTitle(e.currentTarget.value)}
         label="Lesson Title"
       />
-      <RichTextEditor value={content} onChange={setContent} isEditing />
-      <Button loading={loading} onClick={handleSave}>Save</Button>
+
+      <TextInput size="lg"
+        value={learningObjectives}
+        onChange={(e) => setLearningObjectives(e.currentTarget.value)}
+        label="Learning Objectives"
+      />
+
+      <RichTextEditor
+    
+        value={content}
+        onChange={setContent}
+        isEditing
+      />
+
+      <Button loading={loading} onClick={handleSave}>
+        Save
+      </Button>
     </Stack>
   );
 }
