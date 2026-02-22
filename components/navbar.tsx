@@ -7,7 +7,7 @@ import { Badge, Burger, Drawer, Avatar } from "@mantine/core"
 import { useDisclosure } from "@mantine/hooks"
 
 export default function Navbar() {
-  const { user, isLoading, signOut } = useAuth()
+  const { user, userRole, isLoading, signOut } = useAuth()
   const [opened, { toggle, close }] = useDisclosure(false)
 
   if (isLoading) {
@@ -37,6 +37,38 @@ export default function Navbar() {
               AlphaLearn
             </h2>
           </Link>
+
+          {/* Admin Navigation - Only shown for admins */}
+          {userRole === "ADMIN" && (
+            <div className="hidden lg:flex items-center gap-1 ml-4 pl-4 border-l border-[var(--color-border)]">
+              <Badge 
+                size="xs" 
+                variant="gradient"
+                gradient={{ from: '#fb923c', to: '#fbbf24', deg: 135 }}
+                className="mr-2"
+              >
+                ADMIN
+              </Badge>
+              <Link 
+                href="/admin"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
+              >
+                Dashboard
+              </Link>
+              <Link 
+                href="/admin/concepts"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
+              >
+                Concepts
+              </Link>
+              <Link 
+                href="/admin/contributors"
+                className="px-3 py-1.5 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors"
+              >
+                Contributors
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Desktop Right Section */}
@@ -90,7 +122,7 @@ export default function Navbar() {
                 <div className="text-right">
                   <p className="text-xs font-bold text-[var(--color-text)]">{user.email}</p>
                   <p className="text-[8px] text-[var(--color-text-muted)] uppercase tracking-widest font-semibold">
-                    Contributor
+                    {userRole || "User"}
                   </p>
                 </div>
                 <Avatar
@@ -206,10 +238,46 @@ export default function Navbar() {
                 <div>
                   <p className="text-sm font-bold text-[var(--color-text)]">{user.email}</p>
                   <p className="text-xs text-[var(--color-text-muted)] uppercase tracking-wider">
-                    Contributor
+                    {userRole || "User"}
                   </p>
                 </div>
               </div>
+
+              {/* Admin Navigation - Mobile */}
+              {userRole === "ADMIN" && (
+                <div className="flex flex-col gap-2 pb-4 border-b border-[var(--color-border)]">
+                  <Badge 
+                    size="sm" 
+                    variant="gradient"
+                    gradient={{ from: '#fb923c', to: '#fbbf24', deg: 135 }}
+                    fullWidth
+                    className="justify-center"
+                  >
+                    ADMIN PANEL
+                  </Badge>
+                  <Link 
+                    href="/admin"
+                    onClick={close}
+                    className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link 
+                    href="/admin/concepts"
+                    onClick={close}
+                    className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
+                  >
+                    Manage Concepts
+                  </Link>
+                  <Link 
+                    href="/admin/contributors"
+                    onClick={close}
+                    className="w-full px-4 py-2 rounded-lg text-sm font-medium text-[var(--color-text)] hover:bg-[var(--color-overlay)] transition-colors text-center"
+                  >
+                    Manage Contributors
+                  </Link>
+                </div>
+              )}
 
               {/* Stat Badges */}
               <div className="flex flex-col gap-2">

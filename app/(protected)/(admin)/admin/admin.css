@@ -10,21 +10,22 @@
   --color-accent: #fbbf24;
   --color-accent-hover: #f59e0b;
   
-  --color-background: #fffbeb;
-  --color-surface: #fef3c7;
+  --color-background: #fafafa;
+  --color-surface: #ffffff;
   --color-surface-elevated: #ffffff;
-  --color-input: #fef3c7;
+  --color-input: #f5f5f5;
+  --color-background-hover: rgba(251, 146, 60, 0.04);
   
-  --color-text: #171717;
-  --color-text-secondary: #7c2d12;
-  --color-text-muted: #92400e;
+  --color-text: #0a0a0a;
+  --color-text-secondary: #525252;
+  --color-text-muted: #737373;
   
-  --color-border: #fcd34d;
+  --color-border: #e5e5e5;
   --color-border-focus: #fb923c;
   
-  --color-overlay: rgba(251, 146, 60, 0.05);
-  --color-shadow: rgba(251, 146, 60, 0.1);
-  --color-shadow-hover: rgba(251, 146, 60, 0.2);
+  --color-overlay: rgba(251, 146, 60, 0.04);
+  --color-shadow: rgba(0, 0, 0, 0.06);
+  --color-shadow-hover: rgba(251, 146, 60, 0.15);
 }
 
 /* Admin Dark Theme */
@@ -55,13 +56,13 @@
 
 /* Admin Navbar Glass Effect with Orange Glow */
 nav.navbar-glass {
-  background: rgba(254, 243, 199, 0.7) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(251, 146, 60, 0.1) !important;
   box-shadow: 
-    0 0 10px rgba(251, 146, 60, 0.3),
-    0 0 30px rgba(251, 146, 60, 0.15),
-    0 8px 32px rgba(0, 0, 0, 0.1) !important;
+    0 2px 8px rgba(0, 0, 0, 0.05),
+    0 0 20px rgba(251, 146, 60, 0.08) !important;
 }
 
 [data-mantine-color-scheme="dark"] nav.navbar-glass {
@@ -82,18 +83,30 @@ nav.navbar-glass {
   border-radius: 12px;
   padding: 20px;
   box-shadow: 
-    0 0 20px rgba(251, 146, 60, 0.15),
-    0 4px 12px rgba(0, 0, 0, 0.1);
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 0 20px rgba(251, 146, 60, 0.08);
   transition: all 0.3s ease-in-out;
 }
 
 .admin-card:hover {
   border-color: var(--color-primary);
   box-shadow: 
-    0 0 30px rgba(251, 146, 60, 0.25),
-    0 0 60px rgba(251, 146, 60, 0.15),
-    0 8px 25px rgba(0, 0, 0, 0.15);
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 0 30px rgba(251, 146, 60, 0.15);
   transform: translateY(-2px);
+}
+
+/* Light mode specific card styling */
+:root .admin-card {
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+:root .admin-card:hover {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 25px rgba(251, 146, 60, 0.12);
 }
 
 .admin-badge {
@@ -225,15 +238,70 @@ nav.navbar-glass {
 }
 
 /* Responsive table container */
-@media (max-width: 768px) {
-  .admin-table tbody td {
-    padding: 12px 16px;
+@media (max-width: 1024px) {
+  .admin-table {
     font-size: 14px;
   }
   
+  .admin-table thead th,
+  .admin-table tbody td {
+    padding: 12px 12px;
+  }
+  
   .admin-table thead th {
-    padding: 12px 16px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .admin-table thead th,
+  .admin-table tbody td {
+    padding: 10px 8px;
     font-size: 13px;
+  }
+  
+  .admin-table thead th {
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+  
+  /* Make action buttons smaller on mobile */
+  .admin-action-view,
+  .admin-action-delete {
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 6px !important;
+  }
+  
+  .admin-action-view .material-symbols-outlined,
+  .admin-action-delete .material-symbols-outlined {
+    font-size: 18px;
+  }
+  
+  /* Stack cards on mobile */
+  .admin-card {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-table thead th,
+  .admin-table tbody td {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+  
+  /* Hide less important columns on very small screens */
+  .admin-table tbody td:nth-child(3),
+  .admin-table thead th:nth-child(3) {
+    display: none;
   }
 }
 
@@ -255,4 +323,29 @@ nav.navbar-glass {
 /* Apply subtle animation to cards in dark mode */
 [data-mantine-color-scheme="dark"] .admin-card {
   animation: admin-glow 4s ease-in-out infinite;
+}
+
+/* Admin navigation styling */
+.admin-nav-link {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.admin-nav-link:hover {
+  background: var(--color-overlay);
+}
+
+.admin-nav-link.active {
+  background: var(--color-overlay);
+  color: var(--color-primary) !important;
+}
+
+.admin-nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--color-primary);
 }

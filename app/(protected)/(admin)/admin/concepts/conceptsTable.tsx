@@ -5,7 +5,7 @@ import { Spotlight, spotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "@/components/concepts/searchBar";
-import { AdminConcept } from "./page";
+import type { AdminConcept } from "@/interfaces/interfaces";
 
 interface ConceptsManagementTableProps {
   concepts: AdminConcept[];

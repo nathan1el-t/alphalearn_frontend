@@ -3,15 +3,7 @@ import { Badge, Card } from "@mantine/core";
 import { Suspense } from "react";
 import CardSkeleton from "@/components/common/cardSkeleton";
 import ConceptsManagementTable from "./conceptsTable";
-
-// Backend concept structure
-export interface AdminConcept {
-    conceptId: number;
-    title: string;
-    description: string;
-    moderationStatus: "APPROVED" | "PENDING" | "REJECTED";
-    createdAt: string;
-}
+import type { AdminConcept } from "@/interfaces/interfaces";
 
 async function ConceptsData() {
     const concepts = await apiFetch<AdminConcept[]>("/concepts");
