@@ -42,7 +42,7 @@ export function UsersTableView({
           <thead>
             <tr>
               <th className="text-[var(--color-text)] font-semibold text-left p-3">Username</th>
-              <th className="text-[var(--color-text)] font-semibold text-left p-3">User ID</th>
+              {/* <th className="text-[var(--color-text)] font-semibold text-left p-3">User ID</th> */}
               <th className="text-[var(--color-text)] font-semibold text-left p-3">Role</th>
               <th className="text-[var(--color-text)] font-semibold text-left p-3">Status</th>
               <th className="text-[var(--color-text)] font-semibold text-left p-3">Promoted At</th>
@@ -72,11 +72,11 @@ export function UsersTableView({
                         {user.username}
                       </Text>
                     </td>
-                    <td className="p-3">
+                    {/* <td className="p-3">
                       <Text size="sm" className="text-[var(--color-text-secondary)] font-mono">
                         {user.userId}
                       </Text>
-                    </td>
+                    </td> */}
                     <td className="p-3">
                       <Badge 
                         variant="light" 
