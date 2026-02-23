@@ -27,7 +27,7 @@ export interface CreateLessonRequest {
   title: string
   learningObjectives?: string
   content: any
-  conceptId: number
+  conceptIds: number[]
   contributorId: string
   submit?: boolean
 }
