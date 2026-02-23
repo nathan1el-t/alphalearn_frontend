@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import {
   Container,
   Title,
-  Text,
   Card,
   Divider,
   Stack,
@@ -43,14 +42,6 @@ export default async function LessonPage({
           </div>
 
           <Divider />
-
-          <Card withBorder radius="md" p="lg">
-            <Title order={3} mb="sm">
-              Learning Objectives
-            </Title>
-            <Text>{lessonContent.learningObjectives}</Text>
-          </Card>
-
           <Card withBorder radius="md" p="xl">
             <TextDisplayer content={lessonContent.content} />
           </Card>

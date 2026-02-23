@@ -22,7 +22,6 @@ export default async function EditLessonPage({
         <LessonEditor
           id={id}
           initialTitle={lesson.title}
-          initialLearningObjectives={lesson.learningObjectives}
           initialContent={lesson.content}
           initialConceptIds={lesson.conceptIds}
           contributorId={lesson.contributorId} />

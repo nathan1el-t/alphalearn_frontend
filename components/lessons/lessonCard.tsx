@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Card, Tooltip, Badge, Text } from "@mantine/core";
+import { Card, Badge, Text } from "@mantine/core";
 import type { LessonSummary } from "@/interfaces/interfaces";
 import { DateDisplay } from "../dateDisplay";
 
@@ -10,7 +10,6 @@ interface LessonCardProps extends LessonSummary { }
 export default function LessonCard({
   lessonId,
   title,
-  learningObjectives,
   moderationStatus,
   contributorId,
   createdAt,
@@ -46,10 +45,6 @@ export default function LessonCard({
       <Card.Section inheritPadding className="pb-4">
         <Text size="lg" className="mb-1 text-[var(--color-text)] line-clamp-2">
           {title}
-        </Text>
-
-        <Text size="sm" color="dimmed" className="line-clamp-3 mb-2">
-          {learningObjectives}
         </Text>
 
         <div className="flex items-center gap-1 text-[10px] text-[var(--color-text-muted)] font-medium">

@@ -11,7 +11,6 @@ import { Concept, CreateLessonRequest } from "@/interfaces/interfaces";
 export interface LessonEditorProps {
   id?: string;
   initialTitle: string;
-  initialLearningObjectives?: string;
   initialContent: any;
   availableConcepts?: Concept[];
   initialConceptIds?: number[];
@@ -21,7 +20,6 @@ export interface LessonEditorProps {
 export default function LessonEditor({
   id,
   initialTitle,
-  initialLearningObjectives = "",
   initialContent,
   availableConcepts = [],
   initialConceptIds = [],
@@ -29,7 +27,6 @@ export default function LessonEditor({
 }: LessonEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
-  const [learningObjectives, setLearningObjectives] = useState(initialLearningObjectives);
   const [content, setContent] = useState(initialContent);
   const [selectedConceptIds, setSelectedConceptIds] = useState<string[]>(
     initialConceptIds.map(String),
@@ -47,10 +44,9 @@ export default function LessonEditor({
 
     try {
       const response = id
-        ? await saveLesson({ id, title, learningObjectives, content })
+        ? await saveLesson({ id, title, content })
         : await createLesson({
           title,
-          learningObjectives,
           content,
           conceptIds: selectedConceptIds.map(Number).filter((value) => Number.isFinite(value)),
           contributorId,
@@ -83,12 +79,6 @@ export default function LessonEditor({
         value={title}
         onChange={(e) => setTitle(e.currentTarget.value)}
         label="Lesson Title"
-      />
-
-      <TextInput size="lg"
-        value={learningObjectives}
-        onChange={(e) => setLearningObjectives(e.currentTarget.value)}
-        label="Learning Objectives"
       />
 
       {isCreateMode && (
