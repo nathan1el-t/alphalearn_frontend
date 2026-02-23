@@ -34,7 +34,7 @@ export function RichTextEditor({
     content: value,
     editable: isEditing,
     onUpdate: ({ editor }) => {
-      onChange(editor.getJSON());
+      onChange(editor.getHTML());
     },
   });
 

@@ -1,8 +1,9 @@
 import LessonEditor from "./lessoneditor";
 import { apiFetch } from "@/lib/api";
-import { LessonContent } from "@/interfaces/interfaces";
-import { notFound } from "next/navigation";
+import { Lesson } from "@/interfaces/interfaces";
+import NotFound from "@/components/notFound";
 import BackButton from "@/components/backButton";
+import { Container } from "@mantine/core";
 
 export default async function EditLessonPage({
   params,
@@ -11,50 +12,24 @@ export default async function EditLessonPage({
 }) {
   try {
     const { id } = await params;
-    const lesson: LessonContent = await apiFetch(`/lessons/${id}`);
 
-    async function saveLesson({
-      title,
-      content,
-    }: {
-      title: string;
-      content: any;
-    }) {
-      "use server";
-      try {
-        await apiFetch(`/lessons/${id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ title, content }),
-        });
-        return {
-          success: true,
-          message: "successfully saved lesson"
-        };
-
-      } catch (err: any) {
-        return {
-          success: false,
-          message: err?.message || "something went wrong",
-        };
-      }
-    }
+    const lesson: Lesson = await apiFetch(`/lessons/${id}`);
 
     return (
-      <>
+      <Container size="md" py="xl">
         <BackButton />
+
         <LessonEditor
           id={id}
           initialTitle={lesson.title}
+          initialLearningObjectives={lesson.learningObjectives}
           initialContent={lesson.content}
-          onEmit={saveLesson}
-        />
-      </>
+          conceptId={lesson.conceptId}
+          contributorId={lesson.contributorId} />
+      </Container>
     );
   } catch (err: any) {
     console.log(err);
-    return notFound();
+    return <NotFound/>
   }
 }

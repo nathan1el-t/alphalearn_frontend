@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { Card, Tooltip, Badge, Text } from "@mantine/core";
-import type { Lesson } from "@/interfaces/interfaces";
+import type { LessonSummary } from "@/interfaces/interfaces";
 import { DateDisplay } from "../dateDisplay";
 
-interface LessonCardProps extends Lesson {}
+interface LessonCardProps extends LessonSummary { }
 
 export default function LessonCard({
   lessonId,
@@ -34,11 +34,13 @@ export default function LessonCard({
           {moderationStatus}
         </Badge>
 
-        <Tooltip label="Save for later" position="top" withArrow>
+        {/*temporarily removed, may add on next time*/}
+
+        {/* <Tooltip label="Save for later" position="top" withArrow>
           <span className="material-symbols-outlined text-[var(--color-text-muted)] hover:text-[var(--color-text)] cursor-pointer transition-colors text-[16px]">
             bookmark
           </span>
-        </Tooltip>
+        </Tooltip> */}
       </div>
 
       <Card.Section inheritPadding className="pb-4">

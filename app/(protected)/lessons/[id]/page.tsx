@@ -1,6 +1,6 @@
 import { TextDisplayer } from "@/components/textDisplayer";
 import { apiFetch } from "@/lib/api";
-import { LessonContent } from "@/interfaces/interfaces";
+import type { Lesson } from "@/interfaces/interfaces";
 import { notFound } from "next/navigation";
 import {
   Container,
@@ -22,7 +22,7 @@ export default async function LessonPage({
 }) {
   try {
     const { id } = await params;
-    const lessonContent: LessonContent = await apiFetch(`/lessons/${id}`);
+    const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
 
     return (
       <Container size="md" py="xl">
@@ -40,9 +40,6 @@ export default async function LessonPage({
               {lessonContent.title}
             </Title>
 
-            <Text c="dimmed" size="sm">
-              Lesson ID: {id}
-            </Text>
           </div>
 
           <Divider />

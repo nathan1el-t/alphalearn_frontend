@@ -1,12 +1,12 @@
 import { apiFetch } from "@/lib/api";
-import type { Lesson } from "@/interfaces/interfaces";
-import { notFound } from "next/navigation";
+import type { LessonSummary } from "@/interfaces/interfaces";
+import NotFound from "@/components/notFound";
 import LessonCard from "@/components/lessons/lessonCard";
 import { Skeleton, SimpleGrid, Container, Text, Button } from "@mantine/core";
 import Link from "next/link";
 
 export default async function LessonsPage() {
-  let lessons: Lesson[] = [];
+  let lessons: LessonSummary[] = [];
   let loading = false;
 
   try {
@@ -15,7 +15,7 @@ export default async function LessonsPage() {
     loading = false;
   } catch (err: any) {
     console.error(err);
-    return notFound();
+    return <NotFound/>
   }
 
   return (
