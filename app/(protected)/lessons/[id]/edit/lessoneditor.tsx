@@ -13,7 +13,6 @@ export interface LessonEditorProps {
   initialTitle: string;
   initialLearningObjectives?: string;
   initialContent: any;
-  conceptId?: number;
   availableConcepts?: Concept[];
   initialConceptIds?: number[];
   contributorId: string;
@@ -24,7 +23,6 @@ export default function LessonEditor({
   initialTitle,
   initialLearningObjectives = "",
   initialContent,
-  conceptId,
   availableConcepts = [],
   initialConceptIds = [],
   contributorId,
@@ -34,12 +32,7 @@ export default function LessonEditor({
   const [learningObjectives, setLearningObjectives] = useState(initialLearningObjectives);
   const [content, setContent] = useState(initialContent);
   const [selectedConceptIds, setSelectedConceptIds] = useState<string[]>(
-    (initialConceptIds.length > 0
-      ? initialConceptIds
-      : conceptId
-        ? [conceptId]
-        : []
-    ).map(String),
+    initialConceptIds.map(String),
   );
   const [loading, setLoading] = useState(false);
   const isCreateMode = !id;

@@ -14,7 +14,7 @@ export type Lesson = {
   moderationStatus: string
   contributorId: string
   createdAt: string
-  conceptId: number
+  conceptIds: number[]
 }
 
 export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "learningObjectives" | "contributorId" | "createdAt" | "moderationStatus">

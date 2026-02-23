@@ -24,7 +24,7 @@ export default async function EditLessonPage({
           initialTitle={lesson.title}
           initialLearningObjectives={lesson.learningObjectives}
           initialContent={lesson.content}
-          conceptId={lesson.conceptId}
+          initialConceptIds={lesson.conceptIds}
           contributorId={lesson.contributorId} />
       </Container>
     );
