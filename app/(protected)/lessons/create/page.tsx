@@ -13,7 +13,7 @@ export default async function CreateLessonPage({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/signin");
   }
 
   const { conceptId } = await searchParams;
