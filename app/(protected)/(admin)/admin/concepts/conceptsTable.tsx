@@ -5,6 +5,9 @@ import { Spotlight, spotlight } from "@mantine/spotlight";
 import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "@/components/concepts/searchBar";
+import ConfirmModal from "@/components/common/confirmModal";
+import { showSuccess, showError } from "@/lib/notifications";
+import { deleteConcept } from "./actions";
 import type { AdminConcept } from "@/interfaces/interfaces";
 
 interface ConceptsManagementTableProps {
@@ -15,8 +18,43 @@ type FilterType = "all" | "approved" | "pending";
 
 export default function ConceptsManagementTable({ concepts }: ConceptsManagementTableProps) {
   const [filter, setFilter] = useState<FilterType>("all");
-  const handleDeleteConcept = (conceptId: number) => {
-    // delete functionality
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [selectedConcept, setSelectedConcept] = useState<AdminConcept | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteConcept = (concept: AdminConcept) => {
+    setSelectedConcept(concept);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedConcept) return;
+
+    setIsDeleting(true);
+    try {
+      const result = await deleteConcept(selectedConcept.conceptId);
+      
+      setShowDeleteConfirm(false);
+      setSelectedConcept(null);
+      
+      if (result.success) {
+        showSuccess(result.message);
+      } else {
+        showError(result.message);
+      }
+    } catch (error) {
+      console.error("Failed to delete concept:", error);
+      showError("An error occurred while deleting the concept");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (!isDeleting) {
+      setShowDeleteConfirm(false);
+      setSelectedConcept(null);
+    }
   };
 
   // Filter concepts based on current filter
@@ -197,7 +235,7 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                           color="red"
                           className="admin-action-delete hover:bg-red-50 hover:text-red-600 transition-all duration-200"
                           size="sm"
-                          onClick={() => handleDeleteConcept(concept.conceptId)}
+                          onClick={() => handleDeleteConcept(concept)}
                         >
                           <span className="material-symbols-outlined text-base">
                             delete
@@ -212,6 +250,19 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
           </table>
         </div>
       </Card>
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        opened={showDeleteConfirm}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Delete Concept"
+        message={`Are you sure you want to delete "${selectedConcept?.title}"?\n\nThis action cannot be undone.`}
+        confirmText="Delete"
+        confirmColor="red"
+        icon="delete_forever"
+        loading={isDeleting}
+      />
     </>
   );
 }
