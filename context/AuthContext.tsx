@@ -6,10 +6,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { showError, showSuccess } from "@/lib/notifications";
+import { getUserRoleAction } from "@/lib/actions/role";
+
+export type UserRole = "ADMIN" | "CONTRIBUTOR" | "LEARNER" | null;
 
 type AuthContextType = {
   user: User | null;
   session: Session | null;
+  userRole: UserRole;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
@@ -22,10 +26,28 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [userRole, setUserRole] = useState<UserRole>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Fetch user role from backend via Server Action
+  const fetchUserRole = async () => {
+    
+    try {
+      const result = await getUserRoleAction();
+      
+      if (result.success && result.role) {
+        setUserRole(result.role);
+      } else {
+        setUserRole(null);
+      }
+    } catch (error) {
+      setUserRole(null);
+    }
+  };
+
   useEffect(() => {
+    
     const getSession = async () => {
       setIsLoading(true);
       const { data, error } = await supabase.auth.getSession();
@@ -33,6 +55,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!error) {
         setSession(data.session);
         setUser(data.session?.user || null);
+        
+        // Fetch role if user is authenticated
+        if (data.session?.user) {
+          await fetchUserRole();
+        } else {
+        }
       }
 
       setIsLoading(false);
@@ -41,9 +69,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getSession();
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user || null);
+        
+        // Fetch role when auth state changes
+        if (session?.user) {
+          await fetchUserRole();
+        } else {
+          setUserRole(null);
+        }
+        
         setIsLoading(false);
       },
     );
@@ -106,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await supabase.auth.signOut();
       setUser(null);
       setSession(null);
+      setUserRole(null);
       showSuccess("Logged out successfully!");
       router.push("/signin");
     } catch (err: any) {
@@ -116,6 +153,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const value = {
     user,
     session,
+    userRole,
     isLoading,
     signIn,
     signInWithGoogle,

@@ -2,7 +2,7 @@ export interface Concept {
   conceptId: number;
   title: string;
   description: string;
-  moderationStatus: string;
+  moderationStatus: "APPROVED" | "PENDING" | "REJECTED";
   createdAt: string;
 }
 
@@ -51,3 +51,27 @@ export interface CreateLessonRequest {
 //         "contributorId": "3fab4f56-6ef7-40c1-b3cf-b63c12c57923",
 //         "createdAt": "2026-02-15T14:12:10.255478Z"
 //     },  
+export interface AdminContributor {
+  contributorId: string;
+  username: string;
+  promotedAt: string | null;
+  demotedAt: string | null;
+}
+
+export interface AdminLearner {
+  id: string;
+  username: string;
+  createdAt: string;
+  totalPoints: number;
+}
+
+// Unified user interface for admin pages
+export interface AdminUser {
+  userId: string;
+  username: string;
+  role: "CONTRIBUTOR" | "LEARNER";
+  promotedAt?: string | null;
+  demotedAt?: string | null;
+}
+
+export type AdminConcept = Concept;
