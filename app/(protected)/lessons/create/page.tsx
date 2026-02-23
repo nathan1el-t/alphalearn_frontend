@@ -1,22 +1,35 @@
 import { createClient } from "@/lib/supabase/server";
+import { apiFetch } from "@/lib/api";
 import LessonEditor from "@/app/(protected)/lessons/[id]/edit/lessoneditor";
 import { redirect } from "next/navigation";
 import { Container, Title } from "@mantine/core";
 import BackButton from "@/components/backButton";
+import { Concept } from "@/interfaces/interfaces";
 
 export default async function CreateLessonPage({
   searchParams,
 }: {
-  searchParams: Promise<{ conceptId?: string }>;
+  searchParams: Promise<{ conceptId?: string; conceptIds?: string }>;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/signin");
   }
 
-  const { conceptId } = await searchParams;
+  const concepts: Concept[] = await apiFetch<Concept[]>("/concepts");
+  const { conceptId, conceptIds } = await searchParams;
+  const initialConceptIds = Array.from(
+    new Set(
+      [
+        ...(conceptIds ? conceptIds.split(",") : []),
+        ...(conceptId ? [conceptId] : []),
+      ]
+        .map((value) => Number(value))
+        .filter((value) => Number.isFinite(value) && value > 0),
+    ),
+  );
 
   return (
     <Container size="md" py="xl">
@@ -25,7 +38,8 @@ export default async function CreateLessonPage({
       <LessonEditor
         initialTitle=""
         initialContent={{ type: "doc", content: [] }}
-        conceptId={conceptId ? parseInt(conceptId) : 1}
+        availableConcepts={concepts}
+        initialConceptIds={initialConceptIds}
         contributorId={user.id}
       />
     </Container>

@@ -20,11 +20,11 @@ async function handleRequest(url: string, options: RequestInit): Promise<ActionR
   }
 }
 
-export async function saveLesson({ id, title, learningObjectives, content }: { id: string; title: string; learningObjectives: string; content: any; }): Promise<ActionResponse> {
+export async function saveLesson({ id, title, content }: { id: string; title: string; content: any; }): Promise<ActionResponse> {
   const response = await handleRequest(`/lessons/${id}`, {
     method: "PUT",
     headers,
-    body: JSON.stringify({ title, learningObjectives, content }),
+    body: JSON.stringify({ title, content }),
   });
 
   if (response.success) {
