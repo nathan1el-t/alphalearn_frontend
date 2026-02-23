@@ -22,16 +22,18 @@ async function UsersData() {
         const contributorData = contributorMap.get(learner.id);
         
         if (contributorData) {
-            // This learner is a contributor
+            // Check if contributor is currently active (not demoted)
+            const isActiveContributor = contributorData.demotedAt === null;
+            
             return {
                 userId: learner.id,
                 username: learner.username,
-                role: "CONTRIBUTOR" as const,
+                role: isActiveContributor ? "CONTRIBUTOR" as const : "LEARNER" as const,
                 promotedAt: contributorData.promotedAt,
                 demotedAt: contributorData.demotedAt
             };
         } else {
-            // Regular learner
+            // Regular learner (never been promoted)
             return {
                 userId: learner.id,
                 username: learner.username,
