@@ -2,6 +2,7 @@
 
 import { apiFetch } from "./api";
 import { CreateLessonRequest } from "@/interfaces/interfaces";
+import { revalidatePath } from "next/cache";
 
 const headers = { "Content-Type": "application/json" };
 
@@ -20,17 +21,32 @@ async function handleRequest(url: string, options: RequestInit): Promise<ActionR
 }
 
 export async function saveLesson({ id, title, learningObjectives, content }: { id: string; title: string; learningObjectives: string; content: any; }): Promise<ActionResponse> {
-  return handleRequest(`/lessons/${id}`, {
+  const response = await handleRequest(`/lessons/${id}`, {
     method: "PUT",
     headers,
     body: JSON.stringify({ title, learningObjectives, content }),
   });
+
+  if (response.success) {
+    revalidatePath("/lessons/mine");
+    revalidatePath(`/lessons/${id}`);
+    revalidatePath(`/lessons/${id}/edit`);
+  }
+
+  return response;
 }
 
 export async function createLesson(inputs: CreateLessonRequest): Promise<ActionResponse> {
-  return handleRequest(`/lessons`, {
+  const response = await handleRequest(`/lessons`, {
     method: "POST",
     headers,
     body: JSON.stringify(inputs),
   });
+
+  if (response.success) {
+    revalidatePath("/lessons");
+    revalidatePath("/lessons/mine");
+  }
+
+  return response;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { RichTextEditor } from "@/components/textEditor";
 import { Button, Stack, TextInput } from "@mantine/core";
 import { showSuccess, showError } from "@/lib/notifications";
@@ -24,6 +25,7 @@ export default function LessonEditor({
   conceptId,
   contributorId,
 }: LessonEditorProps) {
+  const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [learningObjectives, setLearningObjectives] = useState(initialLearningObjectives);
   const [content, setContent] = useState(initialContent);
@@ -44,9 +46,18 @@ export default function LessonEditor({
           submit: true,
         } satisfies CreateLessonRequest); 
 
-      response.success
-        ? showSuccess(response.message || "Saved!")
-        : showError(response.message || "Failed");
+      if (response.success) {
+        showSuccess(response.message || "Saved!");
+
+        if (!id) {
+          router.replace("/lessons/mine");
+          return;
+        }
+
+        router.refresh();
+      } else {
+        showError(response.message || "Failed");
+      }
 
     } catch (e: any) {
       showError(e.message);
@@ -70,7 +81,6 @@ export default function LessonEditor({
       />
 
       <RichTextEditor
-    
         value={content}
         onChange={setContent}
         isEditing
