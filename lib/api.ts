@@ -26,5 +26,11 @@ export async function apiFetch<T>(
     const errbody = await res.json();
     throw new Error(errbody.message);
   }
+
+  // Handle 204 No Content 
+  if (res.status === 204) {
+    return null as T;
+  }
+
   return res.json();
 }

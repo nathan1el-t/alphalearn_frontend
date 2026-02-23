@@ -30,8 +30,6 @@ export async function promoteUser(learnerId: string) {
 /**
  * Server Action: Demote a contributor to learner
  */
-// to fix: this function does not work since the endpoint returns 204 no content when successfully demoted
-// fix: dont parse the response when its 204
 export async function demoteUser(contributorId: string) {
   try {
     await apiFetch(`/admin/contributors/demote`, {
