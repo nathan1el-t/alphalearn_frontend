@@ -4,7 +4,7 @@ import type { AdminUser } from "@/interfaces/interfaces";
 import { useUserManagement } from "./useUserManagement";
 import { StatsCards } from "./components/statsCards";
 import { UsersTableView } from "./components/usersTableView";
-import { ConfirmModal } from "./components/confirmModal";
+import ConfirmModal from "@/components/common/confirmModal";
 
 interface UsersManagementTableProps {
   users: AdminUser[];
@@ -52,6 +52,7 @@ export default function UsersManagementTable({ users }: UsersManagementTableProp
         }
         confirmText={confirmAction?.type === "promote" ? "Promote" : "Demote"}
         confirmColor={confirmAction?.type === "promote" ? "green" : "red"}
+        icon={confirmAction?.type === "promote" ? "person_add" : "person_remove"}
         loading={!!loading}
       />
     </>
