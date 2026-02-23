@@ -20,7 +20,7 @@ export default async function CreateLessonPage({
 
   return (
     <Container size="md" py="xl">
-      <BackButton />
+      <BackButton href="/lessons/mine" />
       <Title order={1} mb="xl">New Lesson</Title>
       <LessonEditor
         initialTitle=""

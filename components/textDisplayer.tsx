@@ -25,7 +25,7 @@ export function TextDisplayer({content}: {content:any}) {
   });
 
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor editor={editor} className="lesson-rich-text">
       <RichTextEditor.Content />
     </RichTextEditor>
   );

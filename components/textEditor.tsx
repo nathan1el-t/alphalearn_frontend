@@ -45,7 +45,10 @@ export function RichTextEditor({
 }, [editor, isEditing]);
 
   return (
-    <MantineRichTextEditor editor={editor} variant="subtle" 
+    <MantineRichTextEditor
+      editor={editor}
+      variant="subtle"
+      className="lesson-rich-text"
     >
       {isEditing && (
         <MantineRichTextEditor.Toolbar
