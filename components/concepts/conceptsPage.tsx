@@ -1,133 +1,127 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Spotlight, spotlight, SpotlightActionData } from "@mantine/spotlight";
-import SearchBar from "./searchBar";
+import {
+  Container,
+  Text,
+  Group,
+  Stack,
+  Title,
+} from "@mantine/core";
 import ConceptGrid from "./conceptGrid";
 import Pagination from "./pagination";
-
-/**
- *  SMART/CONTAINER COMPONENT
- * 
- * Purpose: Manage state and coordinate all child components
- * Responsibility: Business logic, state management, data flow
- * 
- * React Architecture Pattern:
- * 
- *     ConceptsPage (Smart - has state & logic)
- *          ↓ props
- *     [Dumb Components] ─→ Just display & trigger events
- * 
- * This is the "Presentational vs Container" pattern
- * Container = this component (smart, stateful)
- * Presentational = all the components we built (dumb, stateless)
- * 
- */
-
-interface Concept {
-  conceptId: number;
-  title: string;
-  description: string;
-  createdAt: string;
-}
+import ConceptSpotlightSearch from "./conceptSpotlightSearch";
+import SearchTrigger from "@/components/lessons/searchTrigger";
+import type { Concept } from "@/interfaces/interfaces";
 
 interface ConceptsPageProps {
   concepts: Concept[];
 }
 
-
 const ITEMS_PER_PAGE = 6;
 
 export default function ConceptsPage({ concepts }: ConceptsPageProps) {
-  const router = useRouter();
-
-  // ========================================
-  // STATE MANAGEMENT
-  // ========================================
-  // All state lives here at the top level
-  // Child components are "controlled" by this state
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ========================================
-  // SPOTLIGHT SEARCH SETUP
-  // ========================================
-  // Transform concepts into Spotlight actions
-  const handleSpotlightAction = (conceptId: number) => {
-    spotlight.close();
-    router.push(`/concepts/${conceptId}`);
-  };
-
-  const spotlightActions: SpotlightActionData[] = concepts.map((concept) => ({
-    id: String(concept.conceptId),
-    label: concept.title,
-    description: concept.description,
-    onClick: () => handleSpotlightAction(concept.conceptId),
-  }));
-
-  // ========================================
-  // PAGINATION LOGIC
-  // ========================================
-  // Calculate which concepts to show based on currentPage
+  // Pagination
   const totalPages = Math.ceil(concepts.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedConcepts = concepts.slice(startIndex, endIndex);
 
-  // Handler that child Pagination component will call
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    // In production, you might also:
-    // - Scroll to top of page
-    // - Track analytics
-    // - Prefetch next page data
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
-    <main className="flex-1 flex flex-col h-screen overflow-hidden">
-      {/* Spotlight Search Modal */}
-      <Spotlight
-        actions={spotlightActions}
-        limit={7}
-        nothingFound="No concepts found"
-        highlightQuery
-        searchProps={{
-          placeholder: "Search concepts...",
-        }}
-        shortcut={["mod + K", "ctrl + k"]}
-      />
+    <>
+      <div className="min-h-screen bg-[var(--color-background)]">
+        {/* Hero */}
+        <div className="relative z-10 pt-20 pb-14 border-b border-[var(--color-border)]">
+          <Container size="lg">
+            <Stack gap="xl">
+              <Stack gap="xs">
+                {/* Eyebrow */}
+                <Group gap="xs" align="center" className="mb-1">
+                  <div className="w-5 h-px bg-[var(--color-primary)]" />
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]">
+                    Knowledge Base
+                  </span>
+                </Group>
 
-      {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-6 bg-[var(--color-background)]">
-        {/* Page Title with Inline Search */}
-        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-center gap-4">
-          <div>
-            <h2 className="text-3xl text-center font-extrabold tracking-tight mb-1 mt-5 text-[var(--color-text)]">
-              Browse Concepts
-            </h2>
-            <p className="text-[var(--color-text-secondary)] text-sm">
-              Stay cracked at internet culture and never miss a beat.
-            </p>
-          </div>
+                <Title
+                  order={1}
+                  className="text-[clamp(2.4rem,5vw,4rem)] font-bold tracking-tight leading-[1.1] text-[var(--color-text)]"
+                >
+                  Browse{" "}
+                  <span className="text-[var(--color-primary)]">Concepts</span>
+                </Title>
 
-          {/* Search Bar - Now inline with title */}
-          <div className="md:max-w-md">
-            <SearchBar onSearchClick={spotlight.open} />
-          </div>
+                <Text
+                  size="lg"
+                  className="text-[var(--color-text-secondary)] max-w-xl font-light leading-relaxed"
+                >
+                  Stay cracked at internet culture and never miss a beat.
+                </Text>
+              </Stack>
+
+              <Group justify="flex-end" wrap="wrap" gap="sm">
+                <SearchTrigger />
+              </Group>
+            </Stack>
+          </Container>
         </div>
 
-        {/* Concept Cards Grid */}
-        <ConceptGrid concepts={paginatedConcepts} />
+        {/* Grid */}
+        <div className="relative z-10 py-14 pb-32">
+          <Container size="lg">
+            {concepts.length === 0 ? (
+              <Stack align="center" py={100} gap="md">
+                <div className="w-16 h-16 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center">
+                  <span className="material-symbols-outlined text-3xl text-[var(--color-text-muted)]">
+                    lightbulb
+                  </span>
+                </div>
+                <Title
+                  order={3}
+                  className="text-[var(--color-text-muted)] font-semibold"
+                >
+                  No concepts yet
+                </Title>
+                <Text className="text-[var(--color-text-muted)] text-sm">
+                  No concepts available yet. Check back soon!
+                </Text>
+              </Stack>
+            ) : (
+              <Stack gap="lg">
+                <Group gap="md" align="center" justify="center">
+                  <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-text-muted)]">
+                    {concepts.length} {concepts.length === 1 ? "concept" : "concepts"}{" "}
+                    available
+                  </span>
+                </Group>
 
-        {/* Pagination Controls */}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={concepts.length}
-          itemsPerPage={ITEMS_PER_PAGE}
-          onPageChange={handlePageChange}
-        />
+                <ConceptGrid concepts={paginatedConcepts} />
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={concepts.length}
+                    itemsPerPage={ITEMS_PER_PAGE}
+                    onPageChange={handlePageChange}
+                  />
+                )}
+              </Stack>
+            )}
+          </Container>
+        </div>
       </div>
-    </main>
+
+      {/* Spotlight Search */}
+      <ConceptSpotlightSearch concepts={concepts} />
+    </>
   );
 }
