@@ -15,7 +15,7 @@ export type Lesson = {
   conceptIds: number[]
 }
 
-export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" | "createdAt" | "moderationStatus">
+export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" | "createdAt">
 
 
 
