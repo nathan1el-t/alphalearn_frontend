@@ -1,24 +1,8 @@
 import Link from "next/link";
-import { Card, Tooltip } from "@mantine/core";
+import { Card, Group, Stack, Title, Text } from "@mantine/core";
+import type { Concept } from "@/interfaces/interfaces";
 
-/**
- * PRESENTATIONAL COMPONENT (Using Mantine Card + Tooltip)
- * 
- * Purpose: Display a single concept card
- * Responsibility: Only rendering UI, no logic or state
- * 
- * React Concept: "Props Down" - parent passes data, child displays it
- * Library Integration: Uses Mantine Card for structure + accessibility
- *                      Uses Mantine Tooltip for bookmark interaction hint
- * 
- */
-
-interface ConceptCardProps {
-  conceptId: number;
-  title: string;
-  description: string;
-  createdAt: string;
-}
+interface ConceptCardProps extends Concept { }
 
 export default function ConceptCard({
   conceptId,
@@ -27,47 +11,77 @@ export default function ConceptCard({
   createdAt,
 }: ConceptCardProps) {
   return (
-    <Card
-      component={Link}
-      href={`/concepts/${conceptId}`}
-      padding="md"
-      radius="xl"
-      withBorder={false}
-      style={{ backgroundColor: 'var(--color-surface)' }}
-      className="concept-card border border-[var(--color-overlay)]
-             hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
-    >
-      <div className="flex justify-between items-start mb-1.5">
-        {/* Placeholder for status badge */}
-        <span></span>
-        <Tooltip label="Save for later" position="top" withArrow>
-          <span className="material-symbols-outlined text-[var(--color-text-muted)] hover:text-[var(--color-text)] cursor-pointer transition-colors text-[16px]">
-            bookmark
-          </span>
-        </Tooltip>
-      </div>
+    <Link href={`/concepts/${conceptId}`} className="block no-underline h-full group">
+      <Card
+        padding="xl"
+        radius="lg"
+        className="relative overflow-hidden h-full transition-all duration-500 hover:-translate-y-2"
+        style={{
+          background: "var(--color-card-bg)",
+          border: "1px solid var(--color-card-border)",
+          boxShadow: "var(--color-card-shadow)",
+        }}
+      >
+        {/* Animated Gradient Overlay on Hover */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: "linear-gradient(to bottom right, color-mix(in srgb, var(--color-card-accent) 20%, transparent), transparent)",
+          }}
+        />
 
-      <Card.Section inheritPadding className="pb-4">
-        <h3 className="text-lg font-extrabold mb-1 text-[var(--color-text)]">{title}</h3>
-        <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-2 line-clamp-2">
-          {description}
-        </p>
+        <Stack gap="md" h="100%" justify="space-between" className="relative z-10">
+          <Stack gap="sm">
+            <Group justify="space-between" align="center">
+              <span
+                className="material-symbols-outlined text-[20px]"
+                style={{ color: "var(--color-card-accent)" }}
+              >
+                lightbulb
+              </span>
 
-        <div className="flex items-center gap-1.5 text-[10px] text-[var(--color-text-muted)] font-medium">
-          <span className="ml-auto">
-            Updated {new Date(createdAt).toLocaleDateString()}
-          </span>
-        </div>
-      </Card.Section>
-      <style jsx>{`
-  :global(.concept-card:hover){
-    border-color: var(--color-accent);
-    box-shadow:
-      0 0 5px var(--color-accent),
-      0 0 20px var(--color-accent);
-  }
-`}</style>
-    </Card>
+              {/* Arrow Icon */}
+              <span
+                className="material-symbols-outlined text-[20px] transition-all duration-300 transform group-hover:translate-x-1"
+                style={{ color: "var(--color-card-accent)" }}
+              >
+                arrow_forward
+              </span>
+            </Group>
 
+            <Title
+              order={3}
+              style={{ color: "var(--color-card-text)" }}
+              className="text-[1.15rem] font-bold leading-tight line-clamp-2 min-h-[3rem]"
+            >
+              {title}
+            </Title>
+
+            <Text
+              size="xs"
+              className="line-clamp-2 leading-relaxed"
+              style={{ color: "var(--color-card-text-muted)" }}
+            >
+              {description}
+            </Text>
+          </Stack>
+
+          <Stack gap="xs">
+            {/* Gradient Divider */}
+            <div
+              className="h-px w-full opacity-20"
+              style={{ background: "linear-gradient(to right, var(--color-card-border), var(--color-card-accent), transparent)" }}
+            />
+
+            <Group justify="flex-end" className="text-[11px] font-medium" style={{ color: "var(--color-card-text-muted)" }}>
+              <Group gap={6}>
+                <span className="material-symbols-outlined text-[14px]">event</span>
+                <span>{new Date(createdAt).toLocaleDateString()}</span>
+              </Group>
+            </Group>
+          </Stack>
+        </Stack>
+      </Card>
+    </Link>
   );
 }
