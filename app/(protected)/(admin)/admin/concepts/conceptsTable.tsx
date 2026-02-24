@@ -10,6 +10,7 @@ import AdminEmptyState from "@/components/admin/emptyState";
 import { showSuccess, showError } from "@/lib/notifications";
 import { deleteConcept } from "./actions";
 import type { AdminConcept } from "@/interfaces/interfaces";
+import { DateDisplay } from "@/components/dateDisplay";
 
 interface ConceptsManagementTableProps {
   concepts: AdminConcept[];
@@ -152,9 +153,11 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                       </div>
                     </td>
                     <td className="p-3">
-                      <Text size="sm" className="text-[var(--color-text-secondary)]">
-                        {new Date(concept.createdAt).toLocaleDateString()}
-                      </Text>
+                      <DateDisplay 
+                        date={concept.createdAt} 
+                        size="sm" 
+                        className="text-[var(--color-text-secondary)]"
+                      />
                     </td>
                     <td className="p-3">
                       <div className="flex items-center justify-end gap-2">
