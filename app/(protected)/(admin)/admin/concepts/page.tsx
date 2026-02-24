@@ -24,7 +24,7 @@ export default function ManageConceptsPage() {
                                     Manage Concepts
                                 </h1>
                                 <p className="text-[var(--color-text-secondary)] mb-10">
-                                    Review, moderate, and manage
+                                    Review and manage
                                 </p>
                             </div>
                         </div>

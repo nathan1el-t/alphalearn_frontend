@@ -17,7 +17,6 @@ interface ConceptCardProps {
   conceptId: number;
   title: string;
   description: string;
-  moderationStatus: string;
   createdAt: string;
 }
 
@@ -25,7 +24,6 @@ export default function ConceptCard({
   conceptId,
   title,
   description,
-  moderationStatus,
   createdAt,
 }: ConceptCardProps) {
   return (
@@ -73,4 +71,3 @@ export default function ConceptCard({
 
   );
 }
-

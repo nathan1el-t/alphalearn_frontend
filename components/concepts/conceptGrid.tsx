@@ -19,7 +19,6 @@ interface Concept {
   conceptId: number;
   title: string;
   description: string;
-  moderationStatus: string;
   createdAt: string;
 }
 
@@ -36,7 +35,6 @@ export default function ConceptGrid({ concepts }: ConceptGridProps) {
           conceptId={concept.conceptId}
           title={concept.title}
           description={concept.description}
-          moderationStatus={concept.moderationStatus}
           createdAt={concept.createdAt}
         />
       ))}
