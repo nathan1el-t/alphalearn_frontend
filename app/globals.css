@@ -14,31 +14,46 @@
   --color-primary: #7c5cff;
   --color-primary-hover: #6b4ce6;
   --color-primary-active: #5a3dc0;
-  --color-accent:#3aa37c;
+  --color-accent: #3aa37c;
   --color-accent-hover: #19a071;
-  
+
   --color-background: #f6f4ff;
   --color-surface: #f0e9fe;
   --color-surface-elevated: #ffffff;
   --color-input: #f0f0f5;
-  
+
   --color-text: #171717;
   --color-text-secondary: #6b6b80;
   --color-text-muted: #9a9aaa;
-  
+
   --color-border: #e0e0e8;
   --color-border-focus: #7c5cff;
-  
+
   --color-overlay: rgba(0, 0, 0, 0.05);
   --color-shadow: rgba(124, 92, 255, 0.1);
   --color-shadow-hover: rgba(124, 92, 255, 0.2);
-  
+
+  /* Card-specific */
+  --color-card-bg: #ffffff;
+  --color-card-border: #e2dff0;
+  --color-card-border-hover: #19a071;
+  --color-card-shadow-hover: rgba(100, 255, 92, 0.15);
+  --color-card-accent: #7c5cff;
+  --color-card-text: #1a1a2e;
+  --color-card-text-muted: #6b7280;
+  --color-card-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.08);
+
+  /* Ambient glow */
+  --color-glow-1: rgba(124, 92, 255, 0.08);
+  --color-glow-2: rgba(168, 85, 247, 0.06);
+  --color-glow-3: rgba(192, 132, 252, 0.04);
+
   /* Status Colors */
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
   --color-info: #3b82f6;
-  
+
   /* Special */
   --color-discord: #5865F2;
   --color-streak: #f97316;
@@ -46,34 +61,49 @@
 
 /* Dark Theme */
 [data-mantine-color-scheme="dark"] {
-  --color-primary: #7c5cff;
+  --color-primary: #9b5cff;
   --color-primary-hover: #6b4ce6;
   --color-primary-active: #5a3dc0;
   --color-accent: #2EFFB4;
   --color-accent-hover: #26e5a3;
-  
+
   --color-background: #0F0F14;
   --color-surface: #181826;
   --color-surface-elevated: #1d1736;
   --color-input: #29204b;
-  
+
   --color-text: #ffffff;
   --color-text-secondary: #b3b3c6;
   --color-text-muted: #9a8dce;
-  
+
   --color-border: #3a2e6b;
   --color-border-focus: #2EFFB4;
-  
+
   --color-overlay: rgba(255, 255, 255, 0.05);
   --color-shadow: rgba(46, 255, 180, 0.15);
-  --color-shadow-hover: rgba(46, 255, 180, 0.25);
-  
+  --color-shadow-hover: rgba(0, 255, 162, 0.25);
+
+  /* Card-specific */
+  --color-card-bg: #11111a;
+  --color-card-border: #1e1e2e;
+  --color-card-border-hover: rgba(255, 255, 255, 0.6);
+  --color-card-shadow-hover: rgba(139, 92, 246, 0.25);
+  --color-card-accent: #8b5cf6;
+  --color-card-text: #f8fafc;
+  --color-card-text-muted: #94a3b8;
+  --color-card-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.7);
+
+  /* Ambient glow */
+  --color-glow-1: rgba(139, 92, 246, 0.18);
+  --color-glow-2: rgba(168, 85, 247, 0.12);
+  --color-glow-3: rgba(192, 132, 252, 0.07);
+
   /* Status Colors (slightly adjusted for dark) */
   --color-success: #10b981;
   --color-warning: #fbbf24;
   --color-error: #f87171;
   --color-info: #60a5fa;
-  
+
   /* Special */
   --color-streak: #fb923c;
 }
@@ -202,4 +232,13 @@ html, body {
 
 .lesson-rich-text .ProseMirror li {
   margin: 0.25rem 0;
+}
+
+/* Lesson card glow on hover */
+.lesson-card {
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+}
+
+.lesson-card:hover {
+  box-shadow: var(--color-card-glow-hover) !important;
 }
