@@ -29,7 +29,6 @@ interface Concept {
   conceptId: number;
   title: string;
   description: string;
-  moderationStatus: string;
   createdAt: string;
 }
 
@@ -132,4 +131,3 @@ export default function ConceptsPage({ concepts }: ConceptsPageProps) {
     </main>
   );
 }
-

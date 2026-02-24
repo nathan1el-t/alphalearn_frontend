@@ -2,7 +2,6 @@ export interface Concept {
   conceptId: number;
   title: string;
   description: string;
-  moderationStatus: "APPROVED" | "PENDING" | "REJECTED";
   createdAt: string;
 }
 
