@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import SearchBar from "@/components/concepts/searchBar";
 import ConfirmModal from "@/components/common/confirmModal";
+import AdminEmptyState from "@/components/admin/emptyState";
 import { showSuccess, showError } from "@/lib/notifications";
 import { deleteConcept } from "./actions";
 import type { AdminConcept } from "@/interfaces/interfaces";
@@ -81,7 +82,7 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
       />
       {/* Stats Summary */}
       <div className="grid grid-cols-1 gap-6 mb-8">
-        <Card className="admin-card">
+        <Card className="admin-card admin-stat-card" style={{ "--stat-color": "var(--color-primary)" } as React.CSSProperties}>
           <div className="flex items-center justify-between">
             <div>
               <p className="text-[var(--color-text-muted)] text-sm font-medium">
@@ -91,9 +92,11 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                 {concepts.length}
               </p>
             </div>
-            <span className="material-symbols-outlined text-4xl text-[var(--color-primary)] opacity-50">
-              library_books
-            </span>
+            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-[var(--color-primary)]/10">
+              <span className="material-symbols-outlined text-2xl text-[var(--color-primary)]">
+                library_books
+              </span>
+            </div>
           </div>
         </Card>
       </div>
@@ -121,10 +124,18 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
             <tbody>
               {filteredConcepts.length === 0 ? (
                 <tr>
-                  <td colSpan={3} className="text-center py-8">
-                    <Text c="dimmed">
-                      No concepts found
-                    </Text>
+                  <td colSpan={3} className="text-center py-12">
+                    <AdminEmptyState
+                      icon="concepts"
+                      title="No concepts found"
+                      description="Get started by adding your first concept"
+                      action={
+                        <Link href="/admin/concepts/add" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-primary-hover)] transition-colors">
+                          <span className="material-symbols-outlined text-base">add_circle</span>
+                          Add Concept
+                        </Link>
+                      }
+                    />
                   </td>
                 </tr>
               ) : (

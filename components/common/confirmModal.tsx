@@ -25,7 +25,7 @@ interface ConfirmModalProps {
   message: string;
   confirmText?: string;
   cancelText?: string;
-  confirmColor?: "red" | "orange" | "green" | "yellow";
+  confirmColor?: "red" | "orange" | "green" | "yellow" | "blue";
   loading?: boolean;
   icon?: string; // Material icon name
 }
@@ -99,6 +99,7 @@ export default function ConfirmModal({
               displayProps.confirmColor === "red" ? "bg-red-500/10" :
               displayProps.confirmColor === "green" ? "bg-green-500/10" :
               displayProps.confirmColor === "yellow" ? "bg-yellow-500/10" :
+              displayProps.confirmColor === "blue" ? "bg-blue-500/10" :
               "bg-orange-500/10"
             }`}>
               <span 
@@ -106,6 +107,7 @@ export default function ConfirmModal({
                   displayProps.confirmColor === "red" ? "text-red-500" :
                   displayProps.confirmColor === "green" ? "text-green-500" :
                   displayProps.confirmColor === "yellow" ? "text-yellow-500" :
+                  displayProps.confirmColor === "blue" ? "text-blue-500" :
                   "text-orange-500"
                 }`}
                 style={{ 
@@ -155,11 +157,13 @@ export default function ConfirmModal({
               backgroundColor: displayProps.confirmColor === "red" ? "#ef4444" :
                               displayProps.confirmColor === "green" ? "#22c55e" :
                               displayProps.confirmColor === "yellow" ? "#eab308" :
+                              displayProps.confirmColor === "blue" ? "#2563eb" :
                               "var(--color-primary)",
               '&:hover': {
                 backgroundColor: displayProps.confirmColor === "red" ? "#dc2626" :
                                 displayProps.confirmColor === "green" ? "#16a34a" :
                                 displayProps.confirmColor === "yellow" ? "#ca8a04" :
+                                displayProps.confirmColor === "blue" ? "#1d4ed8" :
                                 "var(--color-primary-hover)",
               },
             },
