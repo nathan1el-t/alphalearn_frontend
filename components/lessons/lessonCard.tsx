@@ -1,67 +1,81 @@
-"use client";
-
 import Link from "next/link";
-import { Card, Badge, Text } from "@mantine/core";
+import { Card, Badge, Group, Stack, Title } from "@mantine/core";
 import type { LessonSummary } from "@/interfaces/interfaces";
-import { DateDisplay } from "../dateDisplay";
 
 interface LessonCardProps extends LessonSummary { }
 
 export default function LessonCard({
   lessonId,
   title,
-  moderationStatus,
   contributorId,
   createdAt,
 }: LessonCardProps) {
+
+
+
   return (
-    <Card
-      component={Link}
-      href={`/lessons/${lessonId}`}
-      padding="md"
-      radius="xl"
-      withBorder={false}
-      style={{ backgroundColor: "var(--color-surface)" }}
-      className="lesson-card border border-[var(--color-overlay)]
-             hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
-    >
-      <div className="flex justify-between items-start mb-2">
-        <Badge
-          color={moderationStatus === "Approved" ? "green" : "yellow"}
-          size="sm"
-        >
-          {moderationStatus}
-        </Badge>
+    <Link href={`/lessons/${lessonId}`} className="block no-underline h-full group">
+      <Card
+        padding="xl"
+        radius="lg"
+        className="relative overflow-hidden h-full transition-all duration-500 hover:-translate-y-2"
+        style={{
+          background: "var(--color-card-bg)",
+          border: "1px solid var(--color-card-border)",
+          boxShadow: "var(--color-card-shadow)",
+        }}
+      >
+        {/* Animated Gradient Border on Hover */}
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: "linear-gradient(to bottom right, color-mix(in srgb, var(--color-card-accent) 20%, transparent), transparent)",
+          }}
+        />
 
-        {/*temporarily removed, may add on next time*/}
+        <Stack gap="md" h="100%" justify="space-between" className="relative z-10">
+          <Stack gap="sm">
+            <Group justify="space-between" align="center">
 
-        {/* <Tooltip label="Save for later" position="top" withArrow>
-          <span className="material-symbols-outlined text-[var(--color-text-muted)] hover:text-[var(--color-text)] cursor-pointer transition-colors text-[16px]">
-            bookmark
-          </span>
-        </Tooltip> */}
-      </div>
+              {/* Glowing Arrow Icon */}
+              <span
+                className="material-symbols-outlined text-[20px] transition-all duration-300 transform group-hover:translate-x-1"
+                style={{ color: "var(--color-card-accent)" }}
+              >
+                arrow_forward
+              </span>
+            </Group>
 
-      <Card.Section inheritPadding className="pb-4">
-        <Text size="lg" className="mb-1 text-[var(--color-text)] line-clamp-2">
-          {title}
-        </Text>
+            <Title
+              order={3}
+              style={{ color: "var(--color-card-text)" }}
+              className="text-[1.15rem] font-bold leading-tight line-clamp-2 min-h-[3rem]"
+            >
+              {title}
+            </Title>
+          </Stack>
 
-        <div className="flex items-center gap-1 text-[10px] text-[var(--color-text-muted)] font-medium">
-          <span className="ml-auto">Contributor: {contributorId}</span>
-          <span>•</span>
-          <DateDisplay date={createdAt} />
-        </div>
-      </Card.Section>
+          <Stack gap="xs">
+            {/* Cleaner Divider */}
+            <div
+              className="h-px w-full opacity-20"
+              style={{ background: "linear-gradient(to right, var(--color-card-border), var(--color-card-accent), transparent)" }}
+            />
 
-      <style jsx>{`
-        :global(.lesson-card:hover) {
-          border-color: var(--color-accent);
-          box-shadow:
-            0 0 5px var(--color-accent),
-            0 0 20px var(--color-accent);
-        }
-      `}</style>
-    </Card>
+            <Group justify="space-between" className="text-[11px] font-medium" style={{ color: "var(--color-card-text-muted)" }}>
+              <Group gap={6}>
+                <span className="material-symbols-outlined text-[14px]">face</span>
+                <span className="group-hover:text-[var(--color-card-text)] transition-colors">{contributorId.split("-")[0]}</span>
+              </Group>
+
+              <Group gap={6}>
+                <span className="material-symbols-outlined text-[14px]">event</span>
+                <span>{new Date(createdAt).toLocaleDateString()}</span>
+              </Group>
+            </Group>
+          </Stack>
+        </Stack>
+      </Card>
+    </Link>
   );
 }
