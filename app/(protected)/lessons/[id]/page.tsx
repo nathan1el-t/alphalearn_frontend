@@ -1,3 +1,4 @@
+import "@mantine/tiptap/styles.css";
 import { TextDisplayer } from "@/components/textDisplayer";
 import { apiFetch } from "@/lib/api";
 import type { Lesson } from "@/interfaces/interfaces";
