@@ -3,6 +3,7 @@ import { Badge, Card } from "@mantine/core";
 import { Suspense } from "react";
 import CardSkeleton from "@/components/common/cardSkeleton";
 import ConceptsManagementTable from "./conceptsTable";
+import GlowIconButton from "@/components/common/glowIconButton";
 import type { AdminConcept } from "@/interfaces/interfaces";
 
 async function ConceptsData() {
@@ -16,14 +17,26 @@ export default function ManageConceptsPage() {
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-15">
-                    <div className="flex items-center justify-center">
-                        <div>
-                            <h1 className="text-4xl font-bold text-[var(--color-text)] mb-2">
-                                Manage Concepts
-                            </h1>
-                            <p className="text-center text-[var(--color-text-secondary)] mb-10">
-                                Review, moderate, and manage
-                            </p>
+                    <div className="flex items-center justify-center gap-4 mb-2">
+                        <div className="flex-1 flex justify-end md:justify-center">
+                            <div className="text-center">
+                                <h1 className="text-4xl font-bold text-[var(--color-text)] mb-2">
+                                    Manage Concepts
+                                </h1>
+                                <p className="text-[var(--color-text-secondary)] mb-10">
+                                    Review, moderate, and manage
+                                </p>
+                            </div>
+                        </div>
+                        
+                        {/* Add Concept Button - Glowing Icon */}
+                        <div className="absolute right-8 top-12 md:relative md:right-0 md:top-0">
+                            <GlowIconButton 
+                                href="/admin/concepts/add"
+                                icon="add_circle" 
+                                ariaLabel="Add new concept"
+                                size="md"
+                            />
                         </div>
                     </div>
 
