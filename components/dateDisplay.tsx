@@ -5,9 +5,11 @@ import { Text } from "@mantine/core";
 
 interface DateDisplayProps {
   date: string;
+  size?: string;
+  className?: string;
 }
 
-export function DateDisplay({ date }: DateDisplayProps) {
+export function DateDisplay({ date, size, className }: DateDisplayProps) {
   const [formatted, setFormatted] = useState<string>("");
 
   useEffect(() => {
@@ -16,5 +18,12 @@ export function DateDisplay({ date }: DateDisplayProps) {
 
   if (!formatted) return null;
 
-  return <Text>{formatted}</Text>;
+  return (
+    <Text 
+      size={size} 
+      className={className}
+    >
+      {formatted}
+    </Text>
+  );
 }

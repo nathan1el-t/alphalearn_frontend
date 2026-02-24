@@ -1,4 +1,5 @@
 import { Badge, Card, Text, Button } from "@mantine/core";
+import AdminEmptyState from "@/components/admin/emptyState";
 import type { AdminUser } from "@/interfaces/interfaces";
 import type { FilterType } from "../useUserManagement";
 
@@ -53,8 +54,12 @@ export function UsersTableView({
           <tbody>
             {filteredUsers.length === 0 ? (
               <tr>
-                <td colSpan={7} className="text-center py-8">
-                  <Text c="dimmed">{getEmptyMessage()}</Text>
+                <td colSpan={7} className="text-center py-12">
+                  <AdminEmptyState
+                    icon={filter === "all" ? "users" : filter === "contributors" ? "users" : "users"}
+                    title={getEmptyMessage()}
+                    description={filter === "all" ? "No users have been registered yet" : `No ${filter} found matching the current filter`}
+                  />
                 </td>
               </tr>
             ) : (
@@ -80,7 +85,7 @@ export function UsersTableView({
                     <td className="p-3">
                       <Badge 
                         variant="light" 
-                        color={user.role === "CONTRIBUTOR" ? "orange" : "grape"}
+                        color={user.role === "CONTRIBUTOR" ? "blue" : "cyan"}
                       >
                         {user.role}
                       </Badge>

@@ -3,6 +3,8 @@ import { Card } from "@mantine/core";
 import { Suspense } from "react";
 import CardSkeleton from "@/components/common/cardSkeleton";
 import UsersManagementTable from "./usersTable";
+import AdminBreadcrumb from "@/components/admin/breadcrumb";
+import AdminPageHeader from "@/components/admin/pageHeader";
 import type { AdminContributor, AdminLearner, AdminUser } from "@/interfaces/interfaces";
 
 async function UsersData() {
@@ -49,19 +51,13 @@ export default function ManageUsersPage() {
     return (
         <div className="min-h-screen bg-[var(--color-background)] pt-10 pb-8 px-4">
             <div className="max-w-7xl mx-auto">
-                {/* Header */}
-                <div className="mb-15">
-                    <div className="flex items-center justify-center">
-                        <div>
-                            <h1 className="text-4xl font-bold text-[var(--color-text)] mb-2">
-                                Manage Users
-                            </h1>
-                            <p className="text-center text-[var(--color-text-secondary)] mb-10">
-                                View and manage all contributors and learners
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                <AdminBreadcrumb />
+
+                <AdminPageHeader
+                    title="Manage Users"
+                    description="View and manage all contributors and learners"
+                    icon="group"
+                />
 
                 <Suspense
                     fallback={

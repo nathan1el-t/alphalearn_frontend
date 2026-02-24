@@ -5,6 +5,7 @@ import { Card, TextInput, Textarea, Button, Text } from "@mantine/core";
 import { addConcept } from "./actions";
 import { showSuccess, showError } from "@/lib/notifications";
 import { useRouter } from "next/navigation";
+import AdminBreadcrumb from "@/components/admin/breadcrumb";
 
 export default function AddConceptPage() {
   const router = useRouter();
@@ -29,6 +30,8 @@ export default function AddConceptPage() {
   return (
     <div className="min-h-screen bg-[var(--color-background)] pt-10 pb-8 px-4">
       <div className="max-w-3xl mx-auto">
+        <AdminBreadcrumb />
+
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-4 mb-4">
