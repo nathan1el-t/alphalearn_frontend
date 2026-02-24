@@ -16,7 +16,7 @@ async function ConceptsData() {
 
 export default function ManageConceptsPage() {
     return (
-        <div className="min-h-screen bg-[var(--color-background)] pt-10 pb-8 px-4">
+        <div className="min-h-screen bg-[var(--color-background)] py-8 px-4 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <AdminBreadcrumb />
 
