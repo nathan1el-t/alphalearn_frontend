@@ -15,23 +15,27 @@ interface ConceptSpotlightSearchProps {
 export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSearchProps) {
     const router = useRouter();
 
-    const actions: SpotlightActionData[] = concepts.map((concept) => ({
-        id: String(concept.conceptId),
-        label: concept.title,
-        description: concept.description,
-        onClick: () => {
-            spotlight.close();
-            router.push(`/concepts/${concept.conceptId}`);
-        },
-        leftSection: (
-            <span
-                className="material-symbols-outlined text-[22px]"
-                style={{ color: "var(--color-card-accent)" }}
-            >
-                lightbulb
-            </span>
-        ),
-    }));
+    const actions: SpotlightActionData[] = concepts.map((concept, idx) => {
+        const finalId = concept.conceptId || (concept as any).publicId || idx;
+
+        return {
+            id: String(finalId),
+            label: concept.title,
+            description: concept.description,
+            onClick: () => {
+                spotlight.close();
+                router.push(`/concepts/${finalId}`);
+            },
+            leftSection: (
+                <span
+                    className="material-symbols-outlined text-[22px]"
+                    style={{ color: "var(--color-primary)" }}
+                >
+                    lightbulb
+                </span>
+            ),
+        };
+    });
 
     return (
         <Spotlight
@@ -53,16 +57,20 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
             }}
             styles={{
                 content: {
-                    background: "var(--color-card-bg)",
-                    border: "1px solid var(--color-card-border)",
+                    background: "var(--color-surface)",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: "24px",
                 },
                 search: {
-                    background: "var(--color-card-bg)",
-                    color: "var(--color-card-text)",
-                    borderBottom: "1px solid var(--color-card-border)",
+                    background: "transparent",
+                    color: "var(--color-text)",
+                    borderBottom: "1px solid var(--color-border)",
+                    fontSize: "1.1rem",
+                    padding: "20px",
                 },
                 action: {
-                    borderRadius: "8px",
+                    borderRadius: "12px",
+                    margin: "4px 8px",
                 },
             }}
         />

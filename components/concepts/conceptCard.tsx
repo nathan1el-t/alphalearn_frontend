@@ -47,9 +47,6 @@ export default function ConceptCard({
             </Stack>
 
             {/* NE Arrow */}
-            <span className="material-symbols-outlined text-[32px] text-white/30 group-hover:text-white group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300">
-              north_east
-            </span>
           </Group>
 
           {/* Large, High-Contrast Title */}
