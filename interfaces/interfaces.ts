@@ -3,8 +3,6 @@ export interface Concept {
   title: string;
   description: string;
   createdAt: string;
-  // Temporary compatibility field while admin views are migrated.
-  conceptId?: number;
 }
 
 export interface PublicAuthor {
@@ -20,17 +18,9 @@ export type Lesson = {
   author: PublicAuthor
   createdAt: string
   conceptPublicIds: string[]
-  // Temporary compatibility fields while admin/public screens are migrated.
-  lessonId?: string
-  contributorId?: string
-  conceptIds?: number[]
 }
 
 export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus">
-
-
-
-//interface for creating lessons, require title, content, conceptid, contributorid
 
 export interface CreateLessonRequest {
   title: string
@@ -38,24 +28,6 @@ export interface CreateLessonRequest {
   conceptPublicIds: string[]
   submit?: boolean
 }
-
-// return response for create lessons
-// {
-//     "lessonId": 20,
-//     "title": "string",
-//     "content": {},
-//     "moderationStatus": "UNPUBLISHED",
-//     "contributorId": "99460798-1886-4782-b37c-40a7e1b4d1a6",
-//     "createdAt": "2026-02-21T01:11:39.9977952+08:00"
-// }
-
-
-// {
-//         "lessonId": 7,
-//         "title": "test1",
-//         "contributorId": "3fab4f56-6ef7-40c1-b3cf-b63c12c57923",
-//         "createdAt": "2026-02-15T14:12:10.255478Z"
-//     },  
 export interface AdminContributor {
   publicId: string;
   username: string;
