@@ -1,5 +1,5 @@
+import { redirect } from "next/navigation";
+//this page doesnt exist yet
 export default function Home() {
-  return (
-    <div>welcome</div>
-  );
+  redirect("/lessons");
 }
