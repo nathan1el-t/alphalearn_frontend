@@ -13,13 +13,14 @@ import LessonCard from "@/components/lessons/lessonCard";
 import GradientButton from "@/components/common/gradientbutton";
 import SpotlightSearch from "@/components/spotlightsearch";
 import SearchTrigger from "@/components/lessons/searchTrigger";
-import { redirectAdminFromPublicRoute } from "@/lib/rbac";
+import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
+
 
 
 
 export default async function LessonsPage() {
   await redirectAdminFromPublicRoute("lessons-list");
-
+  const role = await getUserRole();
   const lessons = await fetchLessons();
 
   if (!lessons) return <NotFound />;
@@ -27,7 +28,7 @@ export default async function LessonsPage() {
   return (
     <>
       <div className="min-h-screen bg-[var(--color-background)]">
-        <HeroSection />
+        <HeroSection role={role} />
 
         <Container size="lg" className="py-14 pb-32">
           {lessons.length === 0 ? (
@@ -54,7 +55,7 @@ async function fetchLessons(): Promise<LessonSummary[] | null> {
 }
 
 
-function HeroSection() {
+function HeroSection({ role }: { role: string | null }) {
   return (
     <div className="border-b border-[var(--color-border)] min-h-screen flex">
       <Container className="my-auto w-full">
@@ -81,11 +82,14 @@ function HeroSection() {
             </Text>
           </Stack>
 
-          <Group justify="flex-end">
-            <GradientButton href="/lessons/mine">
-              My Peak Creations
-            </GradientButton>
-          </Group>
+          {role === "CONTRIBUTOR" && (
+            <Group justify="flex-end">
+              <GradientButton href="/lessons/mine">
+                View My Lessons
+              </GradientButton>
+            </Group>
+          )}
+
         </Stack>
       </Container>
     </div>

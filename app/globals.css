@@ -21,7 +21,6 @@
   --color-surface: #f0e9fe;
   --color-surface-elevated: #ffffff;
   --color-input: #f0f0f5;
-
   --color-text: #171717;
   --color-text-secondary: #6b6b80;
   --color-text-muted: #9a9aaa;
@@ -61,7 +60,7 @@
 
 /* Dark Theme */
 [data-mantine-color-scheme="dark"] {
-  --color-primary: #9b5cff;
+  --color-primary: #7c3aed;
   --color-primary-hover: #6b4ce6;
   --color-primary-active: #5a3dc0;
   --color-accent: #2EFFB4;
@@ -151,12 +150,28 @@ body.not-found-lock-scroll {
 
 html {
   background: var(--color-background);
+  margin: 0;
+  padding: 0;
 }
 
 body {
   background: var(--color-background);
   color: var(--color-text);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ── Navbar frosted glass ── */
+.navbar-glass {
+  background: rgba(240, 233, 254, 0.85);
+  /* light: --color-surface #f0e9fe */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+[data-mantine-color-scheme="dark"] .navbar-glass {
+  background: rgba(24, 24, 38, 0.82);
+  /* dark: --color-surface #181826 */
 }
 
 /* Global Scrollbar - Applied to all scrollable elements */

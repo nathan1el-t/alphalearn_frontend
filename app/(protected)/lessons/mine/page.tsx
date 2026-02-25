@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api";
-import type { LessonSummary } from "@/interfaces/interfaces";
+import type { LessonSummary, MyLessons } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import {
   SimpleGrid,
@@ -28,9 +28,9 @@ export default async function MyLessonsPage() {
     redirect("/lessons");
   }
 
-  let lessons: LessonSummary[] = [];
+  let lessons: MyLessons[] = [];
   try {
-    lessons = await apiFetch<LessonSummary[]>("/lessons/mine");
+    lessons = await apiFetch<MyLessons[]>("/lessons/mine");
   } catch (err) {
     console.error(err);
     return <NotFound />;
@@ -49,7 +49,7 @@ export default async function MyLessonsPage() {
                   My <span className="text-[var(--color-primary)]">Library</span>
                 </Title>
                 <Text className="text-[var(--color-text-secondary)]">
-                  Manage and track the lessons you've contributed to AlphaLearn.
+                  Manage and track the lessons you've created.
                 </Text>
               </Stack>
               <GradientButton href="/lessons/create" icon="add">

@@ -1,15 +1,11 @@
 import "@mantine/tiptap/styles.css";
-import { TextDisplayer } from "@/components/textDisplayer";
+import { TextDisplayer } from "@/components/texteditor/textDisplayer";
 import { apiFetch } from "@/lib/api";
 import type { Lesson } from "@/interfaces/interfaces";
 import { notFound } from "next/navigation";
 import {
   Container,
   Title,
-  Card,
-  Divider,
-  Stack,
-  Button,
   Group,
 } from "@mantine/core";
 import Link from "next/link";
@@ -29,12 +25,11 @@ export default async function LessonPage({
 
     return (
       <Container size="md" py="xl">
-        <Stack gap="xl">
+        <div className="flex flex-col gap-8">
           <Group justify="space-between">
             <BackButton />
-
             <Link href={`/lessons/${id}/edit`}>
-              <Button>Edit Lesson</Button>
+              <BackButton href={`/lessons/${id}/edit`}> Edit Lesson</BackButton>
             </Link>
           </Group>
 
@@ -42,14 +37,15 @@ export default async function LessonPage({
             <Title order={1} mb="sm">
               {lessonContent.title}
             </Title>
-
           </div>
 
-          <Divider />
-          <Card withBorder radius="md" p="xl">
+          <div
+            className="rounded-xl border border-[var(--color-border)] overflow-hidden"
+            style={{ background: "var(--color-surface)" }}
+          >
             <TextDisplayer content={lessonContent.content} />
-          </Card>
-        </Stack>
+          </div>
+        </div>
       </Container>
     );
   } catch (err: any) {

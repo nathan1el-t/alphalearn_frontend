@@ -17,6 +17,7 @@ export type Lesson = {
 
 export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" | "createdAt">
 
+export type MyLessons = Pick<Lesson, "lessonId" | "title" | "moderationStatus" | "conceptIds" | "contributorId" | "createdAt">
 
 
 //interface for creating lessons, require title, content, conceptid, contributorid

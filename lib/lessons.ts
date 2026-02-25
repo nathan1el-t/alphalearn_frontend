@@ -50,3 +50,19 @@ export async function createLesson(inputs: CreateLessonRequest): Promise<ActionR
 
   return response;
 }
+
+export async function submitLesson(id: string): Promise<ActionResponse> {
+  const response = await handleRequest(`/lessons/${id}/submit`, {
+    method: "POST",
+    headers,
+  });
+
+  if (response.success) {
+    revalidatePath("/lessons/mine");
+    revalidatePath(`/lessons/${id}`);
+    revalidatePath(`/lessons/${id}/edit`);
+    return { success: true, message: "Successfully submitted for review" };
+  }
+
+  return response;
+}
