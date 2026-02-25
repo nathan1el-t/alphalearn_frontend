@@ -7,8 +7,10 @@ import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import StarterKit from "@tiptap/starter-kit";
+import { richTextContentStyles } from "./styles";
 
-export function TextDisplayer({content}: {content:any}) {
+
+export function TextDisplayer({ content }: { content: any }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ link: false }),
@@ -25,8 +27,19 @@ export function TextDisplayer({content}: {content:any}) {
   });
 
   return (
-    <RichTextEditor editor={editor} className="lesson-rich-text">
-      <RichTextEditor.Content />
-    </RichTextEditor>
+    <>
+      <style>{richTextContentStyles}</style>
+      <RichTextEditor
+        editor={editor}
+        variant="subtle"
+        className="lesson-rich-text"
+        styles={{
+          root: { border: "none", background: "transparent" },
+          content: { background: "transparent" },
+        }}
+      >
+        <RichTextEditor.Content />
+      </RichTextEditor>
+    </>
   );
 }

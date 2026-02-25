@@ -2,12 +2,16 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@mantine/core";
-
-export default function BackButton({ href }: { href?: string }) {
+import GradientButton from "./common/gradientbutton";
+import { ReactNode } from "react";
+export default function BackButton({ href,children }: { href?: string,children?:ReactNode }) {
   const router = useRouter();
 
   return (
     <Button
+      radius="xl"
+      size="lg"
+      color="#7c3aed"
       my="lg"
       mx="md"
       onClick={() => {
@@ -19,7 +23,7 @@ export default function BackButton({ href }: { href?: string }) {
         router.back();
       }}
     >
-      Back
+      {children ?? "Back"}
     </Button>
   );
 }
