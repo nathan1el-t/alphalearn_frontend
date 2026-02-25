@@ -1,21 +1,32 @@
 export interface Concept {
-  conceptId: number;
+  publicId: string;
   title: string;
   description: string;
   createdAt: string;
+  // Temporary compatibility field while admin views are migrated.
+  conceptId?: number;
+}
+
+export interface PublicAuthor {
+  publicId: string;
+  username: string;
 }
 
 export type Lesson = {
-  lessonId: string
+  lessonPublicId: string
   title: string
   content: any
   moderationStatus: string
-  contributorId: string
+  author: PublicAuthor
   createdAt: string
-  conceptIds: number[]
+  conceptPublicIds: string[]
+  // Temporary compatibility fields while admin/public screens are migrated.
+  lessonId?: string
+  contributorId?: string
+  conceptIds?: number[]
 }
 
-export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" | "createdAt" | "moderationStatus">
+export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus">
 
 
 
@@ -24,8 +35,7 @@ export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" 
 export interface CreateLessonRequest {
   title: string
   content: any
-  conceptIds: number[]
-  contributorId: string
+  conceptPublicIds: string[]
   submit?: boolean
 }
 

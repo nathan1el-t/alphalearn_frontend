@@ -8,16 +8,16 @@ import { DateDisplay } from "../dateDisplay";
 interface LessonCardProps extends LessonSummary { }
 
 export default function LessonCard({
-  lessonId,
+  lessonPublicId,
   title,
   moderationStatus,
-  contributorId,
+  author,
   createdAt,
 }: LessonCardProps) {
   return (
     <Card
       component={Link}
-      href={`/lessons/${lessonId}`}
+      href={`/lessons/${lessonPublicId}`}
       padding="md"
       radius="xl"
       withBorder={false}
@@ -48,7 +48,9 @@ export default function LessonCard({
         </Text>
 
         <div className="flex items-center gap-1 text-[10px] text-[var(--color-text-muted)] font-medium">
-          <span className="ml-auto">Contributor: {contributorId}</span>
+          <span className="ml-auto">
+            Contributor: {author.username || author.publicId}
+          </span>
           <span>•</span>
           <DateDisplay date={createdAt} />
         </div>

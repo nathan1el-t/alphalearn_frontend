@@ -13,8 +13,7 @@ export interface LessonEditorProps {
   initialTitle: string;
   initialContent: any;
   availableConcepts?: Concept[];
-  initialConceptIds?: number[];
-  contributorId: string;
+  initialConceptPublicIds?: string[];
 }
 
 export default function LessonEditor({
@@ -22,20 +21,19 @@ export default function LessonEditor({
   initialTitle,
   initialContent,
   availableConcepts = [],
-  initialConceptIds = [],
-  contributorId,
+  initialConceptPublicIds = [],
 }: LessonEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [selectedConceptIds, setSelectedConceptIds] = useState<string[]>(
-    initialConceptIds.map(String),
+  const [selectedConceptPublicIds, setSelectedConceptPublicIds] = useState<string[]>(
+    initialConceptPublicIds,
   );
   const [loading, setLoading] = useState(false);
   const isCreateMode = !id;
 
   const handleSave = async () => {
-    if (isCreateMode && selectedConceptIds.length === 0) {
+    if (isCreateMode && selectedConceptPublicIds.length === 0) {
       showError("Please select at least one concept");
       return;
     }
@@ -48,10 +46,9 @@ export default function LessonEditor({
         : await createLesson({
           title,
           content,
-          conceptIds: selectedConceptIds.map(Number).filter((value) => Number.isFinite(value)),
-          contributorId,
+          conceptPublicIds: selectedConceptPublicIds,
           submit: true,
-        } satisfies CreateLessonRequest); 
+        } satisfies CreateLessonRequest);
 
       if (response.success) {
         showSuccess(response.message || "Saved!");
@@ -86,11 +83,11 @@ export default function LessonEditor({
           label="Concepts"
           placeholder="Select one or more concepts"
           data={availableConcepts.map((concept) => ({
-            value: String(concept.conceptId),
+            value: concept.publicId,
             label: concept.title,
           }))}
-          value={selectedConceptIds}
-          onChange={setSelectedConceptIds}
+          value={selectedConceptPublicIds}
+          onChange={setSelectedConceptPublicIds}
           searchable
           clearable
           nothingFoundMessage="No concepts found"

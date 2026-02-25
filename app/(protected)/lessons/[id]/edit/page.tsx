@@ -34,8 +34,8 @@ export default async function EditLessonPage({
           id={id}
           initialTitle={lesson.title}
           initialContent={lesson.content}
-          initialConceptIds={lesson.conceptIds}
-          contributorId={lesson.contributorId} />
+          initialConceptPublicIds={lesson.conceptPublicIds ?? []}
+        />
       </Container>
     );
   } catch (err: any) {

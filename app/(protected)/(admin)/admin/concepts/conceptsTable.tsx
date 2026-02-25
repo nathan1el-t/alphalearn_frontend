@@ -31,7 +31,7 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
 
     setIsDeleting(true);
     try {
-      const result = await deleteConcept(selectedConcept.conceptId);
+      const result = await deleteConcept(selectedConcept.publicId);
       
       setShowDeleteConfirm(false);
       setSelectedConcept(null);
@@ -60,11 +60,11 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
 
   // Create spotlight actions for search (use filtered concepts)
   const spotlightActions = filteredConcepts.map((concept) => ({
-    id: String(concept.conceptId),
+    id: concept.publicId,
     label: concept.title,
     description: concept.description,
     onClick: () => {
-      window.location.href = `/concepts/${concept.conceptId}`;
+      window.location.href = `/concepts/${concept.publicId}`;
     },
   }));
 
@@ -141,7 +141,7 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                 </tr>
               ) : (
                 filteredConcepts.map((concept) => (
-                  <tr key={concept.conceptId} className="hover:bg-[var(--color-background-hover)] border-b border-[var(--color-border)]">
+                  <tr key={concept.publicId} className="hover:bg-[var(--color-background-hover)] border-b border-[var(--color-border)]">
                     <td className="p-3">
                       <div>
                         <Text fw={500} className="text-[var(--color-text)]">{concept.title}</Text>
@@ -161,7 +161,7 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                     </td>
                     <td className="p-3">
                       <div className="flex items-center justify-end gap-2">
-                        <Link href={`/concepts/${concept.conceptId}`}>
+                        <Link href={`/concepts/${concept.publicId}`}>
                           <ActionIcon 
                             variant="light" 
                             className="admin-action-view hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"

@@ -10,7 +10,12 @@ import { getUserRole } from "@/lib/rbac";
 export default async function CreateLessonPage({
   searchParams,
 }: {
-  searchParams: Promise<{ conceptId?: string; conceptIds?: string }>;
+  searchParams: Promise<{
+    conceptPublicId?: string;
+    conceptPublicIds?: string;
+    conceptId?: string;
+    conceptIds?: string;
+  }>;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -30,15 +35,17 @@ export default async function CreateLessonPage({
   }
 
   const concepts: Concept[] = await apiFetch<Concept[]>("/concepts");
-  const { conceptId, conceptIds } = await searchParams;
-  const initialConceptIds = Array.from(
+  const { conceptPublicId, conceptPublicIds, conceptId, conceptIds } = await searchParams;
+  const initialConceptPublicIds = Array.from(
     new Set(
       [
+        ...(conceptPublicIds ? conceptPublicIds.split(",") : []),
+        ...(conceptPublicId ? [conceptPublicId] : []),
         ...(conceptIds ? conceptIds.split(",") : []),
         ...(conceptId ? [conceptId] : []),
       ]
-        .map((value) => Number(value))
-        .filter((value) => Number.isFinite(value) && value > 0),
+        .map((value) => value.trim())
+        .filter(Boolean),
     ),
   );
 
@@ -50,8 +57,7 @@ export default async function CreateLessonPage({
         initialTitle=""
         initialContent={{ type: "doc", content: [] }}
         availableConcepts={concepts}
-        initialConceptIds={initialConceptIds}
-        contributorId={user.id}
+        initialConceptPublicIds={initialConceptPublicIds}
       />
     </Container>
   );
