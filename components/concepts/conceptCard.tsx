@@ -14,14 +14,14 @@ import { Card, Tooltip } from "@mantine/core";
  */
 
 interface ConceptCardProps {
-  conceptId: number;
+  publicId: string;
   title: string;
   description: string;
   createdAt: string;
 }
 
 export default function ConceptCard({
-  conceptId,
+  publicId,
   title,
   description,
   createdAt,
@@ -29,7 +29,7 @@ export default function ConceptCard({
   return (
     <Card
       component={Link}
-      href={`/concepts/${conceptId}`}
+      href={`/concepts/${publicId}`}
       padding="md"
       radius="xl"
       withBorder={false}

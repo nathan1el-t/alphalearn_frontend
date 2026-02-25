@@ -1,60 +1,42 @@
 export interface Concept {
-  conceptId: number;
+  publicId: string;
   title: string;
   description: string;
   createdAt: string;
 }
 
+export interface PublicAuthor {
+  publicId: string;
+  username: string;
+}
+
 export type Lesson = {
-  lessonId: string
+  lessonPublicId: string
   title: string
   content: any
   moderationStatus: string
-  contributorId: string
+  author: PublicAuthor
   createdAt: string
-  conceptIds: number[]
+  conceptPublicIds: string[]
 }
 
-export type LessonSummary = Pick<Lesson, "lessonId" | "title" | "contributorId" | "createdAt" | "moderationStatus">
-
-
-
-//interface for creating lessons, require title, content, conceptid, contributorid
+export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus">
 
 export interface CreateLessonRequest {
   title: string
   content: any
-  conceptIds: number[]
-  contributorId: string
+  conceptPublicIds: string[]
   submit?: boolean
 }
-
-// return response for create lessons
-// {
-//     "lessonId": 20,
-//     "title": "string",
-//     "content": {},
-//     "moderationStatus": "UNPUBLISHED",
-//     "contributorId": "99460798-1886-4782-b37c-40a7e1b4d1a6",
-//     "createdAt": "2026-02-21T01:11:39.9977952+08:00"
-// }
-
-
-// {
-//         "lessonId": 7,
-//         "title": "test1",
-//         "contributorId": "3fab4f56-6ef7-40c1-b3cf-b63c12c57923",
-//         "createdAt": "2026-02-15T14:12:10.255478Z"
-//     },  
 export interface AdminContributor {
-  contributorId: string;
+  publicId: string;
   username: string;
   promotedAt: string | null;
   demotedAt: string | null;
 }
 
 export interface AdminLearner {
-  id: string;
+  publicId: string;
   username: string;
   createdAt: string;
   totalPoints: number;
@@ -62,7 +44,7 @@ export interface AdminLearner {
 
 // Unified user interface for admin pages
 export interface AdminUser {
-  userId: string;
+  publicId: string;
   username: string;
   role: "CONTRIBUTOR" | "LEARNER";
   promotedAt?: string | null;
@@ -76,10 +58,9 @@ export type LessonModerationStatus = "PENDING" | "APPROVED" | "REJECTED" | "UNPU
 
 // Admin lesson interface for moderation
 export interface AdminLesson {
-  lessonId: number;
+  lessonPublicId: string;
   lessonTitle: string;
-  contributorId: string;
-  contributorUsername?: string; 
+  author: PublicAuthor;
   lessonModerationStatus: LessonModerationStatus;
   createdAt?: string;
   submittedAt?: string;
@@ -87,10 +68,10 @@ export interface AdminLesson {
 
 // API response type matching backend /admin/lessons endpoint
 export interface LessonModerationResponse {
-  lessonId: number;
+  lessonPublicId: string;
   title: string;
-  conceptIds: number[];
-  contributorId: string;
+  conceptPublicIds: string[];
+  author: PublicAuthor;
   lessonModerationStatus: LessonModerationStatus;
   createdAt: string;
   deletedAt: string | null;

@@ -14,21 +14,21 @@ async function UsersData() {
         apiFetch<AdminContributor[]>("/admin/contributors")
     ]);
 
-    // Create a map of contributor IDs for quick lookup
+    // Create a map of contributor public IDs for quick lookup
     const contributorMap = new Map(
-        contributors.map(c => [c.contributorId, c])
+        contributors.map(c => [c.publicId, c])
     );
 
     // Merge: Check if each learner is also a contributor
     const users: AdminUser[] = learners.map(learner => {
-        const contributorData = contributorMap.get(learner.id);
+        const contributorData = contributorMap.get(learner.publicId);
         
         if (contributorData) {
             // Check if contributor is currently active (not demoted)
             const isActiveContributor = contributorData.demotedAt === null;
             
             return {
-                userId: learner.id,
+                publicId: learner.publicId,
                 username: learner.username,
                 role: isActiveContributor ? "CONTRIBUTOR" as const : "LEARNER" as const,
                 promotedAt: contributorData.promotedAt,
@@ -37,7 +37,7 @@ async function UsersData() {
         } else {
             // Regular learner (never been promoted)
             return {
-                userId: learner.id,
+                publicId: learner.publicId,
                 username: learner.username,
                 role: "LEARNER" as const
             };

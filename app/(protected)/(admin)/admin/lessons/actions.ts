@@ -6,9 +6,9 @@ import { revalidatePath } from "next/cache";
 /**
  * Server Action: Approve a lesson
  */
-export async function approveLesson(lessonId: number) {
+export async function approveLesson(lessonPublicId: string) {
   try {
-    await apiFetch(`/admin/lessons/${lessonId}/approve`, {
+    await apiFetch(`/admin/lessons/${lessonPublicId}/approve`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -29,9 +29,9 @@ export async function approveLesson(lessonId: number) {
 /**
  * Server Action: Reject a lesson
  */
-export async function rejectLesson(lessonId: number) {
+export async function rejectLesson(lessonPublicId: string) {
   try {
-    await apiFetch(`/admin/lessons/${lessonId}/reject`, {
+    await apiFetch(`/admin/lessons/${lessonPublicId}/reject`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

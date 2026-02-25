@@ -41,7 +41,7 @@ export default async function LessonsPage() {
       ) : (
         <SimpleGrid cols={3} spacing="lg">
           {lessons.map((lesson) => (
-            <LessonCard key={lesson.lessonId} {...lesson} />
+            <LessonCard key={lesson.lessonPublicId} {...lesson} />
           ))}
         </SimpleGrid>
       )}

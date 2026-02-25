@@ -1,3 +1,4 @@
+import type { PublicAuthor } from "@/interfaces/interfaces";
 import "@mantine/tiptap/styles.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -7,11 +8,11 @@ import { TextDisplayer } from "@/components/textDisplayer";
 import { apiFetch } from "@/lib/api";
 
 type AdminLessonDetail = {
-  lessonId: number | string;
+  lessonPublicId: string;
   title: string;
   content: unknown;
-  conceptIds?: number[];
-  contributorId?: string | null;
+  conceptPublicIds?: string[];
+  author?: PublicAuthor | null;
   lessonModerationStatus?: string;
   moderationStatus?: string;
 };
@@ -47,9 +48,13 @@ export default async function AdminLessonDetailPage({
 
               <Card className="admin-card">
                 <Stack gap="xs">
-                  <Text size="sm" c="dimmed">Lesson ID: {lesson.lessonId}</Text>
-                  <Text size="sm" c="dimmed">Contributor: {lesson.contributorId ?? "-"}</Text>
-                  <Text size="sm" c="dimmed">Concept IDs: {lesson.conceptIds?.join(", ") || "-"}</Text>
+                  <Text size="sm" c="dimmed">Lesson ID: {lesson.lessonPublicId}</Text>
+                  <Text size="sm" c="dimmed">
+                    Contributor: {lesson.author ? `${lesson.author.username} (${lesson.author.publicId})` : "-"}
+                  </Text>
+                  <Text size="sm" c="dimmed">
+                    Concept IDs: {lesson.conceptPublicIds?.join(", ") || "-"}
+                  </Text>
                 </Stack>
               </Card>
 

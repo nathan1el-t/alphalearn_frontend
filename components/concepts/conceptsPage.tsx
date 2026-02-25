@@ -1,5 +1,6 @@
 "use client";
 
+import type { Concept } from "@/interfaces/interfaces";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Spotlight, spotlight, SpotlightActionData } from "@mantine/spotlight";
@@ -25,13 +26,6 @@ import Pagination from "./pagination";
  * 
  */
 
-interface Concept {
-  conceptId: number;
-  title: string;
-  description: string;
-  createdAt: string;
-}
-
 interface ConceptsPageProps {
   concepts: Concept[];
 }
@@ -53,16 +47,16 @@ export default function ConceptsPage({ concepts }: ConceptsPageProps) {
   // SPOTLIGHT SEARCH SETUP
   // ========================================
   // Transform concepts into Spotlight actions
-  const handleSpotlightAction = (conceptId: number) => {
+  const handleSpotlightAction = (conceptPublicId: string) => {
     spotlight.close();
-    router.push(`/concepts/${conceptId}`);
+    router.push(`/concepts/${conceptPublicId}`);
   };
 
   const spotlightActions: SpotlightActionData[] = concepts.map((concept) => ({
-    id: String(concept.conceptId),
+    id: concept.publicId,
     label: concept.title,
     description: concept.description,
-    onClick: () => handleSpotlightAction(concept.conceptId),
+    onClick: () => handleSpotlightAction(concept.publicId),
   }));
 
   // ========================================

@@ -7,7 +7,7 @@ export type FilterType = "all" | "contributors" | "learners";
 
 type ConfirmAction = {
   type: "promote" | "demote";
-  userId: string;
+  publicId: string;
   username: string;
 } | null;
 
@@ -16,24 +16,24 @@ export function useUserManagement(users: AdminUser[]) {
   const [loading, setLoading] = useState<string | null>(null);
   const [confirmAction, setConfirmAction] = useState<ConfirmAction>(null);
 
-  const handlePromote = async (userId: string, username: string) => {
+  const handlePromote = async (publicId: string, username: string) => {
     // Show confirmation modal
-    setConfirmAction({ type: "promote", userId, username });
+    setConfirmAction({ type: "promote", publicId, username });
   };
 
-  const handleDemote = async (userId: string, username: string) => {
+  const handleDemote = async (publicId: string, username: string) => {
     // Show confirmation modal
-    setConfirmAction({ type: "demote", userId, username });
+    setConfirmAction({ type: "demote", publicId, username });
   };
 
   const executePromote = async () => {
     if (!confirmAction) return;
     
-    setLoading(confirmAction.userId);
+    setLoading(confirmAction.publicId);
     setConfirmAction(null);
     
     try {
-      const result = await promoteUser(confirmAction.userId);
+      const result = await promoteUser(confirmAction.publicId);
       
       if (result.success) {
         showSuccess(result.message);
@@ -51,11 +51,11 @@ export function useUserManagement(users: AdminUser[]) {
   const executeDemote = async () => {
     if (!confirmAction) return;
     
-    setLoading(confirmAction.userId);
+    setLoading(confirmAction.publicId);
     setConfirmAction(null);
     
     try {
-      const result = await demoteUser(confirmAction.userId);
+      const result = await demoteUser(confirmAction.publicId);
       
       if (result.success) {
         showSuccess(result.message);

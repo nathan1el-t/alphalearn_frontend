@@ -7,8 +7,8 @@ interface UsersTableViewProps {
   filteredUsers: AdminUser[];
   filter: FilterType;
   loading: string | null;
-  onPromote: (userId: string, username: string) => void;
-  onDemote: (userId: string, username: string) => void;
+  onPromote: (publicId: string, username: string) => void;
+  onDemote: (publicId: string, username: string) => void;
 }
 
 export function UsersTableView({ 
@@ -69,7 +69,7 @@ export function UsersTableView({
                 
                 return (
                   <tr 
-                    key={user.userId} 
+                    key={user.publicId} 
                     className="hover:bg-[var(--color-background-hover)] border-b border-[var(--color-border)]"
                   >
                     <td className="p-3">
@@ -79,7 +79,7 @@ export function UsersTableView({
                     </td>
                     {/* <td className="p-3">
                       <Text size="sm" className="text-[var(--color-text-secondary)] font-mono">
-                        {user.userId}
+                        {user.publicId}
                       </Text>
                     </td> */}
                     <td className="p-3">
@@ -124,8 +124,8 @@ export function UsersTableView({
                             color="green"
                             size="xs"
                             className="admin-action-view"
-                            onClick={() => onPromote(user.userId, user.username)}
-                            loading={loading === user.userId}
+                            onClick={() => onPromote(user.publicId, user.username)}
+                            loading={loading === user.publicId}
                           >
                             <span className="material-symbols-outlined text-sm mr-1">
                               person_add
@@ -138,8 +138,8 @@ export function UsersTableView({
                             color="red"
                             size="xs"
                             className="admin-action-delete"
-                            onClick={() => onDemote(user.userId, user.username)}
-                            loading={loading === user.userId}
+                            onClick={() => onDemote(user.publicId, user.username)}
+                            loading={loading === user.publicId}
                           >
                             <span className="material-symbols-outlined text-sm mr-1">
                               person_remove
@@ -152,8 +152,8 @@ export function UsersTableView({
                             color="green"
                             size="xs"
                             className="admin-action-view"
-                            onClick={() => onPromote(user.userId, user.username)}
-                            loading={loading === user.userId}
+                            onClick={() => onPromote(user.publicId, user.username)}
+                            loading={loading === user.publicId}
                           >
                             <span className="material-symbols-outlined text-sm mr-1">
                               person_add

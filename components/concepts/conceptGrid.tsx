@@ -1,3 +1,4 @@
+import type { Concept } from "@/interfaces/interfaces";
 import ConceptCard from "./conceptCard";
 
 /**
@@ -15,13 +16,6 @@ import ConceptCard from "./conceptCard";
  * - Separation of concerns!
  */
 
-interface Concept {
-  conceptId: number;
-  title: string;
-  description: string;
-  createdAt: string;
-}
-
 interface ConceptGridProps {
   concepts: Concept[];
 }
@@ -31,8 +25,8 @@ export default function ConceptGrid({ concepts }: ConceptGridProps) {
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-10 pb-10 p-10">
       {concepts.map((concept) => (
         <ConceptCard
-          key={concept.conceptId} // React needs unique 'key' for list items!
-          conceptId={concept.conceptId}
+          key={concept.publicId} // React needs unique 'key' for list items!
+          publicId={concept.publicId}
           title={concept.title}
           description={concept.description}
           createdAt={concept.createdAt}

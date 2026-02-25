@@ -6,9 +6,9 @@ import { revalidatePath } from "next/cache";
 /**
  * Server Action: Delete a concept
  */
-export async function deleteConcept(conceptId: number) {
+export async function deleteConcept(conceptPublicId: string) {
   try {
-    await apiFetch(`/admin/concepts/${conceptId}`, {
+    await apiFetch(`/admin/concepts/${conceptPublicId}`, {
       method: "DELETE",
     });
 
