@@ -94,7 +94,7 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
     if (!selectedLesson) return;
     setIsProcessing(true);
     try {
-      const result = await approveLesson(selectedLesson.lessonId);
+      const result = await approveLesson(selectedLesson.lessonPublicId);
       setShowApproveConfirm(false);
       setSelectedLesson(null);
       if (result.success) {
@@ -113,7 +113,7 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
     if (!selectedLesson) return;
     setIsProcessing(true);
     try {
-      const result = await rejectLesson(selectedLesson.lessonId);
+      const result = await rejectLesson(selectedLesson.lessonPublicId);
       setShowRejectConfirm(false);
       setSelectedLesson(null);
       if (result.success) {
@@ -130,11 +130,11 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
 
   // Spotlight search actions
   const spotlightActions = filteredLessons.map((lesson) => ({
-    id: String(lesson.lessonId),
+    id: lesson.lessonPublicId,
     label: lesson.lessonTitle,
-    description: `By ${lesson.contributorUsername || "Unknown"} • ${statusConfig[lesson.lessonModerationStatus]?.label || lesson.lessonModerationStatus}`,
+    description: `By ${lesson.author.username || lesson.author.publicId} • ${statusConfig[lesson.lessonModerationStatus]?.label || lesson.lessonModerationStatus}`,
     onClick: () => {
-      window.location.href = `/lessons/${lesson.lessonId}`;
+      window.location.href = `/lessons/${lesson.lessonPublicId}`;
     },
   }));
 
@@ -283,14 +283,14 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
 
                   return (
                     <tr 
-                      key={lesson.lessonId} 
+                      key={lesson.lessonPublicId} 
                       className={`hover:bg-[var(--color-background-hover)] border-b border-[var(--color-border)] ${
                         isUrgent ? "bg-orange-500/5" : ""
                       }`}
                     >
                       <td className="p-3">
                         <Link 
-                          href={`/lessons/${lesson.lessonId}`}
+                          href={`/lessons/${lesson.lessonPublicId}`}
                           className="hover:text-[var(--color-primary)] transition-colors"
                         >
                           <div className="flex items-center gap-2">
@@ -311,11 +311,11 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
                       </td>
                       <td className="p-3">
                         <Text size="sm" className="text-[var(--color-text-secondary)]">
-                          {lesson.contributorUsername || "Unknown"}
+                          {lesson.author.username || "Unknown"}
                         </Text>
-                        {!lesson.contributorUsername && (
+                        {!lesson.author.username && (
                           <Text size="xs" c="dimmed" className="text-[var(--color-text-muted)] truncate max-w-[120px]">
-                            {lesson.contributorId.slice(0, 8)}...
+                            {lesson.author.publicId.slice(0, 8)}...
                           </Text>
                         )}
                       </td>
@@ -355,7 +355,7 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
                         <div className="flex items-center justify-end gap-2">
                           <ActionIcon
                             component={Link}
-                            href={`/lessons/${lesson.lessonId}`}
+                            href={`/lessons/${lesson.lessonPublicId}`}
                             variant="subtle"
                             color="blue"
                             size="lg"

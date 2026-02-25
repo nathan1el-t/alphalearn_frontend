@@ -86,10 +86,9 @@ export type LessonModerationStatus = "PENDING" | "APPROVED" | "REJECTED" | "UNPU
 
 // Admin lesson interface for moderation
 export interface AdminLesson {
-  lessonId: number;
+  lessonPublicId: string;
   lessonTitle: string;
-  contributorId: string;
-  contributorUsername?: string; 
+  author: PublicAuthor;
   lessonModerationStatus: LessonModerationStatus;
   createdAt?: string;
   submittedAt?: string;
@@ -97,10 +96,10 @@ export interface AdminLesson {
 
 // API response type matching backend /admin/lessons endpoint
 export interface LessonModerationResponse {
-  lessonId: number;
+  lessonPublicId: string;
   title: string;
-  conceptIds: number[];
-  contributorId: string;
+  conceptPublicIds: string[];
+  author: PublicAuthor;
   lessonModerationStatus: LessonModerationStatus;
   createdAt: string;
   deletedAt: string | null;
