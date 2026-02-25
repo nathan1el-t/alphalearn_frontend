@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { Container, Title } from "@mantine/core";
 import BackButton from "@/components/backButton";
 import { Concept } from "@/interfaces/interfaces";
+import { getUserRole } from "@/lib/rbac";
 
 export default async function CreateLessonPage({
   searchParams,
@@ -16,6 +17,16 @@ export default async function CreateLessonPage({
 
   if (!user) {
     redirect("/signin");
+  }
+
+  const role = await getUserRole();
+
+  if (role === "ADMIN") {
+    redirect("/admin/lessons");
+  }
+
+  if (role === "LEARNER") {
+    redirect("/lessons");
   }
 
   const concepts: Concept[] = await apiFetch<Concept[]>("/concepts");
