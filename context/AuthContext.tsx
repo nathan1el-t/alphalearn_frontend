@@ -6,7 +6,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
 import { showError, showSuccess } from "@/lib/notifications";
-import { getUserRoleAction } from "@/lib/actions/role";
 
 export type UserRole = "ADMIN" | "CONTRIBUTOR" | "LEARNER" | null;
 
@@ -30,17 +29,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  // Fetch user role from backend via Server Action
-  const fetchUserRole = async () => {
-    
+  // Fetch role using the current client session token to avoid stale server cookies.
+  const fetchUserRole = async (currentSession: Session | null) => {
+    if (!currentSession?.access_token) {
+      setUserRole(null);
+      return;
+    }
+
     try {
-      const result = await getUserRoleAction();
-      
-      if (result.success && result.role) {
-        setUserRole(result.role);
-      } else {
+      const res = await fetch("/api/user/role", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${currentSession.access_token}`,
+        },
+        cache: "no-store",
+      });
+
+      if (!res.ok) {
         setUserRole(null);
+        return;
       }
+
+      const data = (await res.json()) as { role?: UserRole };
+      setUserRole(data.role ?? null);
     } catch (error) {
       setUserRole(null);
     }
@@ -53,15 +64,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await supabase.auth.getSession();
 
       if (!error) {
-        console.log("access token:", data.session?.access_token);
-
         setSession(data.session);
         setUser(data.session?.user || null);
         
         // Fetch role if user is authenticated
         if (data.session?.user) {
-          await fetchUserRole();
+          await fetchUserRole(data.session);
         } else {
+          setUserRole(null);
         }
       }
 
@@ -72,12 +82,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        if (
+          (event === "SIGNED_IN" || event === "INITIAL_SESSION") &&
+          session?.access_token
+        ) {
+          console.log("[POSTMAN TEST] access token:", session.access_token);
+        }
+
         setSession(session);
         setUser(session?.user || null);
         
         // Fetch role when auth state changes
         if (session?.user) {
-          await fetchUserRole();
+          await fetchUserRole(session);
         } else {
           setUserRole(null);
         }
@@ -98,6 +115,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
       });
       if (error) throw error;
+      if (data.session?.access_token) {
+        console.log("[POSTMAN TEST] access token:", data.session.access_token);
+      }
       setUser(data.user);
       setSession(data.session);
       showSuccess("Logged in successfully!");
