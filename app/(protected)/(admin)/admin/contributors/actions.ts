@@ -6,14 +6,14 @@ import { revalidatePath } from "next/cache";
 /**
  * Server Action: Promote a learner to contributor
  */
-export async function promoteUser(learnerId: string) {
+export async function promoteUser(learnerPublicId: string) {
   try {
     await apiFetch(`/admin/contributors/promote`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ learnerIds: [learnerId] }),
+      body: JSON.stringify({ learnerPublicIds: [learnerPublicId] }),
     });
 
     revalidatePath("/admin/contributors");
@@ -30,14 +30,14 @@ export async function promoteUser(learnerId: string) {
 /**
  * Server Action: Demote a contributor to learner
  */
-export async function demoteUser(contributorId: string) {
+export async function demoteUser(contributorPublicId: string) {
   try {
     await apiFetch(`/admin/contributors/demote`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ contributorIds: [contributorId] }),
+      body: JSON.stringify({ contributorPublicIds: [contributorPublicId] }),
     });
 
     revalidatePath("/admin/contributors");

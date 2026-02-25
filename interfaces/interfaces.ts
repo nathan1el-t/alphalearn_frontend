@@ -57,14 +57,14 @@ export interface CreateLessonRequest {
 //         "createdAt": "2026-02-15T14:12:10.255478Z"
 //     },  
 export interface AdminContributor {
-  contributorId: string;
+  publicId: string;
   username: string;
   promotedAt: string | null;
   demotedAt: string | null;
 }
 
 export interface AdminLearner {
-  id: string;
+  publicId: string;
   username: string;
   createdAt: string;
   totalPoints: number;
@@ -72,7 +72,7 @@ export interface AdminLearner {
 
 // Unified user interface for admin pages
 export interface AdminUser {
-  userId: string;
+  publicId: string;
   username: string;
   role: "CONTRIBUTOR" | "LEARNER";
   promotedAt?: string | null;
