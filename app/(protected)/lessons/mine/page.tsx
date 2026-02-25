@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api";
-import type { LessonSummary, MyLessons } from "@/interfaces/interfaces";
+import type { LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import {
   SimpleGrid,
@@ -28,9 +28,9 @@ export default async function MyLessonsPage() {
     redirect("/lessons");
   }
 
-  let lessons: MyLessons[] = [];
+  let lessons: LessonSummary[] = [];
   try {
-    lessons = await apiFetch<MyLessons[]>("/lessons/mine");
+    lessons = await apiFetch<LessonSummary[]>("/lessons/mine");
   } catch (err) {
     console.error(err);
     return <NotFound />;
@@ -60,7 +60,6 @@ export default async function MyLessonsPage() {
         </Container>
       </div>
 
-
       <Container size="lg" py="xl" className="pb-32">
         {lessons.length === 0 ? (
           <Stack align="center" py={100} gap="md">
@@ -77,8 +76,8 @@ export default async function MyLessonsPage() {
           </Stack>
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">
-            {lessons.map((lesson, idx) => (
-              <LessonCard key={lesson.lessonId || (lesson as any).id || (lesson as any).lessonPublicId || idx} {...lesson} />
+            {lessons.map((lesson) => (
+              <LessonCard key={lesson.lessonPublicId} {...lesson} />
             ))}
           </SimpleGrid>
         )}

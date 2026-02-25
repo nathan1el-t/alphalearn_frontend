@@ -1,5 +1,6 @@
 "use client";
 
+import type { Concept } from "@/interfaces/interfaces";
 import { useState } from "react";
 import {
   SimpleGrid,
@@ -14,7 +15,6 @@ import Pagination from "./pagination";
 import ConceptSpotlightSearch from "./conceptSpotlightSearch";
 import SearchTrigger from "@/components/lessons/searchTrigger";
 import GradientButton from "@/components/common/gradientbutton";
-import type { Concept } from "@/interfaces/interfaces";
 
 interface ConceptsPageProps {
   concepts: Concept[];
@@ -117,8 +117,8 @@ function ConceptsGrid({
       <ConceptsHeader count={totalCount} />
 
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
-        {concepts.map((concept, idx) => (
-          <ConceptCard key={concept.conceptId || (concept as any).publicId || idx} {...concept} />
+        {concepts.map((concept) => (
+          <ConceptCard key={concept.publicId} {...concept} />
         ))}
       </SimpleGrid>
 

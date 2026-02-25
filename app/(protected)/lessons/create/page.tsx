@@ -10,7 +10,12 @@ import Link from "next/link";
 export default async function CreateLessonPage({
   searchParams,
 }: {
-  searchParams: Promise<{ conceptId?: string; conceptIds?: string }>;
+  searchParams: Promise<{
+    conceptPublicId?: string;
+    conceptPublicIds?: string;
+    conceptId?: string;
+    conceptIds?: string;
+  }>;
 }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -30,15 +35,17 @@ export default async function CreateLessonPage({
   }
 
   const concepts: Concept[] = await apiFetch<Concept[]>("/concepts");
-  const { conceptId, conceptIds } = await searchParams;
-  const initialConceptIds = Array.from(
+  const { conceptPublicId, conceptPublicIds, conceptId, conceptIds } = await searchParams;
+  const initialConceptPublicIds = Array.from(
     new Set(
       [
+        ...(conceptPublicIds ? conceptPublicIds.split(",") : []),
+        ...(conceptPublicId ? [conceptPublicId] : []),
         ...(conceptIds ? conceptIds.split(",") : []),
         ...(conceptId ? [conceptId] : []),
       ]
-        .map((value) => Number(value))
-        .filter((value) => Number.isFinite(value) && value > 0),
+        .map((value) => value.trim())
+        .filter(Boolean),
     ),
   );
 
@@ -48,18 +55,6 @@ export default async function CreateLessonPage({
       <div className="border-b border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
         <Container size="md" className="py-10">
           <Stack gap="md">
-            {/* Breadcrumb */}
-            <Group gap="xs" className="text-xs font-medium text-[var(--color-text-muted)]">
-              <Link href="/lessons" className="hover:text-[var(--color-primary)] transition-colors">
-                Lessons
-              </Link>
-              <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              <Link href="/lessons/mine" className="hover:text-[var(--color-primary)] transition-colors">
-                My Library
-              </Link>
-              <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-              <span className="text-[var(--color-primary)]">New Lesson</span>
-            </Group>
 
             {/* Page Title */}
             <Stack gap={4}>
@@ -92,8 +87,7 @@ export default async function CreateLessonPage({
           initialTitle=""
           initialContent={{ type: "doc", content: [] }}
           availableConcepts={concepts}
-          initialConceptIds={initialConceptIds}
-          contributorId={user.id}
+          initialConceptPublicIds={initialConceptPublicIds}
         />
       </Container>
     </div>

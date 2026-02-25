@@ -22,15 +22,14 @@ export default async function LessonPage({
 
   try {
     const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
+    const lessonPublicId = lessonContent.lessonPublicId || id;
 
     return (
       <Container size="md" py="xl">
         <div className="flex flex-col gap-8">
           <Group justify="space-between">
             <BackButton />
-            <Link href={`/lessons/${id}/edit`}>
-              <BackButton href={`/lessons/${id}/edit`}> Edit Lesson</BackButton>
-            </Link>
+            <BackButton href={`/lessons/${lessonPublicId}/edit`}>Edit Lesson</BackButton>
           </Group>
 
           <div>

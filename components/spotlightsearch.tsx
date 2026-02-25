@@ -15,9 +15,9 @@ interface SpotlightSearchProps {
 export default function SpotlightSearch({ lessons }: SpotlightSearchProps) {
     const router = useRouter();
 
-    const actions: SpotlightActionData[] = lessons.map((lesson, index) => {
-        const id = lesson.lessonId || (lesson as any).lessonPublicId || (lesson as any).id || String(index);
-        const contributor = lesson.contributorId || (lesson as any).author?.username || "Auth";
+    const actions: SpotlightActionData[] = lessons.map((lesson) => {
+        const id = lesson.lessonPublicId;
+        const contributor = lesson.author?.username || "Anonymous";
 
         return {
             id,

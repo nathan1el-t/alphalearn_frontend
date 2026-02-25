@@ -14,8 +14,7 @@ export interface LessonEditorProps {
   initialTitle: string;
   initialContent: any;
   availableConcepts?: Concept[];
-  initialConceptIds?: number[];
-  contributorId: string;
+  initialConceptPublicIds?: string[];
 }
 
 export default function LessonEditor({
@@ -23,26 +22,20 @@ export default function LessonEditor({
   initialTitle,
   initialContent,
   availableConcepts = [],
-  initialConceptIds = [],
-  contributorId,
+  initialConceptPublicIds = [],
 }: LessonEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [selectedConceptIds, setSelectedConceptIds] = useState<string[]>(
-    initialConceptIds.map(String),
+  const [selectedConceptPublicIds, setSelectedConceptPublicIds] = useState<string[]>(
+    initialConceptPublicIds,
   );
   const [loading, setLoading] = useState(false);
   const [discardModalOpened, setDiscardModalOpened] = useState(false);
   const isCreateMode = !id;
 
   const handleSave = async () => {
-    if (!title.trim()) {
-      showError("Please enter a lesson title");
-      return;
-    }
-
-    if (isCreateMode && selectedConceptIds.length === 0) {
+    if (isCreateMode && selectedConceptPublicIds.length === 0) {
       showError("Please select at least one concept");
       return;
     }
@@ -55,8 +48,7 @@ export default function LessonEditor({
         : await createLesson({
           title,
           content,
-          conceptIds: selectedConceptIds.map(Number).filter((value) => Number.isFinite(value)),
-          contributorId,
+          conceptPublicIds: selectedConceptPublicIds,
           submit: true,
         } satisfies CreateLessonRequest);
 
@@ -127,44 +119,19 @@ export default function LessonEditor({
 
       {/* ── Concept Selector (Create mode only) ── */}
       {isCreateMode && (
-        <div className="space-y-2">
-          <label className="block text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-            Linked Concepts
-          </label>
-          <MultiSelect
-            placeholder="Search and select concepts..."
-            data={availableConcepts.map((concept) => ({
-              value: String(concept.conceptId),
-              label: concept.title,
-            }))}
-            value={selectedConceptIds}
-            onChange={setSelectedConceptIds}
-            searchable
-            clearable
-            nothingFoundMessage="No concepts found"
-            radius="xl"
-            size="md"
-            styles={{
-              input: {
-                backgroundColor: "var(--color-surface)",
-                borderColor: "var(--color-border)",
-                color: "var(--color-text)",
-                minHeight: "48px",
-              },
-              dropdown: {
-                backgroundColor: "var(--color-surface-elevated)",
-                borderColor: "var(--color-border)",
-              },
-              option: {
-                color: "var(--color-text)",
-              },
-              pill: {
-                backgroundColor: "var(--color-primary)",
-                color: "#fff",
-              },
-            }}
-          />
-        </div>
+        <MultiSelect
+          label="Concepts"
+          placeholder="Select one or more concepts"
+          data={availableConcepts.map((concept) => ({
+            value: concept.publicId,
+            label: concept.title,
+          }))}
+          value={selectedConceptPublicIds}
+          onChange={setSelectedConceptPublicIds}
+          searchable
+          clearable
+          nothingFoundMessage="No concepts found"
+        />
       )}
 
       {/* ── Rich Text Editor ── */}

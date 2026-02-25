@@ -15,9 +15,6 @@ import SpotlightSearch from "@/components/spotlightsearch";
 import SearchTrigger from "@/components/lessons/searchTrigger";
 import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
 
-
-
-
 export default async function LessonsPage() {
   await redirectAdminFromPublicRoute("lessons-list");
   const role = await getUserRole();
@@ -44,8 +41,6 @@ export default async function LessonsPage() {
   );
 }
 
-
-
 async function fetchLessons(): Promise<LessonSummary[] | null> {
   try {
     return await apiFetch<LessonSummary[]>("/lessons");
@@ -53,7 +48,6 @@ async function fetchLessons(): Promise<LessonSummary[] | null> {
     return null;
   }
 }
-
 
 function HeroSection({ role }: { role: string | null }) {
   return (
@@ -102,8 +96,8 @@ function LessonsGrid({ lessons }: { lessons: LessonSummary[] }) {
       <LessonsHeader count={lessons.length} />
 
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
-        {lessons.map((lesson, idx) => (
-          <LessonCard key={lesson.lessonId || (lesson as any).id || (lesson as any).lessonPublicId || idx} {...lesson} />
+        {lessons.map((lesson) => (
+          <LessonCard key={lesson.lessonPublicId} {...lesson} />
         ))}
       </SimpleGrid>
     </Stack>

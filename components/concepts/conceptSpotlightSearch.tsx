@@ -15,8 +15,8 @@ interface ConceptSpotlightSearchProps {
 export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSearchProps) {
     const router = useRouter();
 
-    const actions: SpotlightActionData[] = concepts.map((concept, idx) => {
-        const finalId = concept.conceptId || (concept as any).publicId || idx;
+    const actions: SpotlightActionData[] = concepts.map((concept) => {
+        const finalId = concept.publicId;
 
         return {
             id: String(finalId),

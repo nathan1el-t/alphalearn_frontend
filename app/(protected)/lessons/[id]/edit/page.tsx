@@ -49,6 +49,17 @@ export default async function EditLessonPage({
           <Container size="md" className="py-10">
             <Stack gap="md">
               {/* Breadcrumb */}
+              <Group gap="xs" className="text-xs font-medium text-[var(--color-text-muted)]">
+                <Link href="/lessons" className="hover:text-[var(--color-primary)] transition-colors">
+                  Lessons
+                </Link>
+                <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                <Link href="/lessons/mine" className="hover:text-[var(--color-primary)] transition-colors">
+                  My Library
+                </Link>
+                <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+                <span className="text-[var(--color-primary)]">Edit Lesson</span>
+              </Group>
 
               {/* Eyebrow + badge row */}
               <Group gap="sm" align="center">
@@ -86,14 +97,13 @@ export default async function EditLessonPage({
                 </Title>
 
                 <Text className="text-[var(--color-text-secondary)] max-w-lg font-light leading-relaxed">
-                  {/* {status === "REJECTED"
+                  {status === "REJECTED"
                     ? "This lesson was rejected. Revise your content and resubmit."
                     : status === "APPROVED"
                       ? "This lesson is live. Edits will require re-approval."
                       : status === "PENDING"
                         ? "This lesson is under review. You can still make edits."
-                        : "Update your lesson content. Changes save directly."} */}
-                        
+                        : "Update your lesson content. Changes save directly."}
                 </Text>
               </Stack>
             </Stack>
@@ -106,8 +116,7 @@ export default async function EditLessonPage({
             id={id}
             initialTitle={lesson.title}
             initialContent={lesson.content}
-            initialConceptIds={lesson.conceptIds}
-            contributorId={lesson.contributorId}
+            initialConceptPublicIds={lesson.conceptPublicIds}
           />
         </Container>
       </div>
@@ -117,4 +126,3 @@ export default async function EditLessonPage({
     return <NotFound />;
   }
 }
-

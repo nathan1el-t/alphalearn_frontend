@@ -32,7 +32,7 @@ export default async function AdminConceptDetailPage({
               <Card className="admin-card">
                 <Stack gap="sm">
                   <Text size="sm" c="dimmed">
-                    Concept ID: {concept.conceptId}
+                    Concept ID: {concept.publicId}
                   </Text>
                   <Text>{concept.description || "No description provided."}</Text>
                 </Stack>

@@ -9,8 +9,8 @@ interface ConceptGridProps {
 export default function ConceptGrid({ concepts }: ConceptGridProps) {
   return (
     <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
-      {concepts.map((concept, idx) => (
-        <ConceptCard key={concept.conceptId || idx} {...concept} />
+      {concepts.map((concept) => (
+        <ConceptCard key={concept.publicId} {...concept} />
       ))}
     </SimpleGrid>
   );
