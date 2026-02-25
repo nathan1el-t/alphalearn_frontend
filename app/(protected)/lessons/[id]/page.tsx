@@ -14,14 +14,17 @@ import {
 } from "@mantine/core";
 import Link from "next/link";
 import BackButton from "@/components/backButton";
+import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 
 export default async function LessonPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
+  await redirectAdminFromPublicRoute("lesson-detail", { id });
+
   try {
-    const { id } = await params;
     const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
 
     return (

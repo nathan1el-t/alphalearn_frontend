@@ -3,6 +3,7 @@ import type { Concept } from "@/interfaces/interfaces";
 import { Suspense } from "react";
 import ConceptsSkeleton from "@/components/concepts/conceptsSkeleton";
 import { apiFetch } from "@/lib/api";
+import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 
 async function ConceptsData() {
   
@@ -11,7 +12,9 @@ async function ConceptsData() {
   return <ConceptsPage concepts={concepts} />;
 }
 
-export default function ConceptsPageRoute() {
+export default async function ConceptsPageRoute() {
+  await redirectAdminFromPublicRoute("concepts-list");
+
   return (
     <Suspense fallback={<ConceptsSkeleton />}>
       <ConceptsData />

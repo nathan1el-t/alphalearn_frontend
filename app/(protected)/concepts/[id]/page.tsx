@@ -2,6 +2,7 @@ import NotFound from "@/components/notFound";
 import BackButton from "@/components/backButton";
 import type { Concept } from "@/interfaces/interfaces";
 import { apiFetch } from "@/lib/api";
+import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 
 
 export default async function ConceptPage({
@@ -14,6 +15,8 @@ export default async function ConceptPage({
   if (!id) {
     return <NotFound />;
   }
+
+  await redirectAdminFromPublicRoute("concept-detail", { id });
 
   let concept: Concept;
   try {

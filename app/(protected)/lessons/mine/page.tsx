@@ -5,8 +5,20 @@ import LessonCard from "@/components/lessons/lessonCard";
 import { Container, Skeleton, SimpleGrid, Text, Group,Button } from "@mantine/core";
 import BackButton from "@/components/backButton";
 import Link from "next/link";
+import { getUserRole } from "@/lib/rbac";
+import { redirect } from "next/navigation";
 
 export default async function MyLessonsPage() {
+  const role = await getUserRole();
+
+  if (role === "ADMIN") {
+    redirect("/admin/lessons");
+  }
+
+  if (role === "LEARNER") {
+    redirect("/lessons");
+  }
+
   let lessons: LessonSummary[] = [];
   let loading = false;
 
