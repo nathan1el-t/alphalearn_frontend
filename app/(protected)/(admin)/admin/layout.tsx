@@ -1,5 +1,6 @@
 import "./admin.css";
 import { requireRole } from "@/lib/rbac";
+import AdminSidebar from "@/components/admin/sidebar";
 
 export default async function AdminLayout({
   children,
@@ -10,5 +11,12 @@ export default async function AdminLayout({
   // Only check admin role here
   await requireRole("ADMIN");
 
-  return <>{children}</>;
+  return (
+    <div className="admin-layout">
+      <AdminSidebar />
+      <main className="admin-content">
+        {children}
+      </main>
+    </div>
+  );
 }

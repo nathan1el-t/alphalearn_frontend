@@ -10,8 +10,8 @@ import type { AdminContributor, AdminLearner, AdminUser } from "@/interfaces/int
 async function UsersData() {
     // Fetch all users (learners) and contributor metadata
     const [learners, contributors] = await Promise.all([
-        apiFetch<AdminLearner[]>("/learners"),
-        apiFetch<AdminContributor[]>("/contributors")
+        apiFetch<AdminLearner[]>("/admin/learners"),
+        apiFetch<AdminContributor[]>("/admin/contributors")
     ]);
 
     // Create a map of contributor IDs for quick lookup
@@ -49,7 +49,7 @@ async function UsersData() {
 
 export default function ManageUsersPage() {
     return (
-        <div className="min-h-screen bg-[var(--color-background)] pt-10 pb-8 px-4">
+        <div className="min-h-screen bg-[var(--color-background)] py-8 px-4 lg:px-8">
             <div className="max-w-7xl mx-auto">
                 <AdminBreadcrumb />
 

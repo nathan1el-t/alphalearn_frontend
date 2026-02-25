@@ -16,6 +16,7 @@ interface BreadcrumbOverride {
 
 const labelOverrides: BreadcrumbOverride = {
   admin: "Dashboard",
+  lessons: "Lessons",
   contributors: "Users",
   concepts: "Concepts",
   add: "Add New",
