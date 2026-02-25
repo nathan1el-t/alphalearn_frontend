@@ -70,3 +70,28 @@ export interface AdminUser {
 }
 
 export type AdminConcept = Concept;
+
+// Lesson moderation status types
+export type LessonModerationStatus = "PENDING" | "APPROVED" | "REJECTED" | "UNPUBLISHED";
+
+// Admin lesson interface for moderation
+export interface AdminLesson {
+  lessonId: number;
+  lessonTitle: string;
+  contributorId: string;
+  contributorUsername?: string; 
+  lessonModerationStatus: LessonModerationStatus;
+  createdAt?: string;
+  submittedAt?: string;
+}
+
+// API response type matching backend /admin/lessons endpoint
+export interface LessonModerationResponse {
+  lessonId: number;
+  title: string;
+  conceptIds: number[];
+  contributorId: string;
+  lessonModerationStatus: LessonModerationStatus;
+  createdAt: string;
+  deletedAt: string | null;
+}

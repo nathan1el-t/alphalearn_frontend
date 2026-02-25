@@ -9,7 +9,7 @@ import AdminPageHeader from "@/components/admin/pageHeader";
 import type { AdminConcept } from "@/interfaces/interfaces";
 
 async function ConceptsData() {
-    const concepts = await apiFetch<AdminConcept[]>("/concepts");
+    const concepts = await apiFetch<AdminConcept[]>("/admin/concepts");
     // const concepts: AdminConcept[] = []; //test no concepts
     return <ConceptsManagementTable concepts={concepts} />;
 }
