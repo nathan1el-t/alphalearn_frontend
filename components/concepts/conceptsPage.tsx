@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import {
+  SimpleGrid,
   Container,
   Text,
   Group,
   Stack,
   Title,
 } from "@mantine/core";
-import ConceptGrid from "./conceptGrid";
+import ConceptCard from "./conceptCard";
 import Pagination from "./pagination";
 import ConceptSpotlightSearch from "./conceptSpotlightSearch";
 import SearchTrigger from "@/components/lessons/searchTrigger";
+import GradientButton from "@/components/common/gradientbutton";
 import type { Concept } from "@/interfaces/interfaces";
 
 interface ConceptsPageProps {
@@ -23,11 +25,9 @@ const ITEMS_PER_PAGE = 6;
 export default function ConceptsPage({ concepts }: ConceptsPageProps) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Pagination
   const totalPages = Math.ceil(concepts.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedConcepts = concepts.slice(startIndex, endIndex);
+  const paginatedConcepts = concepts.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -37,91 +37,134 @@ export default function ConceptsPage({ concepts }: ConceptsPageProps) {
   return (
     <>
       <div className="min-h-screen bg-[var(--color-background)]">
-        {/* Hero */}
-        <div className="relative z-10 pt-20 pb-14 border-b border-[var(--color-border)]">
-          <Container size="lg">
-            <Stack gap="xl">
-              <Stack gap="xs">
-                {/* Eyebrow */}
-                <Group gap="xs" align="center" className="mb-1">
-                  <div className="w-5 h-px bg-[var(--color-primary)]" />
-                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]">
-                    Knowledge Base
-                  </span>
-                </Group>
+        <HeroSection />
 
-                <Title
-                  order={1}
-                  className="text-[clamp(2.4rem,5vw,4rem)] font-bold tracking-tight leading-[1.1] text-[var(--color-text)]"
-                >
-                  Browse{" "}
-                  <span className="text-[var(--color-primary)]">Concepts</span>
-                </Title>
-
-                <Text
-                  size="lg"
-                  className="text-[var(--color-text-secondary)] max-w-xl font-light leading-relaxed"
-                >
-                  Stay cracked at internet culture and never miss a beat.
-                </Text>
-              </Stack>
-
-              <Group justify="flex-end" wrap="wrap" gap="sm">
-                <SearchTrigger />
-              </Group>
-            </Stack>
-          </Container>
-        </div>
-
-        {/* Grid */}
-        <div className="relative z-10 py-14 pb-32">
-          <Container size="lg">
-            {concepts.length === 0 ? (
-              <Stack align="center" py={100} gap="md">
-                <div className="w-16 h-16 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center">
-                  <span className="material-symbols-outlined text-3xl text-[var(--color-text-muted)]">
-                    lightbulb
-                  </span>
-                </div>
-                <Title
-                  order={3}
-                  className="text-[var(--color-text-muted)] font-semibold"
-                >
-                  No concepts yet
-                </Title>
-                <Text className="text-[var(--color-text-muted)] text-sm">
-                  No concepts available yet. Check back soon!
-                </Text>
-              </Stack>
-            ) : (
-              <Stack gap="lg">
-                <Group gap="md" align="center" justify="center">
-                  <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-text-muted)]">
-                    {concepts.length} {concepts.length === 1 ? "concept" : "concepts"}{" "}
-                    available
-                  </span>
-                </Group>
-
-                <ConceptGrid concepts={paginatedConcepts} />
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    totalItems={concepts.length}
-                    itemsPerPage={ITEMS_PER_PAGE}
-                    onPageChange={handlePageChange}
-                  />
-                )}
-              </Stack>
-            )}
-          </Container>
-        </div>
+        <Container size="lg" className="py-14 pb-32">
+          {concepts.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <ConceptsGrid
+              concepts={paginatedConcepts}
+              totalCount={concepts.length}
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          )}
+        </Container>
       </div>
 
-      {/* Spotlight Search */}
       <ConceptSpotlightSearch concepts={concepts} />
     </>
+  );
+}
+
+/* ── Hero: full-screen, matching lessons page ── */
+function HeroSection() {
+  return (
+    <div className="border-b border-[var(--color-border)] min-h-screen flex">
+      <Container className="my-auto w-full">
+        <Stack gap="xl">
+          <Stack gap="xs">
+            <Group gap="xs" align="center">
+              <div className="w-5 h-px bg-[var(--color-primary)]" />
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]">
+                Core Concepts
+              </span>
+            </Group>
+
+            <Title
+              order={1}
+              className="text-[clamp(2.4rem,5vw,4rem)] font-bold tracking-tight leading-[1.1]"
+            >
+              Build your{" "}
+              <span className="text-[var(--color-primary)]">Foundations</span>
+            </Title>
+
+            <Text size="lg" className="max-w-xl font-light leading-relaxed">
+              Explore the fundamental ideas and principles that lessons are built upon.
+              Strengthen your understanding and gain mastery of the building blocks of knowledge.
+            </Text>
+          </Stack>
+
+          <Group justify="flex-end">
+            <GradientButton href="/lessons">
+              Browse Lessons Instead
+            </GradientButton>
+          </Group>
+        </Stack>
+      </Container>
+    </div>
+  );
+}
+
+/* ── Grid section with header + cards + pagination ── */
+function ConceptsGrid({
+  concepts,
+  totalCount,
+  totalPages,
+  currentPage,
+  onPageChange,
+}: {
+  concepts: Concept[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
+}) {
+  return (
+    <Stack gap="lg">
+      <ConceptsHeader count={totalCount} />
+
+      <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
+        {concepts.map((concept) => (
+          <ConceptCard key={concept.conceptId} {...concept} />
+        ))}
+      </SimpleGrid>
+
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalCount}
+          itemsPerPage={ITEMS_PER_PAGE}
+          onPageChange={onPageChange}
+        />
+      )}
+    </Stack>
+  );
+}
+
+/* ── Header row: count label + search trigger (same as lessons) ── */
+function ConceptsHeader({ count }: { count: number }) {
+  return (
+    <Group justify="space-between" align="center">
+      <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-text-muted)] px-3">
+        {count} {count === 1 ? "concept" : "concepts"} available
+      </span>
+
+      <SearchTrigger />
+    </Group>
+  );
+}
+
+/* ── Empty state ── */
+function EmptyState() {
+  return (
+    <Stack align="center" py={100} gap="md">
+      <div className="w-16 h-16 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] flex items-center justify-center">
+        <span className="material-symbols-outlined text-3xl text-[var(--color-text-muted)]">
+          lightbulb
+        </span>
+      </div>
+
+      <Title order={3} className="text-[var(--color-text-muted)]">
+        No concepts yet
+      </Title>
+
+      <Text className="text-[var(--color-text-muted)] text-sm">
+        No concepts available yet. Check back soon!
+      </Text>
+    </Stack>
   );
 }

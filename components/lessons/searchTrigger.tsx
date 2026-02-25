@@ -41,7 +41,7 @@ export default function SearchTrigger() {
             }}
             className="hover:border-[var(--color-card-accent)] transition-colors"
         >
-            Search lessons...
+            Search
         </Button>
     );
 }
