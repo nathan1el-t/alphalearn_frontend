@@ -4,8 +4,11 @@ import NotFound from "@/components/notFound";
 import LessonCard from "@/components/lessons/lessonCard";
 import { Skeleton, SimpleGrid, Container, Text, Button } from "@mantine/core";
 import Link from "next/link";
+import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 
 export default async function LessonsPage() {
+  await redirectAdminFromPublicRoute("lessons-list");
+
   let lessons: LessonSummary[] = [];
   let loading = false;
 

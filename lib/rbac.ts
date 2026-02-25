@@ -7,6 +7,11 @@ import { redirect } from "next/navigation";
  */
 
 export type UserRole = "ADMIN" | "CONTRIBUTOR" | "LEARNER";
+export type PublicRouteKey =
+  | "concepts-list"
+  | "concept-detail"
+  | "lessons-list"
+  | "lesson-detail";
 
 interface RoleResponse {
   role: UserRole;
@@ -20,6 +25,37 @@ export async function getUserRole(): Promise<UserRole> {
   const data = await apiFetch<RoleResponse>("/me/role");
   console.log("[RBAC] Fetched user role:", data.role);
   return data.role;
+}
+
+export function getAdminEquivalentPath(
+  route: PublicRouteKey,
+  params?: { id?: string | number }
+): string {
+  switch (route) {
+    case "concepts-list":
+      return "/admin/concepts";
+    case "concept-detail":
+      return `/admin/concepts/${params?.id ?? ""}`;
+    case "lessons-list":
+      return "/admin/lessons";
+    case "lesson-detail":
+      return `/admin/lessons/${params?.id ?? ""}`;
+    default: {
+      const exhaustiveCheck: never = route;
+      return exhaustiveCheck;
+    }
+  }
+}
+
+export async function redirectAdminFromPublicRoute(
+  route: PublicRouteKey,
+  params?: { id?: string | number }
+): Promise<void> {
+  const role = await getUserRole();
+
+  if (role === "ADMIN") {
+    redirect(getAdminEquivalentPath(route, params));
+  }
 }
 
 /**
