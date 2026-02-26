@@ -2,11 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import {
-    Spotlight,
     SpotlightActionData,
+    SpotlightActions,
     spotlight,
 } from "@mantine/spotlight";
 import type { LessonSummary } from "@/interfaces/interfaces";
+import ContentSpotlight from "@/components/common/contentSpotlight";
 
 interface SpotlightSearchProps {
     lessons: LessonSummary[];
@@ -23,7 +24,10 @@ export default function SpotlightSearch({ lessons }: SpotlightSearchProps) {
             id,
             label: lesson.title,
             description: `By ${String(contributor).split("-")[0]}`,
-            onClick: () => router.push(`/lessons/${id}`),
+            onClick: () => {
+                spotlight.close();
+                router.push(`/lessons/${id}`);
+            },
             leftSection: (
                 <span
                     className="material-symbols-outlined text-[22px]"
@@ -35,41 +39,29 @@ export default function SpotlightSearch({ lessons }: SpotlightSearchProps) {
         };
     });
 
+    const filterActions = (rawQuery: string, rawActions: SpotlightActions[]): SpotlightActions[] => {
+        const trimmedQuery = rawQuery.trim().toLowerCase();
+        const flatActions = rawActions.filter(
+            (action): action is SpotlightActionData => "id" in action
+        );
+
+        if (trimmedQuery.length < 2) {
+            return [];
+        }
+
+        return flatActions.filter((action) => {
+            const label = String(action.label || "").toLowerCase();
+            const description = String(action.description || "").toLowerCase();
+            return label.includes(trimmedQuery) || description.includes(trimmedQuery);
+        });
+    };
+
     return (
-        <Spotlight
+        <ContentSpotlight
             actions={actions}
+            filter={filterActions}
             nothingFound="No lessons found..."
-            highlightQuery
-            shortcut={["mod + K", "mod + P"]}
-            searchProps={{
-                leftSection: (
-                    <span
-                        className="material-symbols-outlined text-[20px]"
-                        style={{ color: "var(--color-text-muted)" }}
-                    >
-                        search
-                    </span>
-                ),
-                placeholder: "Search lessons...",
-            }}
-            styles={{
-                content: {
-                    background: "var(--color-surface)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "24px",
-                },
-                search: {
-                    background: "transparent",
-                    color: "var(--color-text)",
-                    borderBottom: "1px solid var(--color-border)",
-                    fontSize: "1.1rem",
-                    padding: "20px",
-                },
-                action: {
-                    borderRadius: "12px",
-                    margin: "4px 8px",
-                },
-            }}
+            placeholder="Search lessons..."
         />
     );
 }

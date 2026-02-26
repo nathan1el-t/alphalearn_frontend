@@ -2,12 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import {
-    Spotlight,
     SpotlightActionData,
     SpotlightActions,
     spotlight,
 } from "@mantine/spotlight";
 import type { Concept } from "@/interfaces/interfaces";
+import ContentSpotlight from "@/components/common/contentSpotlight";
 
 interface ConceptSpotlightSearchProps {
     concepts: Concept[];
@@ -58,43 +58,11 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
     };
 
     return (
-        <Spotlight
+        <ContentSpotlight
             actions={actions}
             filter={filterActions}
             nothingFound="No concepts found..."
-            limit={7}
-            shortcut={["mod + K", "mod + P"]}
-            searchProps={{
-                rightSection: (
-                    <span
-                        className="material-symbols-outlined text-[20px]"
-                        style={{ color: "var(--color-text-muted)" }}
-                    >
-                        search
-                    </span>
-                ),
-                rightSectionPointerEvents: "none",
-                placeholder: "Search concepts...",
-            }}
-            styles={{
-                content: {
-                    background: "var(--color-surface)",
-                    border: "1px solid var(--color-border)",
-                    borderRadius: "24px",
-                },
-                search: {
-                    background: "transparent",
-                    color: "var(--color-text)",
-                    borderBottom: "1px solid var(--color-border)",
-                    fontSize: "1.1rem",
-                    padding: "20px",
-                    paddingRight: "56px",
-                },
-                action: {
-                    borderRadius: "12px",
-                    margin: "4px 8px",
-                },
-            }}
+            placeholder="Search concepts..."
         />
     );
 }
