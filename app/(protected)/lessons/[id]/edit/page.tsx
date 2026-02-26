@@ -1,6 +1,6 @@
 import LessonEditor from "./lessoneditor";
 import { apiFetch } from "@/lib/api";
-import { Lesson } from "@/interfaces/interfaces";
+import { Lesson, LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import { Container, Stack, Group, Text, Title } from "@mantine/core";
 import { getUserRole } from "@/lib/rbac";
@@ -38,6 +38,13 @@ export default async function EditLessonPage({
   }
 
   try {
+    const myLessons = await apiFetch<LessonSummary[]>("/lessons/mine");
+    const isOwnerLesson = myLessons.some((lesson) => lesson.lessonPublicId === id);
+
+    if (!isOwnerLesson) {
+      return <NotFound />;
+    }
+
     const lesson: Lesson = await apiFetch(`/lessons/${id}`);
     const status = lesson.moderationStatus?.toUpperCase() ?? "UNPUBLISHED";
     const badge = statusConfig[status] ?? statusConfig["UNPUBLISHED"];
