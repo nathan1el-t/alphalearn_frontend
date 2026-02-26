@@ -35,9 +35,45 @@ export default function LessonEditor({
     initialConceptPublicIds,
   );
   const [loading, setLoading] = useState(false);
+  const [loadingAction, setLoadingAction] = useState<"save" | "submit" | null>(null);
   const [discardModalOpened, setDiscardModalOpened] = useState(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const isCreateMode = !id;
+
+  const createLessonWithMode = async (submitForReview: boolean) => {
+    if (selectedConceptPublicIds.length === 0) {
+      showError("Please select at least one concept");
+      return;
+    }
+
+    setLoading(true);
+    setLoadingAction(submitForReview ? "submit" : "save");
+
+    try {
+      const response = await createLesson({
+        title,
+        content,
+        conceptPublicIds: selectedConceptPublicIds,
+        submit: submitForReview,
+      } satisfies CreateLessonRequest);
+
+      if (response.success) {
+        showSuccess(
+          submitForReview
+            ? "Lesson submitted for review."
+            : "Draft saved successfully.",
+        );
+        router.replace("/lessons/mine");
+      } else {
+        showError(response.message || "Failed");
+      }
+    } catch (e: any) {
+      showError(e.message);
+    } finally {
+      setLoading(false);
+      setLoadingAction(null);
+    }
+  };
 
   const handleSave = async () => {
     if (isCreateMode && selectedConceptPublicIds.length === 0) {
@@ -45,26 +81,19 @@ export default function LessonEditor({
       return;
     }
 
+    if (isCreateMode) {
+      await createLessonWithMode(false);
+      return;
+    }
+
     setLoading(true);
+    setLoadingAction("save");
 
     try {
-      const response = id
-        ? await saveLesson({ id, title, content })
-        : await createLesson({
-          title,
-          content,
-          conceptPublicIds: selectedConceptPublicIds,
-          submit: true,
-        } satisfies CreateLessonRequest);
+      const response = await saveLesson({ id: id!, title, content });
 
       if (response.success) {
         showSuccess(response.message || "Saved!");
-
-        if (!id) {
-          router.replace("/lessons/mine");
-          return;
-        }
-
         router.refresh();
       } else {
         showError(response.message || "Failed");
@@ -74,6 +103,7 @@ export default function LessonEditor({
       showError(e.message);
     } finally {
       setLoading(false);
+      setLoadingAction(null);
     }
   };
 
@@ -81,6 +111,7 @@ export default function LessonEditor({
     if (!id) return;
 
     setLoading(true);
+    setLoadingAction("save");
     try {
       const response = await deleteLesson(id);
       if (response.success) {
@@ -93,6 +124,7 @@ export default function LessonEditor({
       showError(e.message);
     } finally {
       setLoading(false);
+      setLoadingAction(null);
       setDeleteModalOpened(false);
     }
   };
@@ -101,6 +133,7 @@ export default function LessonEditor({
     if (!id) return;
 
     setLoading(true);
+    setLoadingAction("submit");
     try {
       const response = await unpublishLesson(id);
       if (response.success) {
@@ -113,6 +146,7 @@ export default function LessonEditor({
       showError(e.message);
     } finally {
       setLoading(false);
+      setLoadingAction(null);
     }
   };
 
@@ -122,6 +156,7 @@ export default function LessonEditor({
     // Optional: Save changes first if the user has edited things. 
     // For now, let's just submit as requested.
     setLoading(true);
+    setLoadingAction("submit");
     try {
       const response = await submitLesson(id);
       if (response.success) {
@@ -134,6 +169,7 @@ export default function LessonEditor({
       showError(e.message);
     } finally {
       setLoading(false);
+      setLoadingAction(null);
     }
   };
 
@@ -309,6 +345,31 @@ export default function LessonEditor({
         />
 
         <div className="flex gap-3">
+          {isCreateMode && (
+            <button
+              type="button"
+              disabled={loading}
+              onClick={() => createLessonWithMode(true)}
+              className="px-6 py-3 rounded-xl text-sm font-bold
+                bg-transparent hover:bg-[var(--color-overlay)]
+                text-[var(--color-primary)] border border-[var(--color-primary)]
+                active:scale-[0.98]
+                disabled:opacity-50 disabled:cursor-not-allowed
+                transition-all duration-200 cursor-pointer
+                flex items-center gap-2"
+            >
+              {loading && loadingAction === "submit" && (
+                <span className="material-symbols-outlined text-base animate-spin">
+                  progress_activity
+                </span>
+              )}
+              <span className="material-symbols-outlined text-base">
+                send
+              </span>
+              Submit for Review
+            </button>
+          )}
+
           {!isCreateMode && (
             initialStatus === "PENDING" || initialStatus === "APPROVED" ? (
               <button
@@ -363,15 +424,17 @@ export default function LessonEditor({
               transition-all duration-200 cursor-pointer
               flex items-center gap-2"
           >
-            {loading && (
+            {loading && loadingAction === "save" && (
               <span className="material-symbols-outlined text-base animate-spin">
                 progress_activity
               </span>
             )}
             {loading
-              ? "Saving..."
+              ? loadingAction === "submit"
+                ? "Submitting..."
+                : "Saving..."
               : isCreateMode
-                ? "Submit for Review"
+                ? "Save Draft"
                 : "Save Changes"}
           </button>
         </div>

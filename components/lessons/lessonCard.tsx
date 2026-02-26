@@ -8,7 +8,6 @@ import { formatShortDate } from "@/lib/formatDate";
 interface LessonCardProps extends LessonSummary { }
 interface LessonCardOptions {
   showModerationBadge?: boolean;
-  conceptLabelsById?: Record<string, string>;
 }
 
 export default function LessonCard({
@@ -18,11 +17,10 @@ export default function LessonCard({
   author,
   createdAt,
   showModerationBadge = true,
-  conceptPublicIds,
-  conceptLabelsById,
+  concepts,
 }: LessonCardProps & LessonCardOptions) {
-  const conceptLabels = (conceptPublicIds || [])
-    .map((id) => conceptLabelsById?.[id])
+  const conceptLabels = (concepts || [])
+    .map((concept) => concept?.title)
     .filter(Boolean)
     .slice(0, 3) as string[];
 

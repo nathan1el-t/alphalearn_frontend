@@ -1,7 +1,7 @@
 import "@mantine/tiptap/styles.css";
 import { TextDisplayer } from "@/components/texteditor/textDisplayer";
 import { apiFetch } from "@/lib/api";
-import type { Concept, Lesson, LessonSummary } from "@/interfaces/interfaces";
+import type { Lesson, LessonSummary } from "@/interfaces/interfaces";
 import { notFound } from "next/navigation";
 import {
   Container,
@@ -22,22 +22,11 @@ export default async function LessonPage({
   try {
     const role = await getUserRole();
     const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
-    let concepts: Concept[] = [];
     const lessonPublicId = lessonContent.lessonPublicId || id;
     let ownsLesson = false;
     const normalizedStatus = lessonContent.moderationStatus?.toUpperCase?.() ?? "UNPUBLISHED";
-
-    try {
-      concepts = await apiFetch<Concept[]>("/concepts");
-    } catch {
-      concepts = [];
-    }
-
-    const conceptLabelsById = Object.fromEntries(
-      concepts.map((concept) => [concept.publicId, concept.title]),
-    );
-    const lessonConceptLabels = (lessonContent.conceptPublicIds || [])
-      .map((conceptId) => conceptLabelsById[conceptId])
+    const lessonConceptLabels = (lessonContent.concepts || [])
+      .map((concept) => concept?.title)
       .filter(Boolean) as string[];
 
     if (role !== "ADMIN") {

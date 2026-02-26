@@ -5,6 +5,11 @@ export interface Concept {
   createdAt: string;
 }
 
+export interface LessonConceptSummary {
+  publicId: string;
+  title: string;
+}
+
 export interface PublicAuthor {
   publicId: string;
   username: string;
@@ -18,10 +23,12 @@ export type Lesson = {
   author: PublicAuthor
   createdAt: string
   conceptPublicIds: string[]
+  concepts?: LessonConceptSummary[]
 }
 
 export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus"> & {
   conceptPublicIds?: string[];
+  concepts?: LessonConceptSummary[];
 }
 
 export interface CreateLessonRequest {

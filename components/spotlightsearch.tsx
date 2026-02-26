@@ -46,7 +46,7 @@ export default function SpotlightSearch({ lessons }: SpotlightSearchProps) {
         );
 
         if (trimmedQuery.length < 2) {
-            return [{key:"search for something",label:"Search For Something"}];
+            return [{ id: "search-hint", label: "Search For Something" }];
         }
 
         return flatActions.filter((action) => {

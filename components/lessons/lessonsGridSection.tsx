@@ -13,11 +13,9 @@ const ITEMS_PER_PAGE = 6;
 export default function LessonsGridSection({
   lessons,
   role,
-  conceptLabelsById,
 }: {
   lessons: LessonSummary[];
   role?: string | null;
-  conceptLabelsById?: Record<string, string>;
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -45,7 +43,6 @@ export default function LessonsGridSection({
             key={lesson.lessonPublicId}
             {...lesson}
             showModerationBadge={false}
-            conceptLabelsById={conceptLabelsById}
           />
         ))}
       </SimpleGrid>
