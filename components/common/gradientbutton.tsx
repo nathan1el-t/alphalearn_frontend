@@ -2,7 +2,7 @@
 
 import { Button } from "@mantine/core";
 import Link from "next/link";
-import { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 
 interface GradientButtonProps {
   href: string;
@@ -19,8 +19,26 @@ export default function GradientButton({
   size = "lg",
   className = "",
 }: GradientButtonProps) {
+  const isHashLink = href.startsWith("#");
+  const Wrapper = isHashLink ? "a" : Link;
+  const handleHashClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (!isHashLink) return;
+
+    event.preventDefault();
+
+    const target = document.querySelector(href);
+    if (target instanceof HTMLElement) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", href);
+    }
+  };
+
   return (
-    <Link href={href} className="no-underline">
+    <Wrapper
+      href={href}
+      className="no-underline"
+      onClick={isHashLink ? handleHashClick : undefined}
+    >
       <div className="relative group w-fit">
         {/* 1. THE UNDER-GLOW 
             Matches your purple/pink gradient but blurred out.
@@ -55,6 +73,6 @@ export default function GradientButton({
           <span className="relative z-10">{children}</span>
         </Button>
       </div>
-    </Link>
+    </Wrapper>
   );
 }

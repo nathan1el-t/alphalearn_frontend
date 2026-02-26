@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import {
     Spotlight,
     SpotlightActionData,
+    SpotlightActions,
     spotlight,
 } from "@mantine/spotlight";
 import type { Concept } from "@/interfaces/interfaces";
@@ -37,15 +38,34 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
         };
     });
 
+    const filterActions = (rawQuery: string, rawActions: SpotlightActions[]): SpotlightActions[] => {
+        const trimmedQuery = rawQuery.trim().toLowerCase();
+        const flatActions = rawActions.filter(
+            (action): action is SpotlightActionData => "id" in action
+        );
+
+        if (trimmedQuery.length === 0) {
+            return [];
+        }
+
+        if (trimmedQuery.length < 2) return [];
+
+        return flatActions.filter((action) => {
+            const label = String(action.label || "").toLowerCase();
+            const description = String(action.description || "").toLowerCase();
+            return label.includes(trimmedQuery) || description.includes(trimmedQuery);
+        });
+    };
+
     return (
         <Spotlight
             actions={actions}
+            filter={filterActions}
             nothingFound="No concepts found..."
-            highlightQuery
             limit={7}
             shortcut={["mod + K", "mod + P"]}
             searchProps={{
-                leftSection: (
+                rightSection: (
                     <span
                         className="material-symbols-outlined text-[20px]"
                         style={{ color: "var(--color-text-muted)" }}
@@ -53,6 +73,7 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
                         search
                     </span>
                 ),
+                rightSectionPointerEvents: "none",
                 placeholder: "Search concepts...",
             }}
             styles={{
@@ -67,6 +88,7 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
                     borderBottom: "1px solid var(--color-border)",
                     fontSize: "1.1rem",
                     padding: "20px",
+                    paddingRight: "56px",
                 },
                 action: {
                     borderRadius: "12px",

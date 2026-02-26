@@ -39,7 +39,7 @@ export default function ConceptsPage({ concepts }: ConceptsPageProps) {
       <div className="min-h-screen bg-[var(--color-background)]">
         <HeroSection />
 
-        <Container size="lg" className="py-14 pb-32">
+        <Container id="concepts-list" size="lg" className="py-14 pb-32 scroll-mt-24">
           {concepts.length === 0 ? (
             <EmptyState />
           ) : (
@@ -88,8 +88,8 @@ function HeroSection() {
           </Stack>
 
           <Group justify="flex-end">
-            <GradientButton href="/lessons">
-              Browse Lessons Instead
+            <GradientButton href="#concepts-list">
+              Browse Concepts
             </GradientButton>
           </Group>
         </Stack>
