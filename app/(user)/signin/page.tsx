@@ -1,15 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useAuth, type SignInMode } from "@/context/AuthContext";
+import { showError } from "@/lib/notifications";
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [signInMode, setSignInMode] = useState<SignInMode>("user");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const { signIn, signUp, signInWithGoogle, isLoading } = useAuth();
+  const modeParam = searchParams.get("mode");
+  const fromParam = searchParams.get("from");
+  const errorParam = searchParams.get("error");
+
+  useEffect(() => {
+    setSignInMode(modeParam === "admin" ? "admin" : "user");
+  }, [modeParam]);
+
+  useEffect(() => {
+    if (errorParam === "admin_required") {
+      showError("Admin account required. This account cannot sign in to the admin portal.");
+    }
+    if (errorParam === "use_admin_mode") {
+      showError("Admin account detected. Please use the Admin sign-in toggle.");
+    }
+  }, [errorParam]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +37,10 @@ export default function SignInPage() {
     if (isSignUp) {
       await signUp(email, password);
     } else {
-      await signIn(email, password);
+      await signIn(email, password, {
+        mode: signInMode,
+        from: fromParam,
+      });
     }
   };
 
@@ -59,17 +82,53 @@ export default function SignInPage() {
           <div className="relative w-full bg-[var(--color-surface-elevated)] rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-[var(--color-border)]">
             {/* Left Panel: Form Section */}
             <div className="flex-1 p-8 sm:p-12 lg:p-14 flex flex-col justify-center">
+              {!isSignUp && (
+                <div className="mb-6">
+                  <div className="grid grid-cols-2 gap-2 rounded-xl border border-[var(--color-border)] bg-[var(--color-input)] p-1">
+                    <button
+                      type="button"
+                      onClick={() => setSignInMode("user")}
+                      className={`h-10 rounded-lg text-sm font-bold transition-colors ${signInMode === "user"
+                          ? "bg-[var(--color-surface-elevated)] text-[var(--color-text)] shadow-sm"
+                          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
+                        }`}
+                    >
+                      Sign in as User
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSignInMode("admin")}
+                      className={`h-10 rounded-lg text-sm font-bold transition-colors ${signInMode === "admin"
+                          ? "bg-[var(--color-surface-elevated)] text-[var(--color-text)] shadow-sm"
+                          : "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]"
+                        }`}
+                    >
+                      Sign in as Admin
+                    </button>
+                  </div>
+                  {signInMode === "admin" && (
+                    <p className="mt-3 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-center text-xs text-[var(--color-text-secondary)]">
+                      Admin sign-in mode. Use an admin account to access the admin panel.
+                    </p>
+                  )}
+                </div>
+              )}
+
               {/* Header text - changes based on login/signup mode */}
               <div className="mb-8">
                 <h1 className="text-4xl text-center font-black tracking-tight leading-tight mb-2 text-[var(--color-text)]">
                   {isSignUp
                     ? "Level Up Your Lore"
-                    : "Welcome Back, Legend"}
+                    : signInMode === "admin"
+                      ? "Admin Sign In"
+                      : "Welcome"}
                 </h1>
                 <p className="text-[var(--color-text-secondary)] text-center text-lg font-normal">
                   {isSignUp
                     ? "Master the memes. Decode the slang."
-                    : "Ready to break the internet again?"}
+                    : signInMode === "admin"
+                      ? "Use an admin account to continue to the control panel."
+                      : "Ready to learn with us?"}
                 </p>
               </div>
 
@@ -78,7 +137,12 @@ export default function SignInPage() {
                 {/* Google button */}
                 <button
                   type="button"
-                  onClick={signInWithGoogle}
+                  onClick={() =>
+                    signInWithGoogle({
+                      mode: signInMode,
+                      from: fromParam,
+                    })
+                  }
                   disabled={isLoading}
                   className="flex items-center justify-center gap-2 h-12 rounded-lg bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-text)] font-bold cursor-pointer"
                   title="Sign in with google"
@@ -113,7 +177,9 @@ export default function SignInPage() {
               <div className="relative flex items-center gap-2 mb-6">
                 <div className="h-px bg-[var(--color-border)] flex-1"></div>
                 <p className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest">
-                  {isSignUp ? "Or create account" : "Or continue with"}
+                  {isSignUp
+                    ? "Or create account"
+                    : "Or continue with"}
                 </p>
                 <div className="h-px bg-[var(--color-border)] flex-1"></div>
               </div>
@@ -206,7 +272,9 @@ export default function SignInPage() {
                     ? "Please wait..."
                     : isSignUp
                       ? "Join the Squad"
-                      : "Resume Streak"}
+                      : signInMode === "admin"
+                        ? "Enter Admin Portal"
+                        : "Resume Streak"}
                 </button>
 
                 {/* Terms text (signup only) */}
@@ -228,7 +296,7 @@ export default function SignInPage() {
                     onClick={() => setIsSignUp(!isSignUp)}
                     className="text-[var(--color-primary)] hover:text-[var(--color-text)] font-bold ml-1 transition-colors hover:underline"
                   >
-                    {isSignUp ? "Log in" : "Start your origin story"}
+                    {isSignUp ? "Log in" : "Create an account"}
                   </button>
                 </p>
               </div>

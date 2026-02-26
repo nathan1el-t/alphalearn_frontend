@@ -9,15 +9,21 @@ import { showError, showSuccess } from "@/lib/notifications";
 import { getUserRoleAction } from "@/lib/actions/role";
 
 export type UserRole = "ADMIN" | "CONTRIBUTOR" | "LEARNER" | null;
+export type SignInMode = "user" | "admin";
+
+type SignInOptions = {
+  mode?: SignInMode;
+  from?: string | null;
+};
 
 type AuthContextType = {
   user: User | null;
   session: Session | null;
   userRole: UserRole;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, options?: SignInOptions) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (options?: SignInOptions) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -31,18 +37,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   // Fetch user role from backend via Server Action
-  const fetchUserRole = async () => {
-
+  const fetchUserRole = async (): Promise<UserRole> => {
     try {
       const result = await getUserRoleAction();
 
       if (result.success && result.role) {
         setUserRole(result.role);
+        return result.role;
       } else {
         setUserRole(null);
+        return null;
       }
-    } catch (error) {
+    } catch {
       setUserRole(null);
+      return null;
     }
   };
 
@@ -53,8 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await supabase.auth.getSession();
 
       if (!error) {
-        console.log("access token:", data.session?.access_token);
-
         setSession(data.session);
         setUser(data.session?.user || null);
 
@@ -91,8 +97,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string, options?: SignInOptions) => {
     try {
+      const mode = options?.mode ?? "user";
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -100,7 +107,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error;
       setUser(data.user);
       setSession(data.session);
+      const role = await fetchUserRole();
+
+      const requestedAdminPath =
+        options?.from && options.from.startsWith("/admin") ? options.from : null;
+
+      if (mode === "admin") {
+        if (role !== "ADMIN") {
+          await supabase.auth.signOut();
+          setUser(null);
+          setSession(null);
+          setUserRole(null);
+          showError("Admin account required. This account cannot sign in to the admin portal.");
+          return;
+        }
+
+        showSuccess("Logged in successfully!");
+        router.push(requestedAdminPath || "/admin");
+        return;
+      }
+
+      if (role === "ADMIN") {
+        await supabase.auth.signOut();
+        setUser(null);
+        setSession(null);
+        setUserRole(null);
+        showError("Admin account detected. Please use the Admin sign-in toggle.");
+        return;
+      }
+
       showSuccess("Logged in successfully!");
+
       router.push("/lessons");
     } catch (err: any) {
       showError(err.message || "Failed to log in");
@@ -111,12 +148,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // ----------------------
   // GOOGLE LOGIN
   // ----------------------
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (options?: SignInOptions) => {
     try {
+      const callbackUrl = new URL(`${window.location.origin}/auth/callback`);
+      if (options?.mode) {
+        callbackUrl.searchParams.set("mode", options.mode);
+      }
+      if (options?.from) {
+        callbackUrl.searchParams.set("from", options.from);
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callbackUrl.toString(),
         },
       })
 
