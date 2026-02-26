@@ -39,7 +39,11 @@ export default function LessonsGridSection({
 
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
         {paginatedLessons.map((lesson) => (
-          <LessonCard key={lesson.lessonPublicId} {...lesson} showModerationBadge={false} />
+          <LessonCard
+            key={lesson.lessonPublicId}
+            {...lesson}
+            showModerationBadge={false}
+          />
         ))}
       </SimpleGrid>
 

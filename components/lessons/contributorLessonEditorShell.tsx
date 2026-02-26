@@ -5,6 +5,7 @@ interface ContributorLessonEditorShellProps {
   headerMeta?: React.ReactNode;
   title: React.ReactNode;
   description: React.ReactNode;
+  titleMeta?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -13,6 +14,7 @@ export default function ContributorLessonEditorShell({
   headerMeta,
   title,
   description,
+  titleMeta,
   children,
 }: ContributorLessonEditorShellProps) {
   return (
@@ -34,6 +36,8 @@ export default function ContributorLessonEditorShell({
               <Text className="text-[var(--color-text-secondary)] max-w-lg font-light leading-relaxed">
                 {description}
               </Text>
+
+              {titleMeta}
             </Stack>
           </Stack>
         </Container>
