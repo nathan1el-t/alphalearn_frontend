@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-
-type SignInMode = "user" | "admin";
+import { useAuth, type SignInMode } from "@/context/AuthContext";
 
 export default function SignInPage() {
   const searchParams = useSearchParams();
@@ -16,6 +14,7 @@ export default function SignInPage() {
 
   const { signIn, signUp, signInWithGoogle, isLoading } = useAuth();
   const modeParam = searchParams.get("mode");
+  const fromParam = searchParams.get("from");
 
   useEffect(() => {
     setSignInMode(modeParam === "admin" ? "admin" : "user");
@@ -27,7 +26,10 @@ export default function SignInPage() {
     if (isSignUp) {
       await signUp(email, password);
     } else {
-      await signIn(email, password);
+      await signIn(email, password, {
+        mode: signInMode,
+        from: fromParam,
+      });
     }
   };
 
