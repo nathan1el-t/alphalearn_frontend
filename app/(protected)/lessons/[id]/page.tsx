@@ -1,7 +1,7 @@
 import "@mantine/tiptap/styles.css";
 import { TextDisplayer } from "@/components/texteditor/textDisplayer";
 import { apiFetch } from "@/lib/api";
-import type { Lesson, LessonSummary } from "@/interfaces/interfaces";
+import type { Concept, Lesson, LessonSummary } from "@/interfaces/interfaces";
 import { notFound } from "next/navigation";
 import {
   Container,
@@ -22,9 +22,23 @@ export default async function LessonPage({
   try {
     const role = await getUserRole();
     const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
+    let concepts: Concept[] = [];
     const lessonPublicId = lessonContent.lessonPublicId || id;
     let ownsLesson = false;
     const normalizedStatus = lessonContent.moderationStatus?.toUpperCase?.() ?? "UNPUBLISHED";
+
+    try {
+      concepts = await apiFetch<Concept[]>("/concepts");
+    } catch {
+      concepts = [];
+    }
+
+    const conceptLabelsById = Object.fromEntries(
+      concepts.map((concept) => [concept.publicId, concept.title]),
+    );
+    const lessonConceptLabels = (lessonContent.conceptPublicIds || [])
+      .map((conceptId) => conceptLabelsById[conceptId])
+      .filter(Boolean) as string[];
 
     if (role !== "ADMIN") {
       try {
@@ -41,9 +55,23 @@ export default async function LessonPage({
       <Container size="md" py="xl">
         <div className="flex flex-col gap-8">
           <Group justify="space-between" align="flex-start">
-            <Title order={1} mb="sm">
-              {lessonContent.title}
-            </Title>
+            <div className="flex-1">
+              <Title order={1} mb="sm">
+                {lessonContent.title}
+              </Title>
+              {lessonConceptLabels.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {lessonConceptLabels.map((label) => (
+                    <span
+                      key={label}
+                      className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/70"
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
             <LessonDetailOwnerActions
               lessonId={lessonPublicId}
               canEdit={canEdit}
