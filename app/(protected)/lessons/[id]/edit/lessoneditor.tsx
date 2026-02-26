@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { RichTextEditor } from "@/components/texteditor/textEditor";
+import dynamic from "next/dynamic";
+const RichTextEditor = dynamic(() => import("@/components/texteditor/textEditor").then(m => m.RichTextEditor), { ssr: false });
 import { MultiSelect, Stack } from "@mantine/core";
 import { showSuccess, showError } from "@/lib/notifications";
 import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/lessons";
@@ -173,6 +174,57 @@ export default function LessonEditor({
           searchable
           clearable
           nothingFoundMessage="No concepts found"
+          styles={{
+            root: {
+              marginBottom: "var(--mantine-spacing-md)",
+            },
+            input: {
+              backgroundColor: "var(--color-surface)",
+              borderColor: "var(--color-border)",
+              borderRadius: "12px",
+              minHeight: "54px",
+              padding: "8px 16px",
+              color: "var(--color-text)",
+              "&:focus-within": {
+                borderColor: "var(--color-primary)",
+                boxShadow: "0 0 0 2px var(--color-primary-overlay)",
+              }
+            },
+            label: {
+              color: "var(--color-text-muted)",
+              marginBottom: "8px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              fontSize: "0.75rem",
+              letterSpacing: "0.2em",
+            },
+            dropdown: {
+              backgroundColor: "var(--color-surface-elevated)",
+              border: "1px solid var(--color-border)",
+              borderRadius: "12px",
+              padding: "8px",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+            },
+            option: {
+              borderRadius: "8px",
+              padding: "10px 12px",
+              "&[data-selected]": {
+                backgroundColor: "var(--color-primary)",
+              },
+              "&[data-combobox-selected]": {
+                backgroundColor: "var(--color-primary)",
+              },
+            },
+            pill: {
+              backgroundColor: "var(--color-primary)",
+              color: "white",
+              fontWeight: 600,
+              borderRadius: "6px",
+            },
+            inputField: {
+              color: "var(--color-text)",
+            }
+          }}
         />
       )}
 
