@@ -1,4 +1,5 @@
 import "./admin.css";
+import "@/components/sidebar/sidebar-shell.css";
 import { requireRole } from "@/lib/rbac";
 import AdminSidebar from "@/components/admin/sidebar";
 

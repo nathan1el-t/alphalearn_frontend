@@ -1,0 +1,221 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Avatar, useMantineColorScheme } from "@mantine/core";
+import { useAuth } from "@/context/AuthContext";
+
+export interface SidebarNavItem {
+  label: string;
+  href: string;
+  icon: string;
+  exact?: boolean;
+}
+
+export interface SidebarNavSection {
+  label: string;
+  items: SidebarNavItem[];
+}
+
+export interface AppSidebarProps {
+  brandTitle: string;
+  brandSubtitle?: string;
+  brandHref: string;
+  brandIcon: string;
+  roleLabel: string;
+  sections: SidebarNavSection[];
+  quickActionsSection?: SidebarNavSection;
+  userFallbackLabel?: string;
+  avatarAccentBorder?: string;
+}
+
+export default function AppSidebar({
+  brandTitle,
+  brandSubtitle,
+  brandHref,
+  brandIcon,
+  roleLabel,
+  sections,
+  quickActionsSection,
+  userFallbackLabel = "User",
+  avatarAccentBorder = "var(--color-accent)",
+}: AppSidebarProps) {
+  const pathname = usePathname();
+  const { user, signOut } = useAuth();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const avatarLetter = user?.email ? user.email[0].toUpperCase() : "?";
+  const profilePicture = user?.user_metadata?.picture || user?.user_metadata?.avatar_url;
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMobileOpen(false);
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
+
+  const isActive = (item: SidebarNavItem) => {
+    if (item.exact) return pathname === item.href;
+    return pathname.startsWith(item.href);
+  };
+
+  return (
+    <>
+      <button
+        className="admin-sidebar-toggle"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Toggle sidebar"
+      >
+        <span className="material-symbols-outlined">
+          {mobileOpen ? "close" : "menu"}
+        </span>
+      </button>
+
+      {mobileOpen && (
+        <div
+          className="admin-sidebar-overlay"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside className={`admin-sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}>
+        <div className="admin-sidebar-header">
+          <Link href={brandHref} className="admin-sidebar-brand">
+            <div className="admin-sidebar-logo">
+              <span className="material-symbols-outlined">{brandIcon}</span>
+            </div>
+            <div className="admin-sidebar-brand-text">
+              <span className="admin-sidebar-title">{brandTitle}</span>
+              {brandSubtitle && (
+                <span className="admin-sidebar-subtitle">{brandSubtitle}</span>
+              )}
+            </div>
+          </Link>
+        </div>
+
+        <button
+          className="admin-sidebar-collapse-btn"
+          onClick={() => setCollapsed(!collapsed)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          <span className="material-symbols-outlined">
+            {collapsed ? "chevron_left" : "chevron_right"}
+          </span>
+        </button>
+
+        <nav className="admin-sidebar-nav">
+          {sections.map((section) => (
+            <div className="admin-sidebar-nav-section" key={section.label}>
+              <span className="admin-sidebar-nav-label">{section.label}</span>
+              <ul className="admin-sidebar-nav-list">
+                {section.items.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`admin-sidebar-nav-item ${isActive(item) ? "active" : ""}`}
+                      title={collapsed ? item.label : undefined}
+                    >
+                      <span className="admin-sidebar-nav-icon material-symbols-outlined">
+                        {item.icon}
+                      </span>
+                      <span className="admin-sidebar-nav-text">{item.label}</span>
+                      {isActive(item) && (
+                        <span className="admin-sidebar-nav-indicator" />
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+
+          {quickActionsSection && (
+            <div className="admin-sidebar-nav-section">
+              <span className="admin-sidebar-nav-label">{quickActionsSection.label}</span>
+              <ul className="admin-sidebar-nav-list">
+                {quickActionsSection.items.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="admin-sidebar-nav-item"
+                      title={collapsed ? item.label : undefined}
+                    >
+                      <span className="admin-sidebar-nav-icon material-symbols-outlined">
+                        {item.icon}
+                      </span>
+                      <span className="admin-sidebar-nav-text">{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="admin-sidebar-nav-section">
+            <span className="admin-sidebar-nav-label">Appearance</span>
+            <button
+              onClick={toggleColorScheme}
+              className="admin-sidebar-theme-toggle"
+              title={colorScheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              aria-label="Toggle color scheme"
+            >
+              <span className="material-symbols-outlined admin-theme-icon sun-icon">
+                light_mode
+              </span>
+              <div className="admin-theme-divider" />
+              <span className="material-symbols-outlined admin-theme-icon moon-icon">
+                dark_mode
+              </span>
+              <div className={`admin-theme-indicator ${colorScheme === "dark" ? "dark" : "light"}`} />
+            </button>
+          </div>
+        </nav>
+
+        <div className="admin-sidebar-footer">
+          <div className="admin-sidebar-user">
+            <Avatar
+              src={profilePicture}
+              color="white"
+              radius="xl"
+              size="md"
+              styles={{
+                root: {
+                  backgroundColor: "var(--color-primary)",
+                  border: `2px solid ${avatarAccentBorder}`,
+                  flexShrink: 0,
+                },
+              }}
+            >
+              {avatarLetter}
+            </Avatar>
+            <div className="admin-sidebar-user-info">
+              <span className="admin-sidebar-user-email">
+                {user?.email || userFallbackLabel}
+              </span>
+              <span className="admin-sidebar-user-role">{roleLabel}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={signOut}
+            className="admin-sidebar-logout"
+            title={collapsed ? "Logout" : undefined}
+          >
+            <div className="admin-sidebar-logout-content">
+              <span className="material-symbols-outlined">logout</span>
+              <span className="admin-sidebar-logout-text">Logout</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+    </>
+  );
+}
