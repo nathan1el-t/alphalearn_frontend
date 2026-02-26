@@ -8,8 +8,8 @@ import {
   Title,
   Group,
 } from "@mantine/core";
-import Link from "next/link";
 import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
+import LessonDetailOwnerActions from "@/components/lessons/lessonDetailOwnerActions";
 
 export default async function LessonPage({
   params,
@@ -23,16 +23,19 @@ export default async function LessonPage({
     const role = await getUserRole();
     const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
     const lessonPublicId = lessonContent.lessonPublicId || id;
-    let canEdit = false;
+    let ownsLesson = false;
+    const normalizedStatus = lessonContent.moderationStatus?.toUpperCase?.() ?? "UNPUBLISHED";
 
-    if (role === "CONTRIBUTOR") {
+    if (role !== "ADMIN") {
       try {
         const myLessons = await apiFetch<LessonSummary[]>("/lessons/mine");
-        canEdit = myLessons.some((lesson) => lesson.lessonPublicId === lessonPublicId);
+        ownsLesson = myLessons.some((lesson) => lesson.lessonPublicId === lessonPublicId);
       } catch {
-        canEdit = false;
+        ownsLesson = false;
       }
     }
+    const canEdit = role === "CONTRIBUTOR" && ownsLesson;
+    const canDelete = ownsLesson && normalizedStatus === "UNPUBLISHED";
 
     return (
       <Container size="md" py="xl">
@@ -41,15 +44,11 @@ export default async function LessonPage({
             <Title order={1} mb="sm">
               {lessonContent.title}
             </Title>
-
-            {canEdit && (
-              <Link
-                href={`/lessons/${lessonPublicId}/edit`}
-                className="inline-flex h-10 items-center rounded-lg border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/10 px-4 text-sm font-semibold text-[var(--color-primary)] transition-colors hover:bg-[var(--color-primary)]/20"
-              >
-                Edit Lesson
-              </Link>
-            )}
+            <LessonDetailOwnerActions
+              lessonId={lessonPublicId}
+              canEdit={canEdit}
+              canDelete={canDelete}
+            />
           </Group>
 
           <div
