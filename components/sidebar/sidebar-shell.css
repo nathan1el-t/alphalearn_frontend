@@ -38,6 +38,15 @@
   overflow: hidden;
 }
 
+.admin-sidebar.collapsed .admin-sidebar-logout {
+  padding: 12px 8px;
+}
+
+.admin-sidebar.collapsed .admin-sidebar-logout-content {
+  justify-content: center;
+  gap: 0;
+}
+
 .admin-sidebar-header {
   padding: 20px 16px;
   border-bottom: 1px solid var(--color-border);
