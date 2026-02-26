@@ -48,6 +48,9 @@ export default async function EditLessonPage({
     const lesson: Lesson = await apiFetch(`/lessons/${id}`);
     const status = lesson.moderationStatus?.toUpperCase() ?? "UNPUBLISHED";
     const badge = statusConfig[status] ?? statusConfig["UNPUBLISHED"];
+    const lessonConceptLabels = (lesson.concepts || [])
+      .map((concept) => concept?.title)
+      .filter(Boolean) as string[];
 
     return (
       <ContributorLessonEditorShell
@@ -89,6 +92,18 @@ export default async function EditLessonPage({
                 ? "This lesson is under review. You can still make edits."
                 : "Update your lesson content. Changes save directly."
         }
+        titleMeta={lessonConceptLabels.length > 0 ? (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {lessonConceptLabels.map((label) => (
+              <span
+                key={label}
+                className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/70"
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        ) : null}
       >
         <LessonEditor
           id={id}
