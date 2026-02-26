@@ -20,7 +20,9 @@ export type Lesson = {
   conceptPublicIds: string[]
 }
 
-export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus">
+export type LessonSummary = Pick<Lesson, "lessonPublicId" | "title" | "author" | "createdAt" | "moderationStatus"> & {
+  conceptPublicIds?: string[];
+}
 
 export interface CreateLessonRequest {
   title: string

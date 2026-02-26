@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api";
-import type { LessonSummary } from "@/interfaces/interfaces";
+import type { Concept, LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import {
   Container,
@@ -17,8 +17,12 @@ export default async function LessonsPage() {
   await redirectAdminFromPublicRoute("lessons-list");
   const role = await getUserRole();
   const lessons = await fetchLessons();
+  const concepts = await fetchConcepts();
 
   if (!lessons) return <NotFound />;
+  const conceptLabelsById = Object.fromEntries(
+    (concepts || []).map((concept) => [concept.publicId, concept.title]),
+  );
 
   return (
     <>
@@ -29,7 +33,11 @@ export default async function LessonsPage() {
           {lessons.length === 0 ? (
             <EmptyState />
           ) : (
-            <LessonsGridSection lessons={lessons} role={role} />
+            <LessonsGridSection
+              lessons={lessons}
+              role={role}
+              conceptLabelsById={conceptLabelsById}
+            />
           )}
         </Container>
       </div>
@@ -42,6 +50,14 @@ export default async function LessonsPage() {
 async function fetchLessons(): Promise<LessonSummary[] | null> {
   try {
     return await apiFetch<LessonSummary[]>("/lessons");
+  } catch {
+    return null;
+  }
+}
+
+async function fetchConcepts(): Promise<Concept[] | null> {
+  try {
+    return await apiFetch<Concept[]>("/concepts");
   } catch {
     return null;
   }

@@ -8,6 +8,7 @@ import { formatShortDate } from "@/lib/formatDate";
 interface LessonCardProps extends LessonSummary { }
 interface LessonCardOptions {
   showModerationBadge?: boolean;
+  conceptLabelsById?: Record<string, string>;
 }
 
 export default function LessonCard({
@@ -17,7 +18,14 @@ export default function LessonCard({
   author,
   createdAt,
   showModerationBadge = true,
+  conceptPublicIds,
+  conceptLabelsById,
 }: LessonCardProps & LessonCardOptions) {
+  const conceptLabels = (conceptPublicIds || [])
+    .map((id) => conceptLabelsById?.[id])
+    .filter(Boolean)
+    .slice(0, 3) as string[];
+
   return (
     <ContentCardShell
       href={`/lessons/${lessonPublicId}`}
@@ -73,6 +81,19 @@ export default function LessonCard({
           >
             {title}
           </Title>
+
+          {conceptLabels.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-1">
+              {conceptLabels.map((label) => (
+                <span
+                  key={label}
+                  className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white/70"
+                >
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
         </Stack>
 
         <div className="pt-4 border-t border-white/5 flex items-center justify-between">

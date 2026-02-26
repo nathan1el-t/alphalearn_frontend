@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api";
-import type { LessonSummary } from "@/interfaces/interfaces";
+import type { Concept, LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import {
   SimpleGrid,
@@ -25,12 +25,17 @@ export default async function MyLessonsPage() {
   const canCreateLessons = role === "CONTRIBUTOR";
 
   let lessons: LessonSummary[] = [];
+  let concepts: Concept[] = [];
   try {
     lessons = await apiFetch<LessonSummary[]>("/lessons/mine");
+    concepts = await apiFetch<Concept[]>("/concepts");
   } catch (err) {
     console.error(err);
     return <NotFound />;
   }
+  const conceptLabelsById = Object.fromEntries(
+    concepts.map((concept) => [concept.publicId, concept.title]),
+  );
 
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
@@ -80,7 +85,11 @@ export default async function MyLessonsPage() {
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">
             {lessons.map((lesson) => (
-              <LessonCard key={lesson.lessonPublicId} {...lesson} />
+              <LessonCard
+                key={lesson.lessonPublicId}
+                {...lesson}
+                conceptLabelsById={conceptLabelsById}
+              />
             ))}
           </SimpleGrid>
         )}
