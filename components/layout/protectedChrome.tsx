@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import UserSidebar from "@/components/sidebar/userSidebar";
+import UserBreadcrumb from "@/components/user/breadcrumb";
 
 export default function ProtectedChrome({
   children,
@@ -19,6 +20,7 @@ export default function ProtectedChrome({
     <div className="admin-layout user-shell">
       <UserSidebar />
       <main className="admin-content user-content">
+        <UserBreadcrumb />
         {children}
       </main>
     </div>

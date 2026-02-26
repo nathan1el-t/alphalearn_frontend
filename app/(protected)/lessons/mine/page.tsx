@@ -39,7 +39,7 @@ export default async function MyLessonsPage() {
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Header Section */}
-      <div className="pt-20 pb-12 bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
+      <div className="pt-20 pb-12 bg-[var(--color-background)]">
         <Container size="lg">
           <Stack gap="lg">
             <Group justify="space-between" align="center">

@@ -17,7 +17,7 @@ export default function ContributorLessonEditorShell({
 }: ContributorLessonEditorShellProps) {
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
-      <div className="border-b border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
+      <div className="border-b border-[var(--color-border)] bg-[var(--color-background)]">
         <Container size="md" className="py-10">
           <Stack gap="md">
             {breadcrumbs}

@@ -5,7 +5,6 @@ import NotFound from "@/components/notFound";
 import { Group } from "@mantine/core";
 import { getUserRole } from "@/lib/rbac";
 import { redirect } from "next/navigation";
-import Link from "next/link";
 import ContributorLessonEditorShell from "@/components/lessons/contributorLessonEditorShell";
 
 // Badge config per moderation status
@@ -52,19 +51,6 @@ export default async function EditLessonPage({
 
     return (
       <ContributorLessonEditorShell
-        breadcrumbs={(
-          <Group gap="xs" className="text-xs font-medium text-[var(--color-text-muted)]">
-            <Link href="/lessons" className="hover:text-[var(--color-primary)] transition-colors">
-              Lessons
-            </Link>
-            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-            <Link href="/lessons/mine" className="hover:text-[var(--color-primary)] transition-colors">
-              My Library
-            </Link>
-            <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-            <span className="text-[var(--color-primary)]">Edit Lesson</span>
-          </Group>
-        )}
         headerMeta={(
           <Group gap="sm" align="center">
             <Group gap="xs" align="center">
