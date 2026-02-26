@@ -158,7 +158,7 @@ export default function LessonEditor({
         <button
           type="button"
           onClick={() => setDiscardModalOpened(true)}
-          className="px-5 py-2.5 rounded-xl text-sm font-semibold
+          className="px-8 py-3 rounded-xl text-sm font-semibold
             text-[var(--color-text-muted)] hover:text-[var(--color-text)]
             bg-transparent hover:bg-[var(--color-overlay)]
             border border-[var(--color-border)]
@@ -221,7 +221,7 @@ export default function LessonEditor({
             {loading
               ? "Saving..."
               : isCreateMode
-                ? "Publish Lesson"
+                ? "Submit for Review"
                 : "Save Changes"}
           </button>
         </div>

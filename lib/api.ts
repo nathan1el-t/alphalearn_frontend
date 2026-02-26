@@ -23,8 +23,19 @@ export async function apiFetch<T>(
   });
 
   if (!res.ok) {
-    const errbody = await res.json();
-    throw new Error(errbody.message);
+    const statusFallback = `Request failed (${res.status}${res.statusText ? ` ${res.statusText}` : ""})`;
+    const rawBody = await res.text();
+
+    if (!rawBody) {
+      throw new Error(statusFallback);
+    }
+
+    try {
+      const errbody = JSON.parse(rawBody) as { message?: string };
+      throw new Error(errbody.message || statusFallback);
+    } catch {
+      throw new Error(rawBody || statusFallback);
+    }
   }
 
   // Handle 204 No Content 

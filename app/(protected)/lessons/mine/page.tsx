@@ -11,7 +11,6 @@ import {
   Title,
 } from "@mantine/core";
 import Link from "next/link";
-import BackButton from "@/components/backButton";
 import LessonCard from "@/components/lessons/lessonCard";
 import GradientButton from "@/components/common/gradientbutton";
 import { getUserRole } from "@/lib/rbac";
@@ -39,20 +38,19 @@ export default async function MyLessonsPage() {
   return (
     <div className="min-h-screen bg-[var(--color-background)]">
       {/* Header Section */}
-      <div className="pt-20 pb-12 bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
+      <div className="pt-8 pb-8 bg-[var(--color-background)]">
         <Container size="lg">
-          <Stack gap="lg">
-            <Group justify="space-between" align="center">
+          <Stack gap="md">
+            <Group justify="space-between" align="flex-start">
               <Stack gap={4} align="flex-start">
-                <BackButton />
                 <Title order={1} className="text-4xl font-black tracking-tight text-[var(--color-text)]">
-                  My <span className="text-[var(--color-primary)]">Library</span>
+                  My <span className="text-[var(--color-primary)]">Lessons</span>
                 </Title>
                 <Text className="text-[var(--color-text-secondary)]">
                   Manage and track the lessons you've created.
                 </Text>
               </Stack>
-              <GradientButton href="/lessons/create" icon="add">
+              <GradientButton href="/lessons/create" icon="add" className="mt-1">
                 Create Lesson
               </GradientButton>
             </Group>

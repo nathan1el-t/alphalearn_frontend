@@ -6,10 +6,17 @@ import type { LessonSummary } from "@/interfaces/interfaces";
 import LessonCard from "@/components/lessons/lessonCard";
 import SearchTrigger from "@/components/lessons/searchTrigger";
 import Pagination from "@/components/concepts/pagination";
+import Link from "next/link";
 
 const ITEMS_PER_PAGE = 6;
 
-export default function LessonsGridSection({ lessons }: { lessons: LessonSummary[] }) {
+export default function LessonsGridSection({
+  lessons,
+  role,
+}: {
+  lessons: LessonSummary[];
+  role?: string | null;
+}) {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalPages = Math.ceil(lessons.length / ITEMS_PER_PAGE);
@@ -28,7 +35,7 @@ export default function LessonsGridSection({ lessons }: { lessons: LessonSummary
 
   return (
     <Stack gap="lg">
-      <LessonsHeader count={lessons.length} />
+      <LessonsHeader count={lessons.length} role={role} />
 
       <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
         {paginatedLessons.map((lesson) => (
@@ -50,14 +57,24 @@ export default function LessonsGridSection({ lessons }: { lessons: LessonSummary
   );
 }
 
-function LessonsHeader({ count }: { count: number }) {
+function LessonsHeader({ count, role }: { count: number; role?: string | null }) {
   return (
     <Group justify="space-between" align="center">
       <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-text-muted)] px-3">
         {count} {count === 1 ? "lesson" : "lessons"} available
       </span>
 
-      <SearchTrigger />
+      <div className="flex items-center gap-3">
+        {role === "CONTRIBUTOR" && (
+          <Link
+            href="/lessons/create"
+            className="inline-flex h-[46px] items-center rounded-xl border border-[var(--color-primary)]/30 bg-[var(--color-primary)]/10 px-4 text-sm font-semibold text-[var(--color-primary)] transition-colors hover:bg-[var(--color-primary)]/20"
+          >
+            Create Lesson
+          </Link>
+        )}
+        <SearchTrigger />
+      </div>
     </Group>
   );
 }

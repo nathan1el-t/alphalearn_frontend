@@ -161,16 +161,11 @@ export default function ConceptsManagementTable({ concepts }: ConceptsManagement
                     </td>
                     <td className="p-3">
                       <div className="flex items-center justify-end gap-2">
-                        <Link href={`/concepts/${concept.publicId}`}>
-                          <ActionIcon 
-                            variant="light" 
-                            className="admin-action-view hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
-                            size="sm"
-                          >
-                            <span className="material-symbols-outlined text-base">
-                              visibility
-                            </span>
-                          </ActionIcon>
+                        <Link
+                          href={`/concepts/${concept.publicId}`}
+                          className="inline-flex h-8 items-center rounded-md border border-blue-500/20 bg-blue-500/10 px-3 text-xs font-semibold text-blue-500 transition-colors hover:bg-blue-500/20"
+                        >
+                          View
                         </Link>
                         <ActionIcon 
                           variant="light" 

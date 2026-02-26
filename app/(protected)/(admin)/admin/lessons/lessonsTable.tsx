@@ -352,43 +352,41 @@ export default function LessonsManagementTable({ lessons }: LessonsManagementTab
                         </Badge>
                       </td>
                       <td className="p-3">
-                        <div className="flex items-center justify-end gap-2">
-                          <ActionIcon
-                            component={Link}
+                        <div className="flex items-center justify-end gap-3">
+                          <div className="flex items-center gap-2">
+                            {isPending && (
+                              <>
+                                <ActionIcon
+                                  variant="light"
+                                  color="green"
+                                  size="lg"
+                                  radius="md"
+                                  onClick={() => handleApprove(lesson)}
+                                  title="Approve lesson"
+                                >
+                                  <span className="material-symbols-outlined text-lg">check</span>
+                                </ActionIcon>
+                                <ActionIcon
+                                  variant="light"
+                                  color="red"
+                                  size="lg"
+                                  radius="md"
+                                  onClick={() => handleReject(lesson)}
+                                  title="Reject lesson"
+                                >
+                                  <span className="material-symbols-outlined text-lg">close</span>
+                                </ActionIcon>
+                              </>
+                            )}
+                          </div>
+
+                          <Link
                             href={`/lessons/${lesson.lessonPublicId}`}
-                            variant="subtle"
-                            color="blue"
-                            size="lg"
-                            radius="md"
+                            className="inline-flex h-10 items-center rounded-md border border-blue-500/20 bg-blue-500/10 px-3 text-sm font-semibold text-blue-500 transition-colors hover:bg-blue-500/20"
                             title="View lesson"
                           >
-                            <span className="material-symbols-outlined text-lg">visibility</span>
-                          </ActionIcon>
-                          
-                          {isPending && (
-                            <>
-                              <ActionIcon
-                                variant="light"
-                                color="green"
-                                size="lg"
-                                radius="md"
-                                onClick={() => handleApprove(lesson)}
-                                title="Approve lesson"
-                              >
-                                <span className="material-symbols-outlined text-lg">check</span>
-                              </ActionIcon>
-                              <ActionIcon
-                                variant="light"
-                                color="red"
-                                size="lg"
-                                radius="md"
-                                onClick={() => handleReject(lesson)}
-                                title="Reject lesson"
-                              >
-                                <span className="material-symbols-outlined text-lg">close</span>
-                              </ActionIcon>
-                            </>
-                          )}
+                            View
+                          </Link>
                         </div>
                       </td>
                     </tr>

@@ -29,7 +29,7 @@ export default async function LessonsPage() {
           {lessons.length === 0 ? (
             <EmptyState />
           ) : (
-            <LessonsGridSection lessons={lessons} />
+            <LessonsGridSection lessons={lessons} role={role} />
           )}
         </Container>
       </div>

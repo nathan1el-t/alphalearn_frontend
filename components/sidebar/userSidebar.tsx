@@ -14,6 +14,13 @@ const sections: SidebarNavSection[] = [
   },
 ];
 
+const contributorQuickActionsSection: SidebarNavSection = {
+  label: "Quick Actions",
+  items: [
+    { label: "Create Lesson", href: "/lessons/create", icon: "add_circle" },
+  ],
+};
+
 function toRoleLabel(role: string | null) {
   if (role === "CONTRIBUTOR") return "Contributor";
   if (role === "LEARNER") return "Learner";
@@ -23,6 +30,8 @@ function toRoleLabel(role: string | null) {
 
 export default function UserSidebar() {
   const { userRole } = useAuth();
+  const quickActionsSection =
+    userRole === "CONTRIBUTOR" ? contributorQuickActionsSection : undefined;
 
   return (
     <AppSidebar
@@ -32,6 +41,7 @@ export default function UserSidebar() {
       brandIcon="bolt"
       roleLabel={toRoleLabel(userRole)}
       sections={sections}
+      quickActionsSection={quickActionsSection}
       userFallbackLabel="Member"
     />
   );
