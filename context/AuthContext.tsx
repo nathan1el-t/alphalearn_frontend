@@ -127,12 +127,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
-      showSuccess("Logged in successfully!");
-
       if (role === "ADMIN") {
-        router.push("/admin");
+        await supabase.auth.signOut();
+        setUser(null);
+        setSession(null);
+        setUserRole(null);
+        showError("Admin account detected. Please use the Admin sign-in toggle.");
         return;
       }
+
+      showSuccess("Logged in successfully!");
 
       router.push("/lessons");
     } catch (err: any) {

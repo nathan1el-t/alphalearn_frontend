@@ -26,6 +26,9 @@ export default function SignInPage() {
     if (errorParam === "admin_required") {
       showError("Admin account required. This account cannot sign in to the admin portal.");
     }
+    if (errorParam === "use_admin_mode") {
+      showError("Admin account detected. Please use the Admin sign-in toggle.");
+    }
   }, [errorParam]);
 
   const handleSubmit = async (e: React.FormEvent) => {

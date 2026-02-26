@@ -37,7 +37,11 @@ export async function GET(request: NextRequest) {
             }
 
             if (role === "ADMIN") {
-                return NextResponse.redirect(new URL("/admin", requestUrl.origin));
+                await supabase.auth.signOut();
+                const signinUrl = new URL("/signin", requestUrl.origin);
+                signinUrl.searchParams.set("mode", "user");
+                signinUrl.searchParams.set("error", "use_admin_mode");
+                return NextResponse.redirect(signinUrl);
             }
         } catch {
             if (isAdminMode) {
