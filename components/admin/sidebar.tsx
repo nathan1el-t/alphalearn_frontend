@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import AppSidebar, { type SidebarNavSection } from "@/components/sidebar/appSidebar";
 
 const sections: SidebarNavSection[] = [
@@ -23,14 +22,6 @@ const quickActionsSection: SidebarNavSection = {
 };
 
 export default function AdminSidebar() {
-  // Commit 1 keeps current behavior while the protected navbar still exists.
-  useEffect(() => {
-    document.body.classList.add("admin-page");
-    return () => {
-      document.body.classList.remove("admin-page");
-    };
-  }, []);
-
   return (
     <AppSidebar
       brandTitle="AlphaLearn"

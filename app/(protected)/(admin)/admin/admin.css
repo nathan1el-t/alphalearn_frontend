@@ -64,12 +64,6 @@
   background: var(--color-background);
 }
 
-/* Hide the main site navbar on admin pages */
-/* Target the sticky top navbar (main site nav) */
-body.admin-page nav.sticky.top-0 {
-  display: none !important;
-}
-
 /* ============================================
    ADMIN CARDS
    ============================================ */
