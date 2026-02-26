@@ -32,10 +32,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Fetch user role from backend via Server Action
   const fetchUserRole = async () => {
-    
+
     try {
       const result = await getUserRoleAction();
-      
+
       if (result.success && result.role) {
         setUserRole(result.role);
       } else {
@@ -47,7 +47,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    
+
     const getSession = async () => {
       setIsLoading(true);
       const { data, error } = await supabase.auth.getSession();
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setSession(data.session);
         setUser(data.session?.user || null);
-        
+
         // Fetch role if user is authenticated
         if (data.session?.user) {
           await fetchUserRole();
@@ -74,14 +74,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       async (event, session) => {
         setSession(session);
         setUser(session?.user || null);
-        
+
         // Fetch role when auth state changes
         if (session?.user) {
           await fetchUserRole();
         } else {
           setUserRole(null);
         }
-        
+
         setIsLoading(false);
       },
     );
@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.user);
       setSession(data.session);
       showSuccess("Logged in successfully!");
-      router.push("/profile");
+      router.push("/lessons");
     } catch (err: any) {
       showError(err.message || "Failed to log in");
     }
@@ -116,13 +116,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}`,
-          // redirectTo: `${window.location.origin}/profile`,
+          redirectTo: `${window.location.origin}/auth/callback`,
         },
       })
 
       if (error) throw error;
-
     } catch (err: any) {
       showError(err.message || "Failed to sign in with Google");
     }

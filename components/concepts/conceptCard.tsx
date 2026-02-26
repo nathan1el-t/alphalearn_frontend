@@ -1,24 +1,10 @@
+"use client";
+
 import Link from "next/link";
-import { Card, Tooltip } from "@mantine/core";
+import { Card, Text, Tooltip, Stack, Title } from "@mantine/core";
+import type { Concept } from "@/interfaces/interfaces";
 
-/**
- * PRESENTATIONAL COMPONENT (Using Mantine Card + Tooltip)
- * 
- * Purpose: Display a single concept card
- * Responsibility: Only rendering UI, no logic or state
- * 
- * React Concept: "Props Down" - parent passes data, child displays it
- * Library Integration: Uses Mantine Card for structure + accessibility
- *                      Uses Mantine Tooltip for bookmark interaction hint
- * 
- */
-
-interface ConceptCardProps {
-  publicId: string;
-  title: string;
-  description: string;
-  createdAt: string;
-}
+interface ConceptCardProps extends Concept { }
 
 export default function ConceptCard({
   publicId,
@@ -30,44 +16,58 @@ export default function ConceptCard({
     <Card
       component={Link}
       href={`/concepts/${publicId}`}
-      padding="md"
-      radius="xl"
-      withBorder={false}
-      style={{ backgroundColor: 'var(--color-surface)' }}
-      className="concept-card border border-[var(--color-overlay)]
-             hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
+      padding="xl"
+      radius="28px"
+      className="relative overflow-hidden h-full transition-all duration-500 border-none group-hover:-translate-y-2 group"
+      style={{
+        background: "#1e1e2e",
+        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px -10px rgba(0,0,0,0.5)",
+      }}
     >
-      <div className="flex justify-between items-start mb-1.5">
-        {/* Placeholder for status badge */}
-        <span></span>
-        <Tooltip label="Save for later" position="top" withArrow>
-          <span className="material-symbols-outlined text-[var(--color-text-muted)] hover:text-[var(--color-text)] cursor-pointer transition-colors text-[16px]">
-            bookmark
-          </span>
-        </Tooltip>
-      </div>
+      {/* GLOW EFFECT */}
+      <div
+        className="absolute inset-0 transition-opacity duration-500 pointer-events-none opacity-0 group-hover:opacity-100"
+        style={{
+          background: "radial-gradient(circle at top right, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
+        }}
+      />
 
-      <Card.Section inheritPadding className="pb-4">
-        <h3 className="text-lg font-extrabold mb-1 text-[var(--color-text)]">{title}</h3>
-        <p className="text-[var(--color-text-secondary)] text-xs leading-relaxed mb-2 line-clamp-2">
-          {description}
-        </p>
+      <Stack gap="md" h="100%" justify="space-between" className="relative z-10">
+        <Stack gap="xs">
+          <div className="flex justify-between items-start">
+            <Text size="xs" fw={800} className="uppercase tracking-[0.25em] text-[var(--color-primary)] opacity-70">
+              Concept
+            </Text>
+            <Tooltip label="Explore concept" position="top" withArrow>
+              <span className="material-symbols-outlined text-white/20 group-hover:text-white/60 transition-colors text-lg">
+                arrow_outward
+              </span>
+            </Tooltip>
+          </div>
 
-        <div className="flex items-center gap-1.5 text-[10px] text-[var(--color-text-muted)] font-medium">
-          <span className="ml-auto">
-            Updated {new Date(createdAt).toLocaleDateString()}
+          <Title
+            order={3}
+            className="text-2xl font-extrabold tracking-tight leading-tight text-white group-hover:text-[var(--color-primary)] transition-colors"
+          >
+            {title}
+          </Title>
+
+          <Text size="sm" className="text-white/60 line-clamp-3 font-light leading-relaxed">
+            {description}
+          </Text>
+        </Stack>
+
+        <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+            {new Date(createdAt).toLocaleDateString()}
           </span>
+          <div className="flex gap-1">
+            <div className="w-1 h-1 rounded-full bg-[var(--color-primary)] opacity-30" />
+            <div className="w-1 h-1 rounded-full bg-[var(--color-primary)] opacity-50" />
+            <div className="w-1 h-1 rounded-full bg-[var(--color-primary)]" />
+          </div>
         </div>
-      </Card.Section>
-      <style jsx>{`
-  :global(.concept-card:hover){
-    border-color: var(--color-accent);
-    box-shadow:
-      0 0 5px var(--color-accent),
-      0 0 20px var(--color-accent);
-  }
-`}</style>
+      </Stack>
     </Card>
-
   );
 }

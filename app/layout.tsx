@@ -10,7 +10,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
 import { Notifications } from "@mantine/notifications";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
-import Navbar from "@/components/navbar";
 
 
 const geistSans = Geist({
@@ -47,7 +46,6 @@ export default function RootLayout({
       >
         <MantineProvider defaultColorScheme="dark">
           <AuthProvider>
-            <Navbar />
             <Notifications position="bottom-right" />
             {children}
           </AuthProvider>

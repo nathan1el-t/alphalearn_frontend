@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button, Card, Container, Stack, Text, Title } from "@mantine/core";
 import AdminBreadcrumb from "@/components/admin/breadcrumb";
-import { TextDisplayer } from "@/components/textDisplayer";
+import { TextDisplayer } from "@/components/texteditor/textDisplayer";
 import { apiFetch } from "@/lib/api";
 
 type AdminLessonDetail = {

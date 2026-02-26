@@ -1,10 +1,19 @@
 import { apiFetch } from "@/lib/api";
 import type { LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
-import LessonCard from "@/components/lessons/lessonCard";
-import { Container, Skeleton, SimpleGrid, Text, Group,Button } from "@mantine/core";
-import BackButton from "@/components/backButton";
+import {
+  SimpleGrid,
+  Container,
+  Text,
+  Button,
+  Group,
+  Stack,
+  Title,
+} from "@mantine/core";
 import Link from "next/link";
+import BackButton from "@/components/backButton";
+import LessonCard from "@/components/lessons/lessonCard";
+import GradientButton from "@/components/common/gradientbutton";
 import { getUserRole } from "@/lib/rbac";
 import { redirect } from "next/navigation";
 
@@ -20,46 +29,59 @@ export default async function MyLessonsPage() {
   }
 
   let lessons: LessonSummary[] = [];
-  let loading = false;
-
   try {
-    loading = true;
-    lessons = await apiFetch("/lessons/mine");
-    loading = false;
-    // console.log(lessons);
-  } catch (err: any) {
-    console.log(err);
-    return <NotFound/>
+    lessons = await apiFetch<LessonSummary[]>("/lessons/mine");
+  } catch (err) {
+    console.error(err);
+    return <NotFound />;
   }
 
   return (
-    <Container size="lg" py="xl">
-      <Text size="2xl" mb="xl">
-        All Lessons
-      </Text>
-      <Group justify="space-between">
-      <BackButton/>
-      <Link href={'/lessons/create'}>
-        <Button>Create new lesson</Button>
-      </Link>
-      </Group>
-      
+    <div className="min-h-screen bg-[var(--color-background)]">
+      {/* Header Section */}
+      <div className="pt-20 pb-12 bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
+        <Container size="lg">
+          <Stack gap="lg">
+            <Group justify="space-between" align="center">
+              <Stack gap={4} align="flex-start">
+                <BackButton />
+                <Title order={1} className="text-4xl font-black tracking-tight text-[var(--color-text)]">
+                  My <span className="text-[var(--color-primary)]">Library</span>
+                </Title>
+                <Text className="text-[var(--color-text-secondary)]">
+                  Manage and track the lessons you've created.
+                </Text>
+              </Stack>
+              <GradientButton href="/lessons/create" icon="add">
+                Create Lesson
+              </GradientButton>
+            </Group>
+          </Stack>
+        </Container>
+      </div>
 
-      {loading ? (
-        <SimpleGrid cols={3} spacing="lg">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} height={200} radius="xl" />
-          ))}
-        </SimpleGrid>
-      ) : lessons.length === 0 ? (
-        <Text>No lessons available.</Text>
-      ) : (
-        <SimpleGrid cols={3} spacing="lg">
-          {lessons.map((lesson) => (
-            <LessonCard key={lesson.lessonPublicId} {...lesson} />
-          ))}
-        </SimpleGrid>
-      )}
-    </Container>
+      <Container size="lg" py="xl" className="pb-32">
+        {lessons.length === 0 ? (
+          <Stack align="center" py={100} gap="md">
+            <div className="w-20 h-20 rounded-full bg-[var(--color-surface)] flex items-center justify-center border border-[var(--color-overlay)]">
+              <span className="material-symbols-outlined text-4xl text-[var(--color-text-muted)]">
+                auto_stories
+              </span>
+            </div>
+            <Title order={3} className="text-[var(--color-text-muted)]">No lessons yet</Title>
+            <Text className="text-[var(--color-text-muted)]">Start your journey by creating your first lesson!</Text>
+            <Link href="/lessons/create">
+              <Button variant="outline" radius="xl">Create First Lesson</Button>
+            </Link>
+          </Stack>
+        ) : (
+          <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">
+            {lessons.map((lesson) => (
+              <LessonCard key={lesson.lessonPublicId} {...lesson} />
+            ))}
+          </SimpleGrid>
+        )}
+      </Container>
+    </div>
   );
 }

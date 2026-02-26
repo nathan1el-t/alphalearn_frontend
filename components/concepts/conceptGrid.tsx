@@ -1,20 +1,6 @@
-import type { Concept } from "@/interfaces/interfaces";
+import { SimpleGrid } from "@mantine/core";
 import ConceptCard from "./conceptCard";
-
-/**
- * CONTAINER/LIST COMPONENT
- * 
- * Purpose: Display a grid of concept cards
- * Responsibility: Layout and rendering list of items
- * 
- * React Concept: "Composition" - using smaller components to build bigger ones
- * Pattern: The .map() pattern for rendering lists
- * 
- * Why separate from ConceptCard?
- * - ConceptCard knows how to render ONE concept
- * - ConceptGrid knows how to layout MANY concepts
- * - Separation of concerns!
- */
+import type { Concept } from "@/interfaces/interfaces";
 
 interface ConceptGridProps {
   concepts: Concept[];
@@ -22,16 +8,10 @@ interface ConceptGridProps {
 
 export default function ConceptGrid({ concepts }: ConceptGridProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-10 pb-10 p-10">
+    <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
       {concepts.map((concept) => (
-        <ConceptCard
-          key={concept.publicId} // React needs unique 'key' for list items!
-          publicId={concept.publicId}
-          title={concept.title}
-          description={concept.description}
-          createdAt={concept.createdAt}
-        />
+        <ConceptCard key={concept.publicId} {...concept} />
       ))}
-    </div>
+    </SimpleGrid>
   );
 }
