@@ -2,10 +2,10 @@ import { createClient } from "@/lib/supabase/server";
 import { apiFetch } from "@/lib/api";
 import LessonEditor from "@/app/(protected)/lessons/[id]/edit/lessoneditor";
 import { redirect } from "next/navigation";
-import { Container, Stack, Group, Text, Title } from "@mantine/core";
+import { Group } from "@mantine/core";
 import { Concept } from "@/interfaces/interfaces";
 import { getUserRole } from "@/lib/rbac";
-import Link from "next/link";
+import ContributorLessonEditorShell from "@/components/lessons/contributorLessonEditorShell";
 
 export default async function CreateLessonPage({
   searchParams,
@@ -50,46 +50,28 @@ export default async function CreateLessonPage({
   );
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)]">
-      {/* Header */}
-      <div className="border-b border-[var(--color-border)] bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
-        <Container size="md" className="py-10">
-          <Stack gap="md">
-
-            {/* Page Title */}
-            <Stack gap={4}>
-              <Group gap="xs" align="center">
-                <div className="w-5 h-px bg-[var(--color-primary)]" />
-                <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]">
-                  Lesson Creator
-                </span>
-              </Group>
-
-              <Title
-                order={1}
-                className="text-3xl font-black tracking-tight text-[var(--color-text)]"
-              >
-                Create a New{" "}
-                <span className="text-[var(--color-primary)]">Lesson</span>
-              </Title>
-
-              <Text className="text-[var(--color-text-secondary)] max-w-lg font-light leading-relaxed">
-                Craft an interactive lesson and share your knowledge with the community.
-              </Text>
-            </Stack>
-          </Stack>
-        </Container>
-      </div>
-
-      {/* Editor */}
-      <Container size="md" className="py-10 pb-32">
-        <LessonEditor
-          initialTitle=""
-          initialContent={{ type: "doc", content: [] }}
-          availableConcepts={concepts}
-          initialConceptPublicIds={initialConceptPublicIds}
-        />
-      </Container>
-    </div>
+    <ContributorLessonEditorShell
+      headerMeta={(
+        <Group gap="xs" align="center">
+          <div className="w-5 h-px bg-[var(--color-primary)]" />
+          <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[var(--color-primary)]">
+            Lesson Creator
+          </span>
+        </Group>
+      )}
+      title={(
+        <>
+          Create a New <span className="text-[var(--color-primary)]">Lesson</span>
+        </>
+      )}
+      description="Craft an interactive lesson and share your knowledge with the community."
+    >
+      <LessonEditor
+        initialTitle=""
+        initialContent={{ type: "doc", content: [] }}
+        availableConcepts={concepts}
+        initialConceptPublicIds={initialConceptPublicIds}
+      />
+    </ContributorLessonEditorShell>
   );
 }
