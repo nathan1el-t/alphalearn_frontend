@@ -37,6 +37,17 @@ export async function updateSession(request: NextRequest) {
 
   const user = data?.claims
 
+  if (!user && request.nextUrl.pathname.startsWith('/admin')) {
+    const url = request.nextUrl.clone()
+    const from = `${request.nextUrl.pathname}${request.nextUrl.search}`
+
+    url.pathname = '/signin'
+    url.searchParams.set('mode', 'admin')
+    url.searchParams.set('from', from)
+
+    return NextResponse.redirect(url)
+  }
+
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/') &&
