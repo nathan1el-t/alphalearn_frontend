@@ -29,7 +29,6 @@ export default async function LessonPage({
         <div className="flex flex-col gap-8">
           <Group justify="space-between">
             <BackButton />
-            <BackButton href={`/lessons/${lessonPublicId}/edit`}>Edit Lesson</BackButton>
           </Group>
 
           <div>
