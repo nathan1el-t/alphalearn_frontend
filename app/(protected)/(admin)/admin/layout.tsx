@@ -13,7 +13,7 @@ export default async function AdminLayout({
   await requireRole("ADMIN");
 
   return (
-    <div className="admin-layout">
+    <div className="admin-layout admin-theme">
       <AdminSidebar />
       <main className="admin-content">
         {children}
