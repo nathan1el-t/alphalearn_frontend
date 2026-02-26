@@ -7,7 +7,7 @@ const labelOverrides: Record<string, string> = {
   lessons: "Lessons",
   concepts: "Concepts",
   profile: "Profile",
-  mine: "My Library",
+  mine: "My Lessons",
   create: "Create Lesson",
   edit: "Edit",
 };
@@ -27,7 +27,7 @@ export default function UserBreadcrumb() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
-  if (segments.length === 0) return null;
+  if (segments.length <= 1) return null;
 
   const crumbs = segments.map((segment, index) => {
     const path = `/${segments.slice(0, index + 1).join("/")}`;
