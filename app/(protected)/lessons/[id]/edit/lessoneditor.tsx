@@ -9,6 +9,7 @@ import { showSuccess, showError } from "@/lib/notifications";
 import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/lessons";
 import { Concept, CreateLessonRequest } from "@/interfaces/interfaces";
 import ConfirmModal from "@/components/common/confirmModal";
+import Background from "@/components/common/background";
 
 export interface LessonEditorProps {
   id?: string;
@@ -208,11 +209,14 @@ export default function LessonEditor({
             option: {
               borderRadius: "8px",
               padding: "10px 12px",
-              "&[data-selected]": {
+              "&[dataSelected]": {
                 backgroundColor: "var(--color-primary)",
               },
-              "&[data-combobox-selected]": {
+              "&[dataComboboxSelected]": {
                 backgroundColor: "var(--color-primary)",
+              },
+              "&[dataComboboxActive]":{
+                BackgroundColor:"var(--color-primary-hover)",
               },
             },
             pill: {

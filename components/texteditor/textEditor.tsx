@@ -8,6 +8,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import StarterKit from "@tiptap/starter-kit";
+import "@mantine/tiptap/styles.css";
 import { richTextStyles } from "./styles";
 
 
@@ -46,19 +47,6 @@ export function RichTextEditor({
     }
   }, [editor, isEditing]);
 
-  if (!editor) {
-    return (
-      <div
-        className="min-h-[200px] flex items-center justify-center rounded-xl border border-[var(--color-border)]"
-        style={{ backgroundColor: "var(--color-surface)" }}
-      >
-        <div className="flex flex-col items-center gap-2">
-          <span className="material-symbols-outlined animate-spin text-[var(--color-primary)]">progress_activity</span>
-          <span className="text-xs font-bold uppercase tracking-widest text-[var(--color-text-muted)]">Loading Editor...</span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
