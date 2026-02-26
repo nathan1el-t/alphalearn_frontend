@@ -45,7 +45,9 @@ export default function ConceptSpotlightSearch({ concepts }: ConceptSpotlightSea
         );
 
 
-        if (trimmedQuery.length < 2) return [{key:"Search for something",label:"Type something to search"}];
+        if (trimmedQuery.length < 2) {
+            return [{ id: "search-hint", label: "Type something to search" }];
+        }
 
         return flatActions.filter((action) => {
             const label = String(action.label || "").toLowerCase();
