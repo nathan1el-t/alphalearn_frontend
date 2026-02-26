@@ -2,18 +2,16 @@ import { apiFetch } from "@/lib/api";
 import type { LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import {
-  SimpleGrid,
   Container,
   Text,
   Group,
   Stack,
   Title,
 } from "@mantine/core";
-import LessonCard from "@/components/lessons/lessonCard";
 import GradientButton from "@/components/common/gradientbutton";
 import SpotlightSearch from "@/components/spotlightsearch";
-import SearchTrigger from "@/components/lessons/searchTrigger";
 import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
+import LessonsGridSection from "@/components/lessons/lessonsGridSection";
 
 export default async function LessonsPage() {
   await redirectAdminFromPublicRoute("lessons-list");
@@ -27,11 +25,11 @@ export default async function LessonsPage() {
       <div className="min-h-screen bg-[var(--color-background)]">
         <HeroSection role={role} />
 
-        <Container size="lg" className="py-14 pb-32">
+        <Container id="lessons-list" size="lg" className="py-14 pb-32 scroll-mt-24">
           {lessons.length === 0 ? (
             <EmptyState />
           ) : (
-            <LessonsGrid lessons={lessons} />
+            <LessonsGridSection lessons={lessons} />
           )}
         </Container>
       </div>
@@ -76,10 +74,19 @@ function HeroSection({ role }: { role: string | null }) {
             </Text>
           </Stack>
 
-          {role === "CONTRIBUTOR" && (
-            <Group justify="flex-end">
+          {role === "CONTRIBUTOR" ? (
+            <Stack align="flex-end" gap="sm">
+              <GradientButton href="#lessons-list">
+                View All Lessons
+              </GradientButton>
               <GradientButton href="/lessons/mine">
                 View My Lessons
+              </GradientButton>
+            </Stack>
+          ) : (
+            <Group justify="flex-end">
+              <GradientButton href="#lessons-list">
+                View All Lessons
               </GradientButton>
             </Group>
           )}
@@ -87,32 +94,6 @@ function HeroSection({ role }: { role: string | null }) {
         </Stack>
       </Container>
     </div>
-  );
-}
-
-function LessonsGrid({ lessons }: { lessons: LessonSummary[] }) {
-  return (
-    <Stack gap="lg">
-      <LessonsHeader count={lessons.length} />
-
-      <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="lg">
-        {lessons.map((lesson) => (
-          <LessonCard key={lesson.lessonPublicId} {...lesson} />
-        ))}
-      </SimpleGrid>
-    </Stack>
-  );
-}
-
-function LessonsHeader({ count }: { count: number }) {
-  return (
-    <Group justify="space-between" align="center">
-      <span className="text-[11px] font-semibold tracking-[0.15em] uppercase text-[var(--color-text-muted)] px-3">
-        {count} {count === 1 ? "lesson" : "lessons"} available
-      </span>
-
-      <SearchTrigger />
-    </Group>
   );
 }
 

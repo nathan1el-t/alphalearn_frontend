@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { Card, Text, Tooltip, Stack, Title } from "@mantine/core";
+import { Text, Tooltip, Stack, Title } from "@mantine/core";
 import type { Concept } from "@/interfaces/interfaces";
+import ContentCardShell from "@/components/common/contentCardShell";
 
 interface ConceptCardProps extends Concept { }
 
@@ -13,25 +13,12 @@ export default function ConceptCard({
   createdAt,
 }: ConceptCardProps) {
   return (
-    <Card
-      component={Link}
+    <ContentCardShell
       href={`/concepts/${publicId}`}
-      padding="xl"
-      radius="28px"
-      className="relative overflow-hidden h-full transition-all duration-500 border-none group-hover:-translate-y-2 group"
-      style={{
-        background: "#1e1e2e",
-        boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px -10px rgba(0,0,0,0.5)",
-      }}
+      background="#1e1e2e"
+      borderColor="rgba(255,255,255,0.05)"
+      glow="radial-gradient(circle at top right, rgba(124, 58, 237, 0.15) 0%, transparent 70%)"
     >
-      {/* GLOW EFFECT */}
-      <div
-        className="absolute inset-0 transition-opacity duration-500 pointer-events-none opacity-0 group-hover:opacity-100"
-        style={{
-          background: "radial-gradient(circle at top right, rgba(124, 58, 237, 0.15) 0%, transparent 70%)",
-        }}
-      />
-
       <Stack gap="md" h="100%" justify="space-between" className="relative z-10">
         <Stack gap="xs">
           <div className="flex justify-between items-start">
@@ -68,6 +55,6 @@ export default function ConceptCard({
           </div>
         </div>
       </Stack>
-    </Card>
+    </ContentCardShell>
   );
 }

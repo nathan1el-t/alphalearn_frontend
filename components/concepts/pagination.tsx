@@ -18,6 +18,7 @@ interface PaginationProps {
   totalItems: number;
   itemsPerPage: number;
   onPageChange: (page: number) => void;
+  itemLabel?: string;
 }
 
 export default function Pagination({
@@ -26,6 +27,7 @@ export default function Pagination({
   totalItems,
   itemsPerPage,
   onPageChange,
+  itemLabel = "concepts",
 }: PaginationProps) {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
@@ -34,7 +36,7 @@ export default function Pagination({
     <div className="flex items-center justify-between border-t border-[var(--color-border)] pt-4">
       {/* Item Count Text */}
       <div className="text-xs text-[var(--color-text-muted)] font-medium">
-        Showing {startIndex + 1} to {endIndex} of {totalItems} concepts
+        Showing {startIndex + 1} to {endIndex} of {totalItems} {itemLabel}
       </div>
 
       {/* Mantine Pagination Component */}
