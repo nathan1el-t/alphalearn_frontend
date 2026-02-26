@@ -22,10 +22,7 @@ export default async function MyLessonsPage() {
   if (role === "ADMIN") {
     redirect("/admin/lessons");
   }
-
-  if (role === "LEARNER") {
-    redirect("/lessons");
-  }
+  const canCreateLessons = role === "CONTRIBUTOR";
 
   let lessons: LessonSummary[] = [];
   try {
@@ -50,9 +47,11 @@ export default async function MyLessonsPage() {
                   Manage and track the lessons you've created.
                 </Text>
               </Stack>
-              <GradientButton href="/lessons/create" icon="add" className="mt-1">
-                Create Lesson
-              </GradientButton>
+              {canCreateLessons && (
+                <GradientButton href="/lessons/create" icon="add" className="mt-1">
+                  Create Lesson
+                </GradientButton>
+              )}
             </Group>
           </Stack>
         </Container>
@@ -67,10 +66,16 @@ export default async function MyLessonsPage() {
               </span>
             </div>
             <Title order={3} className="text-[var(--color-text-muted)]">No lessons yet</Title>
-            <Text className="text-[var(--color-text-muted)]">Start your journey by creating your first lesson!</Text>
-            <Link href="/lessons/create">
-              <Button variant="outline" radius="xl">Create First Lesson</Button>
-            </Link>
+            <Text className="text-[var(--color-text-muted)]">
+              {canCreateLessons
+                ? "Start your journey by creating your first lesson!"
+                : "You haven't authored any lessons yet."}
+            </Text>
+            {canCreateLessons && (
+              <Link href="/lessons/create">
+                <Button variant="outline" radius="xl">Create First Lesson</Button>
+              </Link>
+            )}
           </Stack>
         ) : (
           <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="xl">

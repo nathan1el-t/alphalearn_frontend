@@ -74,7 +74,7 @@ function HeroSection({ role }: { role: string | null }) {
             </Text>
           </Stack>
 
-          {role === "CONTRIBUTOR" ? (
+          {role === "CONTRIBUTOR" || role === "LEARNER" ? (
             <Stack align="flex-end" gap="sm">
               <GradientButton href="#lessons-list">
                 View All Lessons
