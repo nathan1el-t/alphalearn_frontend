@@ -95,6 +95,7 @@ export default async function EditLessonPage({
           initialTitle={lesson.title}
           initialContent={lesson.content}
           initialConceptPublicIds={lesson.conceptPublicIds}
+          initialStatus={status}
         />
       </ContributorLessonEditorShell>
     );

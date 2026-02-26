@@ -8,6 +8,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Superscript from "@tiptap/extension-superscript";
 import Subscript from "@tiptap/extension-subscript";
 import StarterKit from "@tiptap/starter-kit";
+import "@mantine/tiptap/styles.css";
 import { richTextStyles } from "./styles";
 
 
@@ -45,6 +46,7 @@ export function RichTextEditor({
       editor.setEditable(isEditing);
     }
   }, [editor, isEditing]);
+
 
   return (
     <>
