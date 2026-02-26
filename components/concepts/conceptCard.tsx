@@ -3,6 +3,7 @@
 import { Text, Tooltip, Stack, Title } from "@mantine/core";
 import type { Concept } from "@/interfaces/interfaces";
 import ContentCardShell from "@/components/common/contentCardShell";
+import { formatShortDate } from "@/lib/formatDate";
 
 interface ConceptCardProps extends Concept { }
 
@@ -46,7 +47,7 @@ export default function ConceptCard({
 
         <div className="pt-4 border-t border-white/5 flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">
-            {new Date(createdAt).toLocaleDateString()}
+            {formatShortDate(createdAt)}
           </span>
           <div className="flex gap-1">
             <div className="w-1 h-1 rounded-full bg-[var(--color-primary)] opacity-30" />

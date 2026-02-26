@@ -3,6 +3,7 @@
 import { Group, Stack, Title, Text, Badge, Tooltip } from "@mantine/core";
 import type { LessonSummary } from "@/interfaces/interfaces";
 import ContentCardShell from "@/components/common/contentCardShell";
+import { formatShortDate } from "@/lib/formatDate";
 
 interface LessonCardProps extends LessonSummary { }
 interface LessonCardOptions {
@@ -76,7 +77,7 @@ export default function LessonCard({
 
         <div className="pt-4 border-t border-white/5 flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">
-            {createdAt ? new Date(createdAt).toLocaleDateString() : "Recent"}
+            {createdAt ? formatShortDate(createdAt) : "Recent"}
           </span>
           <div className="flex gap-1">
             <div className="w-1 h-1 rounded-full bg-blue-300 opacity-30" />

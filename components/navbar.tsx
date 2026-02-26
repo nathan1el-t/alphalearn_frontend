@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import ThemeToggle from "./themeToggle";
 import { Burger, Drawer, Avatar, Menu } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
@@ -71,10 +70,8 @@ export default function Navbar() {
           </div>
         )}
 
-        {/* Right: theme toggle + user */}
+        {/* Right: user */}
         <div className="flex items-center gap-3">
-          <ThemeToggle />
-
           {!isLoading && (
             <>
               {user ? (
