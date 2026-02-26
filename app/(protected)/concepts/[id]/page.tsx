@@ -5,6 +5,7 @@ import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Container, Group, SimpleGrid, Text, Title } from "@mantine/core";
+import { formatDateTime, formatShortDate } from "@/lib/formatDate";
 
 export default async function ConceptPage({
   params,
@@ -51,7 +52,7 @@ export default async function ConceptPage({
                 </Text>
                 <Text c="dimmed">
                   {concept.createdAt
-                    ? new Date(concept.createdAt).toLocaleString()
+                    ? formatDateTime(concept.createdAt)
                     : "Unknown"}
                 </Text>
               </div>
@@ -94,7 +95,7 @@ export default async function ConceptPage({
                       <div className="mt-auto flex justify-end">
                         <Text c="dimmed" size="xs">
                           {lesson.createdAt
-                            ? new Date(lesson.createdAt).toLocaleDateString()
+                            ? formatShortDate(lesson.createdAt)
                             : ""}
                         </Text>
                       </div>
