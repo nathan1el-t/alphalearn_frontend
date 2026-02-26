@@ -18,6 +18,11 @@ export default function LessonsGridSection({ lessons }: { lessons: LessonSummary
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    const listSection = document.getElementById("lessons-list");
+    if (listSection) {
+      listSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
