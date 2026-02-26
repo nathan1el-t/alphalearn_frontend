@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Avatar, useMantineColorScheme } from "@mantine/core";
+import { Avatar } from "@mantine/core";
 import { useAuth } from "@/context/AuthContext";
 
 export interface SidebarNavItem {
@@ -43,7 +43,6 @@ export default function AppSidebar({
 }: AppSidebarProps) {
   const pathname = usePathname();
   const { user, signOut } = useAuth();
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -159,24 +158,6 @@ export default function AppSidebar({
             </div>
           )}
 
-          <div className="admin-sidebar-nav-section">
-            <span className="admin-sidebar-nav-label">Appearance</span>
-            <button
-              onClick={toggleColorScheme}
-              className="admin-sidebar-theme-toggle"
-              title={colorScheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-              aria-label="Toggle color scheme"
-            >
-              <span className="material-symbols-outlined admin-theme-icon sun-icon">
-                light_mode
-              </span>
-              <div className="admin-theme-divider" />
-              <span className="material-symbols-outlined admin-theme-icon moon-icon">
-                dark_mode
-              </span>
-              <div className={`admin-theme-indicator ${colorScheme === "dark" ? "dark" : "light"}`} />
-            </button>
-          </div>
         </nav>
 
         <div className="admin-sidebar-footer">

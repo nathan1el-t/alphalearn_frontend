@@ -516,7 +516,9 @@
 .admin-content {
   margin-right: 260px;
   min-height: 100vh;
-  transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .admin-sidebar.collapsed ~ .admin-content {

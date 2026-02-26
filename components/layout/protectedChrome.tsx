@@ -16,9 +16,9 @@ export default function ProtectedChrome({
   }
 
   return (
-    <div className="admin-layout">
+    <div className="admin-layout user-shell">
       <UserSidebar />
-      <main className="admin-content">
+      <main className="admin-content user-content">
         {children}
       </main>
     </div>
