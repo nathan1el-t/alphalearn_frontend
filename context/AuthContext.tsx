@@ -23,7 +23,7 @@ type AuthContextType = {
   isLoading: boolean;
   signIn: (email: string, password: string, options?: SignInOptions) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (options?: SignInOptions) => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -61,8 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await supabase.auth.getSession();
 
       if (!error) {
-        console.log("access token:", data.session?.access_token);
-
         setSession(data.session);
         setUser(data.session?.user || null);
 
@@ -146,12 +144,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // ----------------------
   // GOOGLE LOGIN
   // ----------------------
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (options?: SignInOptions) => {
     try {
+      const callbackUrl = new URL(`${window.location.origin}/auth/callback`);
+      if (options?.mode) {
+        callbackUrl.searchParams.set("mode", options.mode);
+      }
+      if (options?.from) {
+        callbackUrl.searchParams.set("from", options.from);
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: callbackUrl.toString(),
         },
       })
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAuth, type SignInMode } from "@/context/AuthContext";
+import { showError } from "@/lib/notifications";
 
 export default function SignInPage() {
   const searchParams = useSearchParams();
@@ -15,10 +16,17 @@ export default function SignInPage() {
   const { signIn, signUp, signInWithGoogle, isLoading } = useAuth();
   const modeParam = searchParams.get("mode");
   const fromParam = searchParams.get("from");
+  const errorParam = searchParams.get("error");
 
   useEffect(() => {
     setSignInMode(modeParam === "admin" ? "admin" : "user");
   }, [modeParam]);
+
+  useEffect(() => {
+    if (errorParam === "admin_required") {
+      showError("Admin account required. This account cannot sign in to the admin portal.");
+    }
+  }, [errorParam]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -126,7 +134,12 @@ export default function SignInPage() {
                 {/* Google button */}
                 <button
                   type="button"
-                  onClick={signInWithGoogle}
+                  onClick={() =>
+                    signInWithGoogle({
+                      mode: signInMode,
+                      from: fromParam,
+                    })
+                  }
                   disabled={isLoading}
                   className="flex items-center justify-center gap-2 h-12 rounded-lg bg-[var(--color-input)] border border-[var(--color-border)] text-[var(--color-text)] font-bold cursor-pointer"
                   title="Sign in with google"
