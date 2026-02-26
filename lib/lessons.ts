@@ -66,3 +66,36 @@ export async function submitLesson(id: string): Promise<ActionResponse> {
 
   return response;
 }
+
+export async function deleteLesson(id: string): Promise<ActionResponse> {
+  const response = await handleRequest(`/lessons/${id}`, {
+    method: "DELETE",
+    headers,
+  });
+
+  if (response.success) {
+    revalidatePath("/lessons");
+    revalidatePath("/lessons/mine");
+    revalidatePath(`/lessons/${id}`);
+    revalidatePath(`/lessons/${id}/edit`);
+    return { success: true, message: "Lesson deleted successfully" };
+  }
+
+  return { success: false, message: "Unable to delete lesson, check that the lesson is unpublished first" };
+}
+
+export async function unpublishLesson(id: string): Promise<ActionResponse> {
+  const response = await handleRequest(`/lessons/${id}/unpublish`, {
+    method: "POST",
+    headers,
+  });
+
+  if (response.success) {
+    revalidatePath("/lessons/mine");
+    revalidatePath(`/lessons/${id}`);
+    revalidatePath(`/lessons/${id}/edit`);
+    return { success: true, message: "Lesson unpublished successfully" };
+  }
+
+  return response;
+}

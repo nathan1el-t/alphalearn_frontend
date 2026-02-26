@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { RichTextEditor } from "@/components/texteditor/textEditor";
 import { MultiSelect, Stack } from "@mantine/core";
 import { showSuccess, showError } from "@/lib/notifications";
-import { createLesson, saveLesson, submitLesson } from "@/lib/lessons";
+import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/lessons";
 import { Concept, CreateLessonRequest } from "@/interfaces/interfaces";
 import ConfirmModal from "@/components/common/confirmModal";
 
@@ -15,6 +15,7 @@ export interface LessonEditorProps {
   initialContent: any;
   availableConcepts?: Concept[];
   initialConceptPublicIds?: string[];
+  initialStatus?: string;
 }
 
 export default function LessonEditor({
@@ -23,6 +24,7 @@ export default function LessonEditor({
   initialContent,
   availableConcepts = [],
   initialConceptPublicIds = [],
+  initialStatus = "UNPUBLISHED",
 }: LessonEditorProps) {
   const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
@@ -32,6 +34,7 @@ export default function LessonEditor({
   );
   const [loading, setLoading] = useState(false);
   const [discardModalOpened, setDiscardModalOpened] = useState(false);
+  const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const isCreateMode = !id;
 
   const handleSave = async () => {
@@ -65,6 +68,45 @@ export default function LessonEditor({
         showError(response.message || "Failed");
       }
 
+    } catch (e: any) {
+      showError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+
+    setLoading(true);
+    try {
+      const response = await deleteLesson(id);
+      if (response.success) {
+        showSuccess(response.message);
+        router.replace("/lessons/mine");
+      } else {
+        showError(response.message);
+      }
+    } catch (e: any) {
+      showError(e.message);
+    } finally {
+      setLoading(false);
+      setDeleteModalOpened(false);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    if (!id) return;
+
+    setLoading(true);
+    try {
+      const response = await unpublishLesson(id);
+      if (response.success) {
+        showSuccess(response.message);
+        router.refresh();
+      } else {
+        showError(response.message);
+      }
     } catch (e: any) {
       showError(e.message);
     } finally {
@@ -155,17 +197,38 @@ export default function LessonEditor({
 
       {/* ── Action Bar ── */}
       <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]">
-        <button
-          type="button"
-          onClick={() => setDiscardModalOpened(true)}
-          className="px-8 py-3 rounded-xl text-sm font-semibold
-            text-[var(--color-text-muted)] hover:text-[var(--color-text)]
-            bg-transparent hover:bg-[var(--color-overlay)]
-            border border-[var(--color-border)]
-            transition-all duration-200 cursor-pointer"
-        >
-          Discard
-        </button>
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={() => setDiscardModalOpened(true)}
+            className="px-8 py-3 rounded-xl text-sm font-semibold
+              text-[var(--color-text-muted)] hover:text-[var(--color-text)]
+              bg-transparent hover:bg-[var(--color-overlay)]
+              border border-[var(--color-border)]
+              transition-all duration-200 cursor-pointer"
+          >
+            Discard
+          </button>
+
+          {!isCreateMode && (
+            <button
+              type="button"
+              onClick={() => setDeleteModalOpened(true)}
+              disabled={loading}
+              className="px-5 py-2.5 rounded-xl text-sm font-semibold
+              text-red-400 hover:text-red-300
+              bg-transparent hover:bg-red-500/10
+              border border-red-500/20 hover:border-red-500/40
+              transition-all duration-200 cursor-pointer
+              flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-[18px]">
+                delete
+              </span>
+              Delete Lesson
+            </button>
+          )}
+        </div>
 
         <ConfirmModal
           opened={discardModalOpened}
@@ -178,25 +241,56 @@ export default function LessonEditor({
           icon="delete"
         />
 
+        <ConfirmModal
+          opened={deleteModalOpened}
+          onClose={() => setDeleteModalOpened(false)}
+          onConfirm={handleDelete}
+          title="Delete Lesson?"
+          message="This action is permanent and cannot be undone. All content in this lesson will be lost."
+          confirmText="Delete Permanently"
+          confirmColor="red"
+          icon="delete_forever"
+        />
+
         <div className="flex gap-3">
           {!isCreateMode && (
-            <button
-              type="button"
-              disabled={loading}
-              onClick={handleSubmitForReview}
-              className="px-6 py-3 rounded-xl text-sm font-bold
-                bg-transparent hover:bg-[var(--color-overlay)]
-                text-[var(--color-primary)] border border-[var(--color-primary)]
-                active:scale-[0.98]
-                disabled:opacity-50 disabled:cursor-not-allowed
-                transition-all duration-200 cursor-pointer
-                flex items-center gap-2"
-            >
-              <span className="material-symbols-outlined text-base">
-                send
-              </span>
-              Submit for Review
-            </button>
+            initialStatus === "PENDING" || initialStatus === "APPROVED" ? (
+              <button
+                type="button"
+                disabled={loading}
+                onClick={handleUnpublish}
+                className="px-6 py-3 rounded-xl text-sm font-bold
+                  bg-transparent hover:bg-[var(--color-overlay)]
+                  text-[var(--color-primary)] border border-[var(--color-primary)]
+                  active:scale-[0.98]
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  transition-all duration-200 cursor-pointer
+                  flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-base">
+                  visibility_off
+                </span>
+                Unpublish
+              </button>
+            ) : initialStatus === "UNPUBLISHED" || initialStatus === "REJECTED" ? (
+              <button
+                type="button"
+                disabled={loading}
+                onClick={handleSubmitForReview}
+                className="px-6 py-3 rounded-xl text-sm font-bold
+                  bg-transparent hover:bg-[var(--color-overlay)]
+                  text-[var(--color-primary)] border border-[var(--color-primary)]
+                  active:scale-[0.98]
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                  transition-all duration-200 cursor-pointer
+                  flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-base">
+                  send
+                </span>
+                Submit for Review
+              </button>
+            ) : null
           )}
 
           <button
