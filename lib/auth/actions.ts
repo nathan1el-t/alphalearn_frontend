@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserRole as getRole } from "@/lib/rbac";
+import { getUserRole as getRole } from "./rbac";
 
 /**
  * Server Action: Get user role

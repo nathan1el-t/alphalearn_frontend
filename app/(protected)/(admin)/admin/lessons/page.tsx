@@ -6,7 +6,7 @@ import LessonsManagementTable from "./lessonsTable";
 import AdminBreadcrumb from "@/components/admin/breadcrumb";
 import AdminPageHeader from "@/components/admin/pageHeader";
 import type { AdminLesson, LessonModerationResponse } from "@/interfaces/interfaces";
-import { getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 
 async function LessonsData() {
   const role = await getUserRole();

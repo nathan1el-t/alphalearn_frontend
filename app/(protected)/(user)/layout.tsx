@@ -4,7 +4,7 @@ import Background from "@/components/common/background";
 import NotFound from "@/components/notFound";
 import UserSidebar from "@/components/sidebar/userSidebar";
 import UserBreadcrumb from "@/components/user/breadcrumb";
-import { getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 export default async function UserLayout({
   children,
 }: {
@@ -26,9 +26,9 @@ export default async function UserLayout({
     );
   }
 
-  if (role === "ADMIN"){
+  if (role === "ADMIN") {
     redirect("/admin");
   }
-  return <NotFound/>
+  return <NotFound />
 
 }

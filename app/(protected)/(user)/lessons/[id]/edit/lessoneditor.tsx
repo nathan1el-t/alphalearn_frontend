@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 const RichTextEditor = dynamic(() => import("@/components/texteditor/textEditor").then(m => m.RichTextEditor), { ssr: false });
 import { MultiSelect, Stack } from "@mantine/core";
-import { showSuccess, showError } from "@/lib/notifications";
-import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/lessons";
+import { showSuccess, showError } from "@/lib/actions/notifications";
+import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/actions/lesson";
 import { Concept, CreateLessonRequest } from "@/interfaces/interfaces";
 import ConfirmModal from "@/components/common/confirmModal";
 

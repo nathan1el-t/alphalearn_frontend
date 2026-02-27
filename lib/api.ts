@@ -1,11 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
+import { getServerSession } from "@/lib/auth/session";
 
 export async function apiFetch<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
-  const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const session = await getServerSession();
 
   if (!session) {
     throw new Error("user not authenticated");

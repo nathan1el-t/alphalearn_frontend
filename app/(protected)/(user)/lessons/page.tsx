@@ -10,11 +10,10 @@ import {
 } from "@mantine/core";
 import GradientButton from "@/components/common/gradientbutton";
 import SpotlightSearch from "@/components/spotlightsearch";
-import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 import LessonsGridSection from "@/components/lessons/lessonsGridSection";
 
 export default async function LessonsPage() {
-  await redirectAdminFromPublicRoute("lessons-list");
   const [role, lessons] = await Promise.all([
     getUserRole(),
     fetchLessons(),

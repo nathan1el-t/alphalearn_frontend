@@ -8,7 +8,7 @@ import SearchBar from "@/components/concepts/searchBar";
 import ConfirmModal from "@/components/common/confirmModal";
 import AdminEmptyState from "@/components/admin/emptyState";
 import { RelativeTime, getUrgencyLevel } from "@/components/relativeTime";
-import { showSuccess, showError } from "@/lib/notifications";
+import { showSuccess, showError } from "@/lib/actions/notifications";
 import { approveLesson, rejectLesson } from "./actions";
 import type { AdminLesson, LessonModerationStatus } from "@/interfaces/interfaces";
 

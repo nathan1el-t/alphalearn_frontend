@@ -3,7 +3,7 @@ import { apiFetch } from "@/lib/api";
 import { Lesson, LessonSummary } from "@/interfaces/interfaces";
 import NotFound from "@/components/notFound";
 import { Group } from "@mantine/core";
-import { getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 import { redirect } from "next/navigation";
 import ContributorLessonEditorShell from "@/components/lessons/contributorLessonEditorShell";
 
