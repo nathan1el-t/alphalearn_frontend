@@ -9,7 +9,6 @@ import { showSuccess, showError } from "@/lib/notifications";
 import { createLesson, saveLesson, submitLesson, deleteLesson, unpublishLesson } from "@/lib/lessons";
 import { Concept, CreateLessonRequest } from "@/interfaces/interfaces";
 import ConfirmModal from "@/components/common/confirmModal";
-import Background from "@/components/common/background";
 
 export interface LessonEditorProps {
   id?: string;

@@ -20,8 +20,10 @@ export default async function LessonPage({
   await redirectAdminFromPublicRoute("lesson-detail", { id });
 
   try {
-    const role = await getUserRole();
-    const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
+    const [role, lessonContent] = await Promise.all([
+      getUserRole(),
+      apiFetch<Lesson>(`/lessons/${id}`),
+    ]);
     const lessonPublicId = lessonContent.lessonPublicId || id;
     let ownsLesson = false;
     const normalizedStatus = lessonContent.moderationStatus?.toUpperCase?.() ?? "UNPUBLISHED";

@@ -1,0 +1,34 @@
+import { redirect } from "next/navigation";
+
+import Background from "@/components/common/background";
+import NotFound from "@/components/notFound";
+import UserSidebar from "@/components/sidebar/userSidebar";
+import UserBreadcrumb from "@/components/user/breadcrumb";
+import { getUserRole } from "@/lib/rbac";
+export default async function UserLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const role = await getUserRole();
+  if (role === "LEARNER" || role === "CONTRIBUTOR") {
+    return (
+      <>
+        <Background />
+        <div className="admin-layout user-shell">
+          <UserSidebar />
+          <main className="admin-content user-content">
+            <UserBreadcrumb />
+            {children}
+          </main>
+        </div>
+      </>
+    );
+  }
+
+  if (role === "ADMIN"){
+    redirect("/admin");
+  }
+  return <NotFound/>
+
+}

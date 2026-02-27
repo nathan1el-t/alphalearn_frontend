@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { apiFetch } from "@/lib/api";
 import { redirect } from "next/navigation";
 
@@ -21,11 +22,11 @@ interface RoleResponse {
  * Get the current user's role from the backend
  * Throws error if not authenticated (handled by parent protected layout)
  */
-export async function getUserRole(): Promise<UserRole> {
+export const getUserRole = cache(async (): Promise<UserRole> => {
   const data = await apiFetch<RoleResponse>("/me/role");
   console.log("[RBAC] Fetched user role:", data.role);
   return data.role;
-}
+});
 
 export function getAdminEquivalentPath(
   route: PublicRouteKey,
@@ -66,9 +67,9 @@ export async function requireRole(allowedRoles: UserRole | UserRole[], redirectT
   try {
     const userRole = await getUserRole();
     const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
-    
+
     console.log("[RBAC] Checking role:", { userRole, allowedRoles, isAllowed: roles.includes(userRole) });
-    
+
     if (!roles.includes(userRole)) {
       console.log("[RBAC] Access denied. Redirecting to:", redirectTo);
       redirect(redirectTo);
