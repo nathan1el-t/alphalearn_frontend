@@ -5,25 +5,19 @@ import type { Session, User } from "@supabase/supabase-js";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase/client";
-import { showError, showSuccess } from "@/lib/notifications";
-import { getUserRoleAction } from "@/lib/actions/role";
+import { showError, showSuccess } from "@/lib/actions/notifications";
+import { getUserRoleAction } from "@/lib/auth/actions";
 
 export type UserRole = "ADMIN" | "CONTRIBUTOR" | "LEARNER" | null;
-export type SignInMode = "user" | "admin";
-
-type SignInOptions = {
-  mode?: SignInMode;
-  from?: string | null;
-};
 
 type AuthContextType = {
   user: User | null;
   session: Session | null;
   userRole: UserRole;
   isLoading: boolean;
-  signIn: (email: string, password: string, options?: SignInOptions) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
-  signInWithGoogle: (options?: SignInOptions) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 };
 
@@ -67,7 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Fetch role if user is authenticated
         if (data.session?.user) {
           await fetchUserRole();
-        } else {
         }
       }
 
@@ -97,9 +90,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  const signIn = async (email: string, password: string, options?: SignInOptions) => {
+  const signIn = async (email: string, password: string) => {
     try {
-      const mode = options?.mode ?? "user";
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -107,61 +99,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) throw error;
       setUser(data.user);
       setSession(data.session);
-      const role = await fetchUserRole();
-
-      const requestedAdminPath =
-        options?.from && options.from.startsWith("/admin") ? options.from : null;
-
-      if (mode === "admin") {
-        if (role !== "ADMIN") {
-          await supabase.auth.signOut();
-          setUser(null);
-          setSession(null);
-          setUserRole(null);
-          showError("Admin account required. This account cannot sign in to the admin portal.");
-          return;
-        }
-
-        showSuccess("Logged in successfully!");
-        router.push(requestedAdminPath || "/admin");
-        return;
-      }
-
-      if (role === "ADMIN") {
-        await supabase.auth.signOut();
-        setUser(null);
-        setSession(null);
-        setUserRole(null);
-        showError("Admin account detected. Please use the Admin sign-in toggle.");
-        return;
-      }
+      await fetchUserRole();
 
       showSuccess("Logged in successfully!");
-
+      // Layouts handle role-based routing (admin → /admin, etc.)
       router.push("/lessons");
     } catch (err: any) {
       showError(err.message || "Failed to log in");
     }
   };
 
-
-  // ----------------------
-  // GOOGLE LOGIN
-  // ----------------------
-  const signInWithGoogle = async (options?: SignInOptions) => {
+  const signInWithGoogle = async () => {
     try {
-      const callbackUrl = new URL(`${window.location.origin}/auth/callback`);
-      if (options?.mode) {
-        callbackUrl.searchParams.set("mode", options.mode);
-      }
-      if (options?.from) {
-        callbackUrl.searchParams.set("from", options.from);
-      }
+      const callbackUrl = `${window.location.origin}/auth/callback`;
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: callbackUrl.toString(),
+          redirectTo: callbackUrl,
         },
       })
 

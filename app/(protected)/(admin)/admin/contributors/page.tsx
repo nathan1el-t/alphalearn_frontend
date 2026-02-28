@@ -22,11 +22,11 @@ async function UsersData() {
     // Merge: Check if each learner is also a contributor
     const users: AdminUser[] = learners.map(learner => {
         const contributorData = contributorMap.get(learner.publicId);
-        
+
         if (contributorData) {
             // Check if contributor is currently active (not demoted)
             const isActiveContributor = contributorData.demotedAt === null;
-            
+
             return {
                 publicId: learner.publicId,
                 username: learner.username,

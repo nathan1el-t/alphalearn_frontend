@@ -8,7 +8,7 @@ import {
   Title,
   Group,
 } from "@mantine/core";
-import { redirectAdminFromPublicRoute, getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 import LessonDetailOwnerActions from "@/components/lessons/lessonDetailOwnerActions";
 
 export default async function LessonPage({
@@ -17,11 +17,12 @@ export default async function LessonPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await redirectAdminFromPublicRoute("lesson-detail", { id });
 
   try {
-    const role = await getUserRole();
-    const lessonContent: Lesson = await apiFetch(`/lessons/${id}`);
+    const [role, lessonContent] = await Promise.all([
+      getUserRole(),
+      apiFetch<Lesson>(`/lessons/${id}`),
+    ]);
     const lessonPublicId = lessonContent.lessonPublicId || id;
     let ownsLesson = false;
     const normalizedStatus = lessonContent.moderationStatus?.toUpperCase?.() ?? "UNPUBLISHED";

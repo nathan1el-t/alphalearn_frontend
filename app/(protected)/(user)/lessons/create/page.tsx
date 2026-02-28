@@ -1,10 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import { apiFetch } from "@/lib/api";
-import LessonEditor from "@/app/(protected)/lessons/[id]/edit/lessoneditor";
+import LessonEditor from "@/app/(protected)/(user)/lessons/[id]/edit/lessoneditor";
 import { redirect } from "next/navigation";
 import { Group } from "@mantine/core";
 import { Concept } from "@/interfaces/interfaces";
-import { getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 import ContributorLessonEditorShell from "@/components/lessons/contributorLessonEditorShell";
 
 export default async function CreateLessonPage({

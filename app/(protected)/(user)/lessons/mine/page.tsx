@@ -13,7 +13,7 @@ import {
 import Link from "next/link";
 import LessonCard from "@/components/lessons/lessonCard";
 import GradientButton from "@/components/common/gradientbutton";
-import { getUserRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
 import { redirect } from "next/navigation";
 
 export default async function MyLessonsPage() {

@@ -6,8 +6,12 @@ import LessonsManagementTable from "./lessonsTable";
 import AdminBreadcrumb from "@/components/admin/breadcrumb";
 import AdminPageHeader from "@/components/admin/pageHeader";
 import type { AdminLesson, LessonModerationResponse } from "@/interfaces/interfaces";
+import { getUserRole } from "@/lib/auth/rbac";
 
 async function LessonsData() {
+  const role = await getUserRole();
+  if (role !== "ADMIN") return null;
+
   const lessonsResponse = await apiFetch<LessonModerationResponse[]>("/admin/lessons");
 
   const lessons: AdminLesson[] = lessonsResponse.map(lesson => ({

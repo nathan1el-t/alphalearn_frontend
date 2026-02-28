@@ -1,6 +1,5 @@
 import type { Concept, LessonSummary } from "@/interfaces/interfaces";
 import { apiFetch } from "@/lib/api";
-import { redirectAdminFromPublicRoute } from "@/lib/rbac";
 import { notFound } from "next/navigation";
 import { Container, SimpleGrid, Text, Title } from "@mantine/core";
 import { formatDateTime } from "@/lib/formatDate";
@@ -12,7 +11,6 @@ export default async function ConceptPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await redirectAdminFromPublicRoute("concept-detail", { id });
 
   try {
     const concept = await apiFetch<Concept>(`/concepts/${id}`);

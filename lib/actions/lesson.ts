@@ -1,6 +1,8 @@
 "use server";
 
-import { apiFetch } from "./api";
+// server side logic that the client component can use
+
+import { apiFetch } from "../api";
 import { CreateLessonRequest } from "@/interfaces/interfaces";
 import { revalidatePath } from "next/cache";
 

@@ -1,6 +1,6 @@
 import "./admin.css";
-import "@/components/sidebar/sidebar-shell.css";
-import { requireRole } from "@/lib/rbac";
+import { getUserRole } from "@/lib/auth/rbac";
+import NotFound from "@/components/notFound";
 import AdminSidebar from "@/components/admin/sidebar";
 
 export default async function AdminLayout({
@@ -8,9 +8,12 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Authentication is already checked by parent (protected) layout
-  // Only check admin role here
-  await requireRole("ADMIN");
+
+  // making this pages visible only to admins
+  const role = await getUserRole();
+  if (role !== "ADMIN") {
+    return <NotFound />
+  }
 
   return (
     <div className="admin-layout admin-theme">
